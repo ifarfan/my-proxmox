@@ -25,7 +25,7 @@ Parameters:
 ```
 
 
-Build **Ubuntu** template on `macmini1` noder:
+Build **Ubuntu** template on `macmini1` node:
 ```shell
 ./build -n macmini1 -t ubuntu-20-04
 ```
