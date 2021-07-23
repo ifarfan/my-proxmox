@@ -1,0 +1,303 @@
+#!/usr/bin/env bash
+#
+#  BUILD: Manage proxmox VM templates
+#
+config() {
+    #
+    # Global configs
+    #
+
+    #  Reset global timer
+    SECONDS=0
+
+    #  Global constants
+    CMDS=(
+        'jq'
+        'packer'
+    )
+
+    #  Format: "Hostname | IP"
+    PROXMOX_NODES=(
+        'macmini1|192.168.136.11'
+        'macmini2|192.168.136.12'
+        'macmini3|192.168.136.13'
+    )
+
+    #  Find <NODES> dynamically
+    for NODE_X in "${PROXMOX_NODES[@]}"; do
+        # shellcheck disable=SC2206
+        NODE_ARRAY=(${NODE_X//|/ })
+        NODES+=("${NODE_ARRAY[0]}")
+    done
+
+    NODE_IP=""
+    NODE_PWD=""
+
+    #  Colors
+    BLACK=$(tput setaf 0)
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    BLUE=$(tput setaf 4)
+    CYAN=$(tput setaf 6)
+    BOLD=$(tput bold)
+    NORMAL=$(tput sgr0)
+
+    #  Find <TEMPLATES> dynamically
+    CUR_DIR=$(pwd)
+    EXE_DIR=$(dirname "$0")
+    TEMPLATES=(); TEMPLATE_FILES=("${CUR_DIR}"/"${EXE_DIR}"/vars/*.pkrvars.hcl)
+    for TEMPLATE_FILE in "${TEMPLATE_FILES[@]}"; do
+        # shellcheck disable=SC2207,SC2001
+        TEMPLATES+=($(echo "${TEMPLATE_FILE##*/}" | sed -e 's/\.pkrvars\.hcl$//g'))
+    done
+
+    #  File paths
+    FILE_ANSIBLE_PROVISION=''
+    FILE_ANSIBLE_TESTING=''
+    FILE_PACKER_VARS=''
+    FILE_PACKER_LOG=''
+    FILE_MANIFEST=''
+}
+
+
+log_line() {
+    #
+    #  Write message to console, with optional alert flag
+    #  - "":  None
+    #  - "E": Error (red)
+    #  - "O": OK (green)
+    #  - "W": Warning (yellow)
+    #
+    local MSG_TYPE=$1; local MSG=$2
+
+    case "$MSG_TYPE" in
+        'E') echo -e "${RED}${BOLD}Error:${NORMAL} ${MSG}";;
+        'O') echo -e "${GREEN}${BOLD}OK:${NORMAL} ${MSG}";;
+        'W') echo -e "${YELLOW}${BOLD}Warning:${NORMAL} ${MSG}";;
+        *)   echo -e "${MSG}";;
+    esac
+}
+
+
+usage() {
+  #
+  #  Show usage + send output also to stderr
+  #
+  echo -e "Usage${BLACK}${BOLD}:${NORMAL} ${GREEN}${BOLD}${0##*/}${NORMAL} ${YELLOW}${BOLD}--node${NORMAL} ${BLUE}<NODE>${NORMAL} ${YELLOW}${BOLD}--template${NORMAL} ${BLUE}<TEMPLATE>${NORMAL}
+
+Parameters${BLACK}${BOLD}:${NORMAL}
+${YELLOW}${BOLD}--node${NORMAL}${BLACK}${BOLD}|${NORMAL}${YELLOW}${BOLD}-n${NORMAL} ${BLUE}<NODE>${NORMAL}${BLACK}${BOLD}:${NORMAL}
+  Available node(s)${BLACK}${BOLD}:${NORMAL} ${BOLD}${NODES[*]}${NORMAL}
+
+${YELLOW}${BOLD}--template${NORMAL}${BLACK}${BOLD}|${NORMAL}${YELLOW}${BOLD}-t${NORMAL} ${BLUE}<TEMPLATE>${NORMAL}${BLACK}${BOLD}:${NORMAL}
+  Available templates(s)${BLACK}${BOLD}:${NORMAL} ${BOLD}${TEMPLATES[*]}${NORMAL}
+" 1>&2
+
+  exit 1
+}
+
+
+check_values() {
+    #
+    #  Check cmd-line executables + file paths + params supplied
+    #
+    local NODE_X
+
+    #  Ensure we're at the script's directory
+    if [[ "${EXE_DIR}" != "." ]]; then
+        log_line 'E' "Invoke script from its directory location: 'cd ${BOLD}${CUR_DIR}/${EXE_DIR}${NORMAL}'\n"
+        usage
+    fi
+
+    #  Utilities needed, on error show usage + quit
+    for CMD in "${CMDS[@]}"; do
+        if ( ! command -v "${CMD}" >/dev/null 2>&1 ); then
+            log_line 'E' "Unable to find command line utility ${RED}${BOLD}${CMD}${NORMAL} in \$PATH; please install it\n"
+            usage
+        fi
+    done
+
+    #  Check for valid <NODE>
+    # shellcheck disable=SC2076
+    if [[ ! ${NODES[*]} =~ "${NODE}" ]]; then
+        log_line 'E' "Invalid node: '${RED}${BOLD}${NODE}${NORMAL}'"
+        log_line 'E' "Valid values for --${YELLOW}${BOLD}node${NORMAL}: ${BOLD}${NODES[*]}${NORMAL}\n"
+        usage
+    fi
+
+    #  Find Node IP
+    for NODE_X in "${PROXMOX_NODES[@]}"; do
+        #  Split out instance fields
+        # shellcheck disable=SC2206
+        NODE_ARRAY=(${NODE_X//|/ })
+        if [[ "${NODE_ARRAY[0]}" == "${NODE}" ]]; then
+            NODE_IP="${NODE_ARRAY[1]}"
+            break
+        fi
+    done
+
+    #  Check for valid <TEMPLATE>
+    # shellcheck disable=SC2076
+    if [[ ! ${TEMPLATES[*]} =~ "${TEMPLATE}" ]]; then
+        log_line 'E' "Invalid template: '${RED}${BOLD}${TEMPLATE}${NORMAL}'"
+        log_line 'E' "Valid values for --${YELLOW}${BOLD}template${NORMAL}: ${BOLD}${TEMPLATES[*]}${NORMAL}\n"
+        usage
+    fi
+
+    #  Ensure <TEMPLATE> packer vars file exists
+    FILE_PACKER_VARS="vars/${TEMPLATE}.pkrvars.hcl"
+    if [[ ! -f ${FILE_PACKER_VARS} ]]; then
+        log_line 'E' "Missing packer '${BOLD}vars${NORMAL}' file: ${YELLOW}${BOLD}${FILE_PACKER_VARS}${NORMAL}\n"
+        usage
+    fi
+
+    #  Ensure <TEMPLATE> ansible playbook file exists
+    FILE_ANSIBLE_PROVISION="ansible/playbooks/${TEMPLATE}_build.yml"
+    if [[ ! -f ${FILE_ANSIBLE_PROVISION} ]]; then
+        log_line 'E' "Missing ansible '${BOLD}provisioning${NORMAL}' playbook: ${YELLOW}${BOLD}${FILE_ANSIBLE_PROVISION}${NORMAL}\n"
+        usage
+    fi
+
+    #  Ensure <TEMPLATE> ansible provisioning file exists
+    FILE_ANSIBLE_TESTING="ansible/playbooks/${TEMPLATE}_test.yml"
+    if [[ ! -f ${FILE_ANSIBLE_TESTING} ]]; then
+        log_line 'E' "Missing ansible '${BOLD}testing${NORMAL}' playbook: ${YELLOW}${BOLD}${FILE_ANSIBLE_TESTING}${NORMAL}\n"
+        usage
+    fi
+
+    #  Other files
+    FILE_PACKER_LOG="logs/${TEMPLATE}.log"
+    FILE_MANIFEST="manifests/${TEMPLATE}.json"
+}
+
+
+time_elapsed() {
+    #
+    #  Format-friendly time counter
+    #
+    local SECS_CNT=$SECONDS
+
+    local MINS=0; local SECS=0;
+    if [[ $SECS_CNT -gt 59 ]]; then
+        SECS=$(( SECS_CNT%60 ))
+        SECS_CNT=$(( SECS_CNT/60 ))
+        [[ $SECS_CNT -gt 59 ]] && MINS=$(( SECS_CNT%60 )) || MINS=${SECS_CNT}
+    else
+        SECS=${SECS_CNT}
+    fi
+    echo "${BOLD}${MINS}${NORMAL} mins, ${BOLD}${SECS}${NORMAL} secs"
+}
+
+
+build() {
+    #
+    #  Invoke packer command
+    #
+    local RESULT
+
+    log_line 'O' "All checks passed!"
+    log_line '' ""
+    log_line '' "${BOLD}Parameters:${NORMAL}"
+    log_line '' "${BOLD}–––––––––––${NORMAL}"
+    log_line '' "- Template          : ${YELLOW}${TEMPLATE}${NORMAL}"
+    log_line '' "- Proxmox Node      : ${YELLOW}${NODE}${NORMAL}"
+    log_line '' "- Proxmox Node IP   : ${YELLOW}${NODE_IP}${NORMAL}"
+    log_line '' ""
+    log_line '' "${BOLD}Files:${NORMAL}"
+    log_line '' "${BOLD}––––––${NORMAL}"
+    log_line '' "- Ansible Provision : ${YELLOW}${FILE_ANSIBLE_PROVISION}${NORMAL}"
+    log_line '' "- Ansible Testing   : ${YELLOW}${FILE_ANSIBLE_TESTING}${NORMAL}"
+    log_line '' "- Packer Log        : ${YELLOW}${FILE_PACKER_LOG}${NORMAL}"
+    log_line '' "- Packer Manifest   : ${YELLOW}${FILE_MANIFEST}${NORMAL}"
+    log_line '' "- Packer Vars       : ${YELLOW}${FILE_PACKER_VARS}${NORMAL}"
+    log_line '' ""
+
+    read -s -p "- Proxmox password for ${YELLOW}${NODE}${NORMAL}: " NODE_PWD
+
+    log_line '' ""
+    log_line '' ""
+    log_line '' "Executing ${GREEN}${BOLD}packer${NORMAL} now..."
+    log_line '' ""
+
+    #  Execute packer build
+    PACKER_LOG=1                                    \
+    PACKER_LOG_PATH=${FILE_PACKER_LOG}              \
+    PKR_VAR_proxmox_ip=${NODE_IP}                   \
+    PKR_VAR_proxmox_node=${NODE}                    \
+    PKR_VAR_proxmox_password=${NODE_PWD}            \
+    packer build                                    \
+        -force                                      \
+        -timestamp-ui                               \
+        -var-file=vars/${TEMPLATE}.pkrvars.hcl      \
+        .
+    RESULT=$?
+
+    if [[ "${RESULT}" -eq 0 ]]; then
+        local VM_ID; local VM_NAME; local VM_DESCRIPTION
+
+        if [[ -f ${FILE_MANIFEST} ]]; then
+            VM_ID=$(jq -r ".builds[0].artifact_id" "${FILE_MANIFEST}" | cut -d ':' -f 2)
+            VM_NAME=$(jq -r ".builds[0].custom_data.vm_name" "${FILE_MANIFEST}")
+            VM_DESCRIPTION=$(jq -r ".builds[0].custom_data.vm_description" "${FILE_MANIFEST}")
+
+            log_line '' ""
+            log_line 'O' "VM Info:"
+            log_line '' "- ID          : ${GREEN}${BOLD}${VM_ID}${NORMAL}"
+            log_line '' "- Name        : ${GREEN}${BOLD}${VM_NAME}${NORMAL}"
+            log_line '' "- Description : ${GREEN}${BOLD}${VM_DESCRIPTION}${NORMAL}"
+            log_line '' ""
+        fi
+        log_line 'O' "Packer run ${GREEN}success${NORMAL}"
+    else
+        log_line '' ""
+        log_line 'E' "Packer run ${RED}failure${NORMAL}"
+    fi
+    log_line '' ""
+    log_line '' "${CYAN}${BOLD}Time elapsed${NORMAL}: $(time_elapsed)"
+
+    exit "${RESULT}"
+}
+
+
+#
+#  Main()
+#
+config
+
+[[ $# -eq 0 ]] && usage                         #  No parameters passed, exit out
+
+PARAMS=""
+while (( "$#" )); do                            #  Parse parameters
+    [[ $1 == --*=* || $1 == -*=* ]] && set -- "${1%%=*}" "${1#*=}" "${@:2}"
+    # shellcheck disable=SC2221,SC2222,SC2034
+    case "$1" in
+        -t|--template)
+            [[ -n "$2" ]] && TEMPLATE=$2; shift 2 || break
+            ;;
+        -n|--node)
+            [[ -n "$2" ]] && NODE=$2; shift 2 || break
+            ;;
+        -h|--help)
+            usage
+            ;;
+        --)                                     # end argument parsing
+            shift
+            break
+            ;;
+        -*|--*=)                                # unsupported flags
+            log_line 'E' "Unknown parameter ${RED}${BOLD}${1}${NORMAL}\n"
+            usage
+            ;;
+        *)                                      # preserve positional arguments
+            PARAM="$PARAMS $1"
+            shift
+            ;;
+    esac
+done
+
+eval set -- "$PARAMS"                           #  Set positional arguments in their proper place
+check_values                                    #  Check for valid values
+build
+
+exit 0

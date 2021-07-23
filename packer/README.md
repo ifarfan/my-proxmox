@@ -1,12 +1,31 @@
 # Build Proxmox Templates via Packer
-Pass the proxmox `root` password via the `PROXMOX_PWD` environment variable at the command prompt
 
-####  Build Ubuntu 20.04 template
+Build **Proxmox** VM templates
+
+## Installation
+Install **packer**:
 ```shell
-read -s -p "Proxmox root password: " hold_pwd
-PACKER_LOG=1 PACKER_LOG_PATH=logs/packer_hcl.log packer build -timestamp-ui -force -var proxmox_password=${hold_pwd} ubuntu_20.04.pkr.hcl
+brew install packer
+packer version
 ```
 
-#### Requirements
-- Ensure `packer` is installed
-- Ensure ISO files specified under `variables`.`iso_filename` are present under folder `/var/lib/vz/templates/iso`
+## Usage
+**build** script:
+```shell
+$> ./build -h
+
+Usage: build --node <NODE> --template <TEMPLATE>
+
+Parameters:
+--node|-n <NODE>:
+  Available node(s): macmini1 macmini2 macmini3
+
+--template|-t <TEMPLATE>:
+  Available templates(s): ubuntu-20-04
+```
+
+
+Build **Ubuntu** template on `macmini1` noder:
+```shell
+./build -n macmini1 -t ubuntu-20-04
+```
