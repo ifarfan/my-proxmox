@@ -20,7 +20,7 @@ terraform destroy -auto-approve
 
 #### Fetch `kube-config` file from primary `server`
 ```shell
-scp rancher@192.168.136.31:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+scp rancher@192.168.136.30:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 ```
 
 #### Label agent nodes as `workers`
