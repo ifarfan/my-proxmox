@@ -1,0 +1,14 @@
+---
+file:
+  /etc/cloud/cloud.cfg:
+    exists: true
+    filetype: file
+    owner: root
+    group: root
+    mode: "0644"
+  /var/lib/cloud/instance:
+    exists: false
+
+package:
+  cloud-init:
+    installed: true

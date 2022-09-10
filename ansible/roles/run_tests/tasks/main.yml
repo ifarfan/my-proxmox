@@ -1,0 +1,59 @@
+---
+- name: Check mandatory vars
+  assert:
+    that:
+      - role_to_test is defined
+
+- name: Create goss folder for tests
+  file:
+    path: "{{ goss_test_directory }}"
+    state: directory
+    mode: 0755
+  loop:
+    - absent
+    - directory
+
+- name: Set Role tests path
+  set_fact:
+    path_to_tests: "roles/{{ role_to_test }}/molecule/tests/*.yml"
+
+- name: Find Role tests
+  set_fact:
+    goss_fixed_files: "{{ lookup('fileglob', path_to_tests, wantlist=True) | sort }}"
+
+- name: Copy tests to remote
+  copy:
+    src: "{{ item }}"
+    dest: "{{ goss_test_directory }}/{{ item | basename }}"
+    mode: 0755
+  with_items:
+    - "{{ goss_fixed_files }}"
+
+- name: Tally all tests
+  shell: ls *.yml
+  args:
+    executable: /bin/bash
+    chdir: "{{ goss_test_directory }}"
+  register: test_files
+  changed_when: false
+
+- name: list tests
+  debug:
+    msg: "{{ item }}"
+  loop: "{{ test_files.stdout_lines }}"
+
+- name: Run goss tests
+  command:
+    goss --gossfile {{ goss_test_directory }}/{{ item }} validate --format documentation
+  register: test_results
+  with_items: "{{ test_files.stdout_lines }}"
+  failed_when: false
+  changed_when: false
+
+- name: Display goss tests results
+  debug:
+    msg: "[command]:\n{{ item.cmd | join(' ') }}\n\n[output]:\n{{ item.stdout }}\n\n[return code]:\n{{ item.rc }}"
+  loop: "{{ test_results.results }}"
+  loop_control:
+    label: "{{ item.changed }}"
+  failed_when: item.rc != 0

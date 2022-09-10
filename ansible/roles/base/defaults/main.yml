@@ -1,0 +1,72 @@
+---
+apt_pkgs_to_remove:
+  - byobu
+  - eject
+  - g++
+  - g++-9
+  - popularity-contest
+  - telnet
+  - ubuntu-advantage-tools
+  - usbutils
+  - xauth
+  - xkb-data
+
+apt_pkgs_to_install:
+  - apt-file
+  - apt-utils
+  - aptitude
+  - bat
+  - colordiff
+  - curl
+  - dnsutils
+  - git-core
+  - grc
+  - htop
+  - iftop
+  - iotop
+  - iptraf
+  - lnav
+  - locate
+  - lsb-release
+  - lsof
+  - multitail
+  - nano
+  - ncdu
+  - nmap
+  - nscd
+  - peco
+  - python3-apt
+  - python3-pip
+  - python3-setuptools
+  - rsync
+  - screen
+  - software-properties-common
+  - sysstat
+  - tar
+  - tree
+  - unzip
+  - wget
+  - zip
+
+services_2_disable:
+  - multipathd                # Used to map physical storage devices
+  - packagekit                # Used during package updates when using GUI
+  - systemd-timesyncd         # Replaced by "chrony"
+
+cron_job_to_remove:
+  # ? NOTE:
+  # ? Removing jobs that are either resource hogs (cough, sysstat, cough)
+  # ? and/or no longer needed/deprecated
+  - cron.d/sysstat
+  - cron.daily/apport
+  - cron.daily/apt-compat
+  - cron.daily/bsdmainutils
+  - cron.daily/locate
+  - cron.daily/update-notifier-common
+  - cron.weekly/update-notifier-common
+
+locale: en_US.UTF-8
+time_zone: Etc/UTC
+
+goss_url: https://github.com/aelsabbahy/goss/releases/latest/download/goss-linux-amd64
+goss_exec: /usr/local/bin/goss

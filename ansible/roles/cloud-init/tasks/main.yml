@@ -1,0 +1,26 @@
+---
+# ? Note:
+# ? Install cloud-init package and prepare for run on next boot
+- name: Install cloud-init
+  apt:
+    pkg: cloud-init
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Comment out unused cloud-init modules
+  replace:
+    path: /etc/cloud/cloud.cfg
+    regexp: '(^\s*- {{ item }}.*)'
+    replace: '#\1'
+  loop: "{{ cloud_modules_disabled }}"
+
+- name: Clean cloud-init so it runs again on next boot
+  command:
+    cmd: /usr/bin/cloud-init clean
+    removes: /var/lib/cloud/instance
+
+- name: Reset machine-id
+  copy:
+    content: ''
+    dest: /etc/machine-id

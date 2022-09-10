@@ -1,0 +1,110 @@
+#!/bin/sh
+#
+#  1 0 - B A N N E R - W A R N I N G
+#
+#  ASCII Generator at http://patorjk.com/software/taag/
+#
+
+##  Get Distro Info
+[ -r /etc/lsb-release ] && . /etc/lsb-release
+
+if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+    # Fall back to using the very slow lsb_release utility
+    DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+fi
+
+##  Show Logo
+echo
+echo "\033[1;32m"
+cat << 'EOF'
+                                       *     .--.
+                                            / /  `
+                           +               | |
+                                  '         \ \__,
+                              *          +   '--'  *
+                                  +   /\
+                     +              .'  '.   *
+                            *      /======\      +
+                                  ;:.  _   ;
+                                  |:. (_)  |
+                                  |:.  _   |
+                        +         |:. (_)  |          *
+                                  ;:.      ;
+                                .' \:.    / `.
+                               / .-'':._.'`-. \
+                               |/    /||\    \|
+                             _..--"""````"""--.._
+                       _.-'``                    ``'-._
+                     -'                                '-
+EOF
+echo "\033[1;94m"; cat << 'EOF'
+  _ __ ___  _   _   ______   _ __  _ __ _____  _____  _ __ ___   _____  __
+ | '_ ` _ \| | | | |______| | '_ \| '__/ _ \ \/ / _ \| '_ ` _ \ / _ \ \/ /
+ | | | | | | |_| |          | |_) | | | (_) >  < (_) | | | | | | (_) >  <
+ |_| |_| |_|\__, |          | .__/|_|  \___/_/\_\___/|_| |_| |_|\___/_/\_\
+             __/ |          | |
+            |___/           |_|
+EOF
+echo "\033[0m"
+
+##  Show Distro Info
+echo "\033[0;32m"
+cat << 'EOF'
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    S Y S T E M    I N F O R M A T I O N
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+EOF
+echo "\033[0m"
+
+echo "  Date/Time: \t$(date)"
+echo "  Hostname: \t\033[0;32m$(hostname)\033[0m"
+echo "  OS Version: \t$DISTRIB_DESCRIPTION [$(uname -o) $(uname -r) $(uname -m)]"
+
+##  Uptime
+UPTIME_DAYS=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 / 86400)
+UPTIME_HOURS=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 % 86400 / 3600)
+UPTIME_MINUTES=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 % 86400 % 3600 / 60)
+echo "  Uptime: \t$UPTIME_DAYS days, $UPTIME_HOURS hours, $UPTIME_MINUTES minutes"
+
+##  Show Machine Info
+cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+[ "$cores" -eq "0" ] && cores=1
+threshold="${cores:-1}.0"
+if [ $(echo "`cut -f1 -d ' ' /proc/loadavg` < $threshold" | bc) -eq 1 ]; then
+    echo
+    /usr/bin/landscape-sysinfo
+else
+    echo
+    echo "  System information disabled due to load higher than $threshold"
+fi
+
+## Show Warning
+echo "\033[0;31m"
+cat << 'EOF'
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    S E C U R I T Y    N O T I C E
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+EOF
+echo "\033[0m"
+
+echo "  This computer system is for authorized users only. All activity is logged"
+echo "  and regulary checked by systems personnel. Individuals using this system"
+echo "  without authority, or in excess of their authority, are subject to having"
+echo "  all their services revoked. Any illegal services ran by user or attempts"
+echo "  to take down this server or its services will be reported to local law "
+echo "  enforcement, and said user will be punished to the full extent of the law."
+
+echo
+echo "  Anyone using this system consents to these terms."
+echo
+
+## Notify of reboot
+if [ -x /usr/lib/update-notifier/update-motd-fsck-at-reboot ]; then
+    exec /usr/lib/update-notifier/update-motd-fsck-at-reboot
+fi
+
+if [ -x /usr/lib/update-notifier/update-motd-reboot-required ]; then
+    exec /usr/lib/update-notifier/update-motd-reboot-required
+fi
+
+exit 0

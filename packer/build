@@ -58,6 +58,9 @@ config() {
     FILE_PACKER_VARS=''
     FILE_PACKER_LOG=''
     FILE_MANIFEST=''
+
+    #  Build from VM Clone or ISO
+    BUILD_FROM=''
 }
 
 
@@ -152,18 +155,26 @@ check_values() {
         usage
     fi
 
-    #  Ensure <TEMPLATE> ansible playbook file exists
-    FILE_ANSIBLE_PROVISION="ansible/playbooks/${TEMPLATE}_build.yml"
-    if [[ ! -f ${FILE_ANSIBLE_PROVISION} ]]; then
-        log_line 'E' "Missing ansible '${BOLD}provisioning${NORMAL}' playbook: ${YELLOW}${BOLD}${FILE_ANSIBLE_PROVISION}${NORMAL}\n"
-        usage
-    fi
+    #  Determine if we're building from clone or iso
+    if grep -qs 'iso_file' "${FILE_PACKER_VARS}"; then
+        #  No need for ansible playbooks
+        BUILD_FROM='iso'
+    else
+        BUILD_FROM='clone'
 
-    #  Ensure <TEMPLATE> ansible provisioning file exists
-    FILE_ANSIBLE_TESTING="ansible/playbooks/${TEMPLATE}_test.yml"
-    if [[ ! -f ${FILE_ANSIBLE_TESTING} ]]; then
-        log_line 'E' "Missing ansible '${BOLD}testing${NORMAL}' playbook: ${YELLOW}${BOLD}${FILE_ANSIBLE_TESTING}${NORMAL}\n"
-        usage
+        #  Ensure <TEMPLATE> ansible playbook file exists
+        FILE_ANSIBLE_PROVISION="ansible/playbooks/${TEMPLATE}_build.yml"
+        if [[ ! -f ${FILE_ANSIBLE_PROVISION} ]]; then
+            log_line 'E' "Missing ansible '${BOLD}provisioning${NORMAL}' playbook: ${YELLOW}${BOLD}${FILE_ANSIBLE_PROVISION}${NORMAL}\n"
+            usage
+        fi
+
+        #  Ensure <TEMPLATE> ansible provisioning file exists
+        FILE_ANSIBLE_TESTING="ansible/playbooks/${TEMPLATE}_test.yml"
+        if [[ ! -f ${FILE_ANSIBLE_TESTING} ]]; then
+            log_line 'E' "Missing ansible '${BOLD}testing${NORMAL}' playbook: ${YELLOW}${BOLD}${FILE_ANSIBLE_TESTING}${NORMAL}\n"
+            usage
+        fi
     fi
 
     #  Other files
@@ -194,7 +205,7 @@ build() {
     #
     #  Invoke packer command
     #
-    local RESULT
+    local RESULT; local FILTER
 
     log_line 'O' "All checks passed!"
     log_line '' ""
@@ -203,11 +214,14 @@ build() {
     log_line '' "- Template          : ${YELLOW}${TEMPLATE}${NORMAL}"
     log_line '' "- Proxmox Node      : ${YELLOW}${NODE}${NORMAL}"
     log_line '' "- Proxmox Node IP   : ${YELLOW}${NODE_IP}${NORMAL}"
+    log_line '' "- Build Type        : ${YELLOW}${BUILD_FROM}${NORMAL}"
     log_line '' ""
     log_line '' "${BOLD}Files:${NORMAL}"
     log_line '' "${BOLD}––––––${NORMAL}"
-    log_line '' "- Ansible Provision : ${YELLOW}${FILE_ANSIBLE_PROVISION}${NORMAL}"
-    log_line '' "- Ansible Testing   : ${YELLOW}${FILE_ANSIBLE_TESTING}${NORMAL}"
+    if [[ "${BUILD_FROM}" == 'clone' ]]; then
+        log_line '' "- Ansible Provision : ${YELLOW}${FILE_ANSIBLE_PROVISION}${NORMAL}"
+        log_line '' "- Ansible Testing   : ${YELLOW}${FILE_ANSIBLE_TESTING}${NORMAL}"
+    fi
     log_line '' "- Packer Log        : ${YELLOW}${FILE_PACKER_LOG}${NORMAL}"
     log_line '' "- Packer Manifest   : ${YELLOW}${FILE_MANIFEST}${NORMAL}"
     log_line '' "- Packer Vars       : ${YELLOW}${FILE_PACKER_VARS}${NORMAL}"
@@ -220,6 +234,9 @@ build() {
     log_line '' "Executing ${GREEN}${BOLD}packer${NORMAL} now..."
     log_line '' ""
 
+    #  Filter build by type
+    [[ "${BUILD_FROM}" == 'iso' ]] && FILTER='from_iso_build' || FILTER='from_clone_build'
+
     #  Execute packer build
     PACKER_LOG=1                                    \
     PACKER_LOG_PATH=${FILE_PACKER_LOG}              \
@@ -230,6 +247,7 @@ build() {
         -force                                      \
         -timestamp-ui                               \
         -var-file=vars/${TEMPLATE}.pkrvars.hcl      \
+        -only="${FILTER}.*"                         \
         .
     RESULT=$?
 

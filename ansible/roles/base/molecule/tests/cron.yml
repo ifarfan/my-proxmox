@@ -1,0 +1,28 @@
+---
+file:
+  /etc/default/cron:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - EXTRA_OPTS="-L 0"
+  /lib/systemd/system/cron.service:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - Restart=always
+  /var/spool/cron/crontabs/root:
+    exists: true
+    mode: "0600"
+    owner: root
+    group: crontab
+    filetype: file
+
+package:
+  cron:
+    installed: true

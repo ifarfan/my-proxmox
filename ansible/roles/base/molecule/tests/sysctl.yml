@@ -1,0 +1,12 @@
+---
+file:
+  /etc/sysctl.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - vm.swappiness = 10
+      - net.core.somaxconn = 4096
+      - net.ipv4.tcp_fin_timeout = 10

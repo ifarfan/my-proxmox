@@ -1,0 +1,7 @@
+---
+- name: Download + Install Goss
+  get_url:
+    url: "{{ goss_url }}"
+    dest: "{{ goss_exec }}"
+    owner: root
+    mode: 0755

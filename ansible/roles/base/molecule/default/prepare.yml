@@ -1,0 +1,26 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  tasks:
+    - name: Include global Ansible variables
+      include_vars:
+        dir: ../../../../group_vars/all
+
+    #
+    # ! NOTE:
+    # ! Include below any tasks you need to execute prior to running any tests
+    #
+    - name: Create ubuntu group
+      group:
+        name: ubuntu
+        state: present
+
+    - name: Create ubuntu user
+      user:
+        name: ubuntu
+        group: ubuntu
+        comment: The man, the legend
+        state: present
+        shell: /bin/bash
+        create_home: true

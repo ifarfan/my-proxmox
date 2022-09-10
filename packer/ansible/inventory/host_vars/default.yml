@@ -1,0 +1,4 @@
+---
+# ! Notes:
+# ! - Packer expects a "default" group for Ansible hosts
+# ! - Enter below variables normally set on an inventory YML file

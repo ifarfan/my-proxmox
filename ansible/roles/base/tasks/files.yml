@@ -1,0 +1,25 @@
+---
+- name: Copy profile.d files
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/profile.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - 10-prompt.sh
+
+- name: Copy default .bashrc files
+  copy:
+    src: _bashrc
+    dest: "{{ item.path }}"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: 0644
+  loop:
+    -
+      path: '/etc/skel/.bashrc'
+      user: 'root'
+    -
+      path: '/root/.bashrc'
+      user: 'root'

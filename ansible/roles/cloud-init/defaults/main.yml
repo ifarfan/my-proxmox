@@ -1,0 +1,15 @@
+---
+cloud_modules_disabled:
+  - 'byobu'
+  - 'chef'
+  - 'fan'
+  - 'landscape'
+  - 'locale'
+  - 'mcollective'
+  - 'ntp'
+  - 'phone-home'
+  - 'puppet'
+  - 'rightscale_userdata'
+  - 'salt-minion'
+  - 'timezone'
+  - 'ubuntu-advantage'

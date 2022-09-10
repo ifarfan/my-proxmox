@@ -1,0 +1,13 @@
+---
+#
+# ? Ubuntu 20.04 provisioning
+#
+- name: Provision Ubuntu 20.04
+  hosts: default
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Setup base Ubuntu
+      include_role:
+        name: base

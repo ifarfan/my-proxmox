@@ -1,0 +1,28 @@
+---
+- name: restart rsyslog
+  systemd:
+    name: rsyslog
+    state: restarted
+    enabled: true
+
+- name: restart chrony
+  systemd:
+    name: chrony
+    daemon_reload: true
+    state: restarted
+    enabled: true
+
+- name: restart cron
+  systemd:
+    name: cron
+    state: restarted
+    enabled: true
+
+- name: reload ssh
+  systemd:
+    name: ssh
+    state: reloaded
+    enabled: true
+
+- name: run sysctl
+  command: sysctl --system

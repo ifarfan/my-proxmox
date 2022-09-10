@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: Include global Ansible variables
+      include_vars:
+        dir: ../../../../group_vars/all
+
+    - name: Configure common 20.04
+      include_role:
+        name: common_20_04

@@ -21,11 +21,11 @@ Parameters:
   Available node(s): macmini1 macmini2 macmini3
 
 --template|-t <TEMPLATE>:
-  Available templates(s): ubuntu-20-04
+  Available templates(s): ubuntu-20-04-base ubuntu-20-04-iso
 ```
 
 
 Build **Ubuntu** template on `macmini1` node:
 ```shell
-./build -n macmini1 -t ubuntu-20-04
+./build -n macmini1 -t ubuntu-20-04-iso
 ```

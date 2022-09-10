@@ -1,0 +1,31 @@
+---
+dependency:
+  name: galaxy
+lint: |
+  set -e
+  yamllint -c ../../.yamllint .
+  ansible-lint
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: git.office.smartasset.com:4567/devops/ci/ubuntu-2004-molecule-client
+    command: /lib/systemd/systemd
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+  env:
+    OBJC_DISABLE_INITIALIZE_FORK_SAFETY: "YES"
+  config_options:
+    defaults:
+      stdout_callback: yaml
+      bin_ansible_callbacks: true
+verifier:
+  name: ansible

@@ -32,6 +32,12 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+#  Packer
+packer/logs/*
+!packer/logs/.gitkeep
+packer/manifests/*
+!packer/manifests/.gitkeep
+
 # Editors
 .vscode/
 .idea/
