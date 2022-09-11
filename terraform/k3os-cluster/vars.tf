@@ -35,7 +35,7 @@ locals {
     }
   ]
 
-  # ? k3os Agents
+  # ? k3os Workers
   agents = [
     {
       name        = "k3os-agent-00",
@@ -69,6 +69,19 @@ locals {
     }
   ]
 
+  # ? k3os Storage
+  data = [
+    {
+      name        = "k3os-data-00",
+      desc        = "k3os Data 00",
+      target_node = local.proxmox_nodes.1
+    },
+    {
+      name        = "k3os-data-01",
+      desc        = "k3os Data 01",
+      target_node = local.proxmox_nodes.2
+    }
+  ]
 
   # ? VM defaults
   iso      = "/mnt/pve/remote-nfs/template/iso/k3os-amd64.iso"
@@ -103,6 +116,16 @@ locals {
   agent = {
     cores  = 2,
     memory = 4096,
+
+    disk = {
+      size = "32G"
+    }
+  }
+
+  # ? VM "data" overrides
+  datum = {
+    cores  = 1,
+    memory = 1024,
 
     disk = {
       size = "32G"
