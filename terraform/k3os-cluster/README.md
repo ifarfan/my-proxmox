@@ -37,5 +37,5 @@ kubectl label nodes k3os-agent-05 kubernetes.io/role=worker
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
-kubectl apply -f https://raw.githubusercontent.com/ifarfan/metallb-ip-pool.yml
+kubectl apply -f https://raw.githubusercontent.com/ifarfan/my-proxmox/main/terraform/k3os-cluster/configs/metallb-ip-pool.yml
 ```
