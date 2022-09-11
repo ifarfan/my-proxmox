@@ -31,6 +31,9 @@ kubectl label nodes k3os-agent-02 kubernetes.io/role=worker
 kubectl label nodes k3os-agent-03 kubernetes.io/role=worker
 kubectl label nodes k3os-agent-04 kubernetes.io/role=worker
 kubectl label nodes k3os-agent-05 kubernetes.io/role=worker
+
+kubectl label nodes k3os-data-00 kubernetes.io/role=data
+kubectl label nodes k3os-data-01 kubernetes.io/role=data
 ```
 
 #### Install metallb
