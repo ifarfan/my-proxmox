@@ -1,0 +1,51 @@
+---
+# ? See references:
+# ? - https://github.com/feeltheajf/trufflehog3/blob/2.x/trufflehog.yaml
+# ? - https://github.com/feeltheajf/trufflehog3/blob/2.x/examples/trufflehog.yaml
+skip_paths:
+  - packer/logs/*
+  - terraform/cloudflare/.terraform.lock.hcl
+  - terraform/cloudflare/terraform.tfstate
+  - terraform/k3os-cluster/.terraform.lock.hcl
+  - terraform/k3os-cluster/logs/*
+  - terraform/k3os-cluster/terraform.tfstate
+  - terraform/k8s/.terraform.lock.hcl
+  - terraform/logs/*
+  - terraform/portainer/.terraform.lock.hcl
+  - terraform/portainer/terraform.tfstate
+  - terraform/yatch/.terraform.lock.hcl
+  - terraform/yatch/terraform.tfstate
+
+skip_strings:
+  packer/http/ubuntu-20-04-iso.preseed.cfg:
+    - user-password-crypted
+    - root-password-crypted
+  terraform/k3os-cluster/configs/k3os-00.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-01.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-02.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-agent-00.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-agent-01.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-agent-02.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-agent-03.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-agent-04.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-agent-05.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-data-00.yml:
+    - token
+  terraform/k3os-cluster/configs/k3os-data-01.yml:
+    - token
+  terraform/portainer/vars.tf:
+    - ssh_public_keys
+  terraform/k8s/vars.tf:
+    - ssh-ed25519
+    - ssh-rsa
+  terraform/yatch/vars.tf:
+    - ssh_public_keys
