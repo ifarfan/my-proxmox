@@ -1,0 +1,54 @@
+---
+- name: Portainer provisioning
+  hosts: portainer
+  become: true
+  gather_facts: true
+  tasks:
+    # Base OS install + fixings
+    - name: Install Ubuntu 22.04 lxc
+      ansible.builtin.include_role:
+        name: base/lxc
+
+    - name: Install modern Unix utilities
+      ansible.builtin.include_role:
+        name: modern_unix
+
+    # Docker daemon + docker compose apps
+    - name: Install docker
+      ansible.builtin.include_role:
+        name: docker
+
+    - name: Install traefik
+      ansible.builtin.include_role:
+        name: traefik
+      tags: traefik
+
+    - name: Install portainer
+      ansible.builtin.include_role:
+        name: portainer
+      tags: portainer
+
+    - name: Install heimdall
+      ansible.builtin.include_role:
+        name: heimdall
+      tags: heimdall
+
+    - name: Install uptime-kuma
+      ansible.builtin.include_role:
+        name: uptime_kuma
+      tags: uptime_kuma
+
+    - name: Install prometheus
+      ansible.builtin.include_role:
+        name: prometheus
+      tags: prometheus
+
+    - name: Install grafana
+      ansible.builtin.include_role:
+        name: grafana
+      tags: grafana
+
+    - name: Install dashy
+      ansible.builtin.include_role:
+        name: dashy
+      tags: dashy

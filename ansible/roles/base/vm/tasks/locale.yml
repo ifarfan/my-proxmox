@@ -1,0 +1,24 @@
+---
+- name: Ensure locales is installed
+  ansible.builtin.apt:
+    pkg: locales
+    state: present
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Ensure our locale exists
+  community.general.locale_gen:
+    name: "{{ locale }}"
+    state: present
+
+- name: Set locale
+  ansible.builtin.debconf:
+    name: locales
+    question: locales/default_environment_locale
+    value: "{{ locale }}"
+    vtype: select
+  register: locale_update
+
+- name: Rebuild locale database   # noqa no-handler
+  ansible.builtin.command:
+    dpkg-reconfigure locales -f noninteractive
+  when: locale_update is changed

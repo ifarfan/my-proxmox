@@ -1,0 +1,4 @@
+---
+portainer_directory: /opt/portainer
+portainer_volume: portainer_data
+portainer_port: 9000

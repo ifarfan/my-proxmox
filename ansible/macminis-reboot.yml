@@ -1,0 +1,12 @@
+---
+- name: Reboot Proxmox servers
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Reboot 1 proxmox node at the time + wait up to 3 mins
+      throttle: 1
+      ansible.builtin.reboot:
+        post_reboot_delay: 60
+        reboot_timeout: 180
+        # test_command: /usr/bin/systemctl status pvedaemon

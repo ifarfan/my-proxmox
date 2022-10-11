@@ -1,0 +1,25 @@
+---
+hostname: k3os-server-02
+ssh_authorized_keys:
+  - github:ifarfan
+write_files:
+  - path: /var/lib/connman/default.config
+    content: |-
+      [service_eth0]
+      Type=ethernet
+      IPv4=192.168.136.42/255.255.255.0/192.168.136.1
+      IPv6=off
+      Nameservers=1.1.1.1,1.0.0.1
+k3os:
+  ntp_servers:
+    - 0.us.pool.ntp.org
+    - 1.us.pool.ntp.org
+  dns_nameservers:
+    - 1.1.1.1
+    - 1.0.0.1
+  k3s_args:
+    - server
+    - "--disable=servicelb"
+    - "--bind-address=192.168.136.42"
+  token: "e6saw26p88bhukn7uuyr9ay8t45xyz4pw6664km5erzw5utr5vjhdrutbwz9s7zkejnz6yhuts8bm2p3u6zzht4ydphw3pyenqc"
+  server_url: https://192.168.136.41:6443

@@ -1,0 +1,14 @@
+---
+file:
+  /etc/timezone:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - Etc/UTC
+
+package:
+  tzdata:
+    installed: true

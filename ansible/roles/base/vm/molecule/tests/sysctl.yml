@@ -1,0 +1,20 @@
+---
+file:
+  /etc/sysctl.d/90-tcptuning.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - vm.swappiness = 10
+      - net.core.somaxconn = 4096
+  /etc/sysctl.d/90-hardening.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - fs.suid_dumpable = 0
+      - kernel.sysrq = 0

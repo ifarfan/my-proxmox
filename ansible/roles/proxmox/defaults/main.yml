@@ -1,0 +1,124 @@
+---
+repo_sources_folder: /etc/apt/sources.list.d
+cloudinit_folder: /var/lib/vz/cloud-init
+apt_cache_time: 1800
+
+apt_pkgs_to_install:
+- aptitude
+- curl
+- git
+- grc
+- hddtemp
+- htop
+- lm-sensors
+- locate
+- lsof
+- multitail
+- nano
+- ncdu
+- net-tools
+- nmap
+- tar
+- tree
+- unzip
+- wget
+- zip
+
+aliases: |
+  #
+  #  Global aliases
+  #
+  alias ..='cd ../'
+  alias ...='cd ../../'
+  alias .2='cd ../../'
+  alias .3='cd ../../../'
+  alias .4='cd ../../../../'
+  alias .5='cd ../../../../../'
+  alias .6='cd ../../../../../../'
+  alias 1='cd +1'
+  alias 2='cd +2'
+  alias 3='cd +3'
+  alias 4='cd +4'
+  alias 5='cd +5'
+  alias 6='cd +6'
+  alias 7='cd +7'
+  alias 8='cd +8'
+  alias 9='cd +9'
+  alias c=clear
+  alias cd..='cd ../'
+  alias colourify='/usr/bin/grc -es --colour=auto'
+  alias configure='colourify ./configure'
+  alias cp='cp -iv'
+  alias cpi='nocorrect cp -i'
+  alias d='dirs -v'
+  alias df='colourify df'
+  alias diff='colourify diff'
+  alias diffu='diff --unified'
+  alias dig='colourify dig'
+  alias du='colourify du'
+  alias egrep='egrep --color=auto'
+  alias env='colourify env'
+  alias fdisk='colourify fdisk'
+  alias fix_stty='stty sane'
+  alias free='colourify free'
+  alias ftp='noglob ftp'
+  alias head='colourify head'
+  alias id='colourify id'
+  alias ifconfig='colourify ifconfig'
+  alias ip='colourify ip'
+  alias l='ls -1A'
+  alias la='ll -A'
+  alias lc='lt -c'
+  alias ld='colourify ld'
+  alias less='less -FSRXc'
+  alias lk='ll -Sr'
+  alias ll='ls -FGlAhp'
+  alias lm='la | "$PAGER"'
+  alias locate='noglob locate'
+  alias lr='ll -R'
+  alias lsblk='colourify lsblk'
+  alias lsof='colourify lsof'
+  alias lspci='colourify lspci'
+  alias lt='ll -tr'
+  alias lu='lt -u'
+  alias lx='ll -XB'
+  alias mkdir='mkdir -pv'
+  alias mount='colourify mount'
+  alias mv='mv -iv'
+  alias my_ip='dig +short myip.opendns.com @resolver1.opendns.com'
+  alias netstat='colourify netstat'
+  alias path='echo -e ${PATH//:/\\n}'
+  alias ping='colourify ping'
+  alias ps='colourify ps'
+  alias psc='ps xao pid,state,user,args'
+  alias pu=pushd
+  alias rrsync='rsync --rsync-path sudo\ rsync --recursive --perms --copy-links --verbose --compress --rsh=ssh'
+  alias rsync='noglob rsync'
+  alias run-help=man
+  alias sa='alias | grep -i'
+  alias scp='noglob scp'
+  alias sftp='noglob sftp'
+  alias show_options=shopt
+  alias sl=ls
+  alias sudo='sudo '
+  alias sum='xargs | tr '' '' ''+'' | bc'
+  alias tail='colourify tail'
+  alias topc='top -o cpu'
+  alias topm='top -o vsize'
+  alias traceroute='colourify traceroute'
+  alias traceroute6='colourify traceroute6'
+  alias type='type -a'
+  alias vi='vim -p'
+  alias xx='exa --long -a --header --grid'
+  alias '~'='cd ~'
+
+prompt: |
+  #
+  #  Global Bash Prompt
+  #
+  export PS1='\[\033[1;32m\]\u\[\033[0m\]@\[\033[1;30m\]\H\[\033[0m\]:\[\033[0;34m\]\w\[\033[0m\]\$ '
+
+dns: |
+  search local
+  nameserver 1.1.1.1
+  nameserver 1.0.0.1

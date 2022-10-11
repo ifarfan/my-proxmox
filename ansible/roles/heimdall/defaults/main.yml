@@ -1,0 +1,4 @@
+---
+heimdall_directory: /opt/heimdall
+heimdall_volume: heimdall_data
+heimdall_port: 80

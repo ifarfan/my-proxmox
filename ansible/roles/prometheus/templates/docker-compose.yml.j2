@@ -1,0 +1,54 @@
+---
+version: '3'
+
+volumes:
+  {{ prometheus_volume }}:
+    driver: local
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "{{ prometheus_port }}:{{ prometheus_port }}"
+    volumes:
+      - /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - {{ prometheus_volume }}:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+
+  # cadvisor:
+  #   # https://github.com/google/cadvisor/issues/3066
+  #   # To manual check versions: https://github.com/google/cadvisor/releases
+  #   image: gcr.io/cadvisor/cadvisor:v0.45.0
+  #   container_name: cadvisor
+  #   network_mode: host
+  #   restart: unless-stopped
+  #   # privileged: true
+  #   ports:
+  #     - "8080:8081"
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #     - /dev/disk/:/dev/disk:ro
+  #   # devices:
+  #   #  - /dev/kmsg:/dev/kmsg

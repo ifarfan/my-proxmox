@@ -1,0 +1,34 @@
+---
+version: '3'
+
+volumes:
+  {{ loki_volume }}:
+    driver: local
+
+services:
+  loki:
+    image: loki/loki-ce
+    container_name: loki
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - {{ loki_volume }}:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.loki.entrypoints=http"
+      - "traefik.http.routers.loki.rule=Host(`loki.{{ global_domain }}`)"
+      - "traefik.http.middlewares.loki-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.loki.middlewares=loki-https-redirect"
+      - "traefik.http.routers.loki-secure.entrypoints=https"
+      - "traefik.http.routers.loki-secure.rule=Host(`loki.{{ global_domain }}`)"
+      - "traefik.http.routers.loki-secure.tls=true"
+      - "traefik.http.routers.loki-secure.service=loki"
+      - "traefik.http.services.loki.loadbalancer.server.port=9000"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

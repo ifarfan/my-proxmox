@@ -1,0 +1,53 @@
+---
+- name: Install traefik
+  block:
+
+    - name: Create traefik directory
+      ansible.builtin.file:
+        path: "{{ traefik_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ traefik_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Copy config.yml file
+      ansible.builtin.template:
+        src: config.yml.j2
+        dest: "{{ traefik_directory }}/config.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Copy traefik.yml file
+      ansible.builtin.template:
+        src: traefik.yml.j2
+        dest: "{{ traefik_directory }}/traefik.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Create and start traefik
+      community.docker.docker_compose:
+        project_src: "{{ traefik_directory }}"
+
+    - name: Wait until certificate is registered
+      ansible.builtin.uri:
+        url: "https://traefik.{{ global_domain }}/"
+        validate_certs: yes
+        status_code:
+          - 200
+      until: uri_output.status == 200
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
+      delay: 10
+      register: uri_output
+
+  tags: traefik

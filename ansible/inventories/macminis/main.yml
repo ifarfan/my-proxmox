@@ -1,0 +1,7 @@
+---
+all:
+  hosts:
+    m1.macminis.net:
+    m2.macminis.net:
+    m3.macminis.net:
+  vars:

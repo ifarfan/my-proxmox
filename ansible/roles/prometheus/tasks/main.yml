@@ -1,0 +1,44 @@
+---
+- name: Configure prometheus
+  block:
+
+    - name: Create prometheus directory
+      ansible.builtin.file:
+        path: "{{ prometheus_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ prometheus_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Copy config file
+      ansible.builtin.copy:
+        src: prometheus.yml
+        dest: "{{ prometheus_directory }}/prometheus.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Create and start prometheus
+      community.docker.docker_compose:
+        project_src: "{{ prometheus_directory }}"
+
+    - name: Wait until site is up
+      ansible.builtin.uri:
+        url: "http://prometheus.{{ global_domain }}:{{ prometheus_port }}/"
+        validate_certs: yes
+        status_code:
+          - 200
+      until: uri_output.status == 200
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
+      delay: 10
+      register: uri_output
+
+  tags: prometheus

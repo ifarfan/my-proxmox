@@ -1,0 +1,4 @@
+---
+uptime_kuma_directory: /opt/uptime_kuma
+uptime_kuma_volume: uptime_kuma_data
+uptime_kuma_port: 3001

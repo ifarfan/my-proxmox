@@ -1,0 +1,27 @@
+---
+- name: restart chrony
+  ansible.builtin.systemd:
+    name: chrony
+    state: restarted
+    enabled: true
+
+- name: restart cron
+  ansible.builtin.systemd:
+    name: cron
+    state: restarted
+    enabled: true
+
+- name: restart rsyslog
+  ansible.builtin.systemd:
+    name: rsyslog
+    state: restarted
+    enabled: true
+
+- name: reload ssh
+  ansible.builtin.systemd:
+    name: ssh
+    state: reloaded
+    enabled: true
+
+- name: run sysctl
+  ansible.builtin.command: sysctl --system

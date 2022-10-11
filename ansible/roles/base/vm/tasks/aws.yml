@@ -1,0 +1,30 @@
+---
+- name: Download awscliv2 installer
+  ansible.builtin.unarchive:
+    src: "{{ aws_cli_url }}"
+    dest: "{{ executable_temp_dir | default('/tmp') }}"
+    remote_src: true
+    creates: /tmp/aws
+    mode: 0755
+
+- name: Run awscliv2 installer
+  ansible.builtin.command:
+    cmd: /bin/sh "{{ executable_temp_dir | default('/tmp') }}/aws/install"
+    creates: /usr/local/bin/aws
+
+- name: Set AWS cli default region
+  ansible.builtin.command:
+    aws configure set region {{ aws_cli_region }}
+  changed_when: false                     # noqa no-changed-when
+
+- name: Set AWS cli default output
+  ansible.builtin.command:
+    aws configure set output {{ aws_cli_output }}
+  changed_when: false                     # noqa no-changed-when
+
+- name: Install AWS apt utilities
+  ansible.builtin.apt:
+    pkg: "{{ aws_apt_pkgs }}"
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"

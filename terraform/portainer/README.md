@@ -1,3 +1,3 @@
 # Portainer
 
-Create `portainer` lxc to host docker container apps
+Launch a LXC container to host `portainer` + create DNS record on `Cloudflare`

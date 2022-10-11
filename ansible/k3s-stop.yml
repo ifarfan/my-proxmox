@@ -1,0 +1,51 @@
+---
+#
+# ? Stop all nodes in this order
+# ? - agents
+# ? - data
+# ? - servers
+#
+- name: Stop k3s agent hosts
+  hosts: k3s_agents
+  gather_facts: false
+  tasks:
+    - name: Stop agent nodes
+      throttle: 1
+      local_action:
+        module: community.general.proxmox
+        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
+        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
+        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+        hostname: "{{ inventory_hostname }}"
+        unprivileged: true
+        state: stopped
+
+- name: Stop k3s data hosts
+  hosts: k3s_data
+  gather_facts: false
+  tasks:
+    - name: Stop data nodes
+      throttle: 1
+      local_action:
+        module: community.general.proxmox
+        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
+        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
+        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+        hostname: "{{ inventory_hostname }}"
+        unprivileged: true
+        state: stopped
+
+- name: Stop k3s server hosts
+  hosts: k3s_servers
+  gather_facts: false
+  tasks:
+    - name: Stop server nodes
+      throttle: 1
+      local_action:
+        module: community.general.proxmox
+        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
+        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
+        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+        hostname: "{{ inventory_hostname }}"
+        unprivileged: true
+        state: stopped

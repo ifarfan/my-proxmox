@@ -1,0 +1,108 @@
+---
+apt_pkgs_modern:
+  - bat
+  - fd-find
+  - jq
+
+apt_debs_modern:
+  - https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+  - https://github.com/ClementTsang/bottom/releases/download/0.6.8/bottom_0.6.8_amd64.deb
+  - https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd-musl_0.23.1_amd64.deb
+  - https://github.com/bootandy/dust/releases/download/v0.8.3/du-dust_0.8.3_amd64.deb
+  - https://github.com/dandavison/delta/releases/download/0.14.0/git-delta-musl_0.14.0_amd64.deb
+  - https://github.com/muesli/duf/releases/download/v0.8.1/duf_0.8.1_linux_amd64.deb
+  - https://github.com/rs/curlie/releases/download/v1.6.9/curlie_1.6.9_linux_amd64.deb
+
+zip_flat_modern:
+  - https://github.com/dalance/procs/releases/download/v0.13.1/procs-v0.13.1-x86_64-linux.zip
+
+# File contents
+aliases: |
+  #
+  # Aliases for modern unix packages
+  #
+  alias lll='lsd -lA'
+  alias ll='lsd -lA'
+  alias la='lsd'
+  alias l='lsd -F'
+  alias bat=batcat
+  alias b=batcat
+  alias fd=fdfind
+
+  # Colorify utils
+  alias colourify='/usr/bin/grc -es --colour=auto'
+  alias as='colourify as'
+  alias blkid='colourify blkid'
+  alias df='colourify df'
+  alias diff='colourify diff'
+  alias dig='colourify dig'
+  alias docker-machine='colourify docker-machine'
+  alias docker='colourify docker'
+  alias du='colourify du'
+  alias env='colourify env'
+  alias fdisk='colourify fdisk'
+  alias findmnt='colourify findmnt'
+  alias free='colourify free'
+  alias head='colourify head'
+  alias id='colourify id'
+  alias ifconfig='colourify ifconfig'
+  alias ip='colourify ip'
+  alias iptables='colourify iptables'
+  alias ld='colourify ld'
+  alias lsblk='colourify lsblk'
+  alias lsof='colourify lsof'
+  alias lspci='colourify lspci'
+  alias mount='colourify mount'
+  alias mtr='colourify mtr'
+  alias ping='colourify ping'
+  alias ps='colourify ps'
+  alias stat='colourify stat'
+  alias tail='colourify tail'
+  alias traceroute6='colourify traceroute6'
+  alias traceroute='colourify traceroute'
+  alias uptime='colourify uptime'
+  alias whois='colourify whois'
+
+  # Navigation
+  alias ..='cd ../'
+  alias ...='cd ../../'
+  alias .2='cd ../../'
+  alias .3='cd ../../../'
+  alias .4='cd ../../../../'
+  alias .5='cd ../../../../../'
+  alias .6='cd ../../../../../../'
+  alias 1='cd +1'
+  alias 2='cd +2'
+  alias 3='cd +3'
+  alias 4='cd +4'
+  alias 5='cd +5'
+  alias 6='cd +6'
+  alias 7='cd +7'
+  alias 8='cd +8'
+  alias 9='cd +9'
+  alias '~'='cd ~'
+
+  # Short-cuts
+  alias dk=docker
+  alias k=kubectl
+  alias h=helm
+  alias tf=terraform
+
+git_config: |
+  [core]
+    pager = delta
+
+  [interactive]
+    diffFilter = delta --color-only
+  [add.interactive]
+    useBuiltin = false # required for git 2.37.0
+
+  [delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+
+  [merge]
+    conflictstyle = diff3
+
+  [diff]
+    colorMoved = default

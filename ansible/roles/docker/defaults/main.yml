@@ -1,0 +1,23 @@
+---
+docker_pkgs_dependencies:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+
+docker_pkgs:
+  - docker-ce
+  - docker-ce-cli
+  - docker-ce-rootless-extras
+  - docker-compose-plugin
+  - containerd.io
+
+docker_repo_url: https://download.docker.com/linux
+docker_apt_release_channel: stable
+docker_apt_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+docker_apt_repository: "deb [arch={{ docker_apt_arch }}] {{ docker_repo_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
+docker_apt_gpg_key: "{{ docker_repo_url }}/{{ ansible_distribution | lower }}/gpg"
+
+# Docker daemon options as a dict
+docker_daemon_options: {}

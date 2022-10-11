@@ -1,0 +1,34 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  tasks:
+    - name: Include global Ansible variables
+      ansible.builtin.include_vars:
+        dir: ../../../../group_vars/all
+
+    # ! NOTE:
+    # ! Include below any tasks you need to execute
+    # ! prior to running any role tests
+    - name: Create "ubuntu" group
+      ansible.builtin.group:
+        name: ubuntu
+        state: present
+
+    - name: Create "ubuntu" user
+      ansible.builtin.user:
+        name: ubuntu
+        group: ubuntu
+        comment: I fight for the users!
+        state: present
+        shell: /bin/bash
+        create_home: true
+
+    - name: Download and install Goss
+      ansible.builtin.get_url:
+        url: "{{ goss_url }}"
+        dest: "{{ goss_bin }}"
+        mode: 0755
+      register: was_downloaded
+      until: was_downloaded is succeeded
+      retries: 3

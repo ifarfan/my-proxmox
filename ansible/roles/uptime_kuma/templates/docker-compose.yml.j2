@@ -1,0 +1,38 @@
+---
+version: '3'
+
+volumes:
+  {{ uptime_kuma_volume }}:
+    driver: local
+
+services:
+  kuma:
+    image: louislam/uptime-kuma:1-alpine
+    container_name: kuma
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ uptime_kuma_volume }}:/app/data
+    # dns:
+    #   - 1.1.1.1
+    #   - 1.0.0.1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kuma.entrypoints=http"
+      - "traefik.http.routers.kuma.rule=Host(`kuma.{{ global_domain }}`)"
+      - "traefik.http.middlewares.kuma-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.kuma.middlewares=kuma-https-redirect"
+      - "traefik.http.routers.kuma-secure.entrypoints=https"
+      - "traefik.http.routers.kuma-secure.rule=Host(`kuma.{{ global_domain }}`)"
+      - "traefik.http.routers.kuma-secure.tls=true"
+      - "traefik.http.routers.kuma-secure.service=kuma"
+      - "traefik.http.services.kuma.loadbalancer.server.port={{ uptime_kuma_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

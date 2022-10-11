@@ -1,0 +1,12 @@
+---
+file:
+  /etc/logrotate.d/rsyslog:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+
+package:
+  rsyslog:
+    installed: true

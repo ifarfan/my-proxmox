@@ -1,0 +1,36 @@
+---
+#
+# ? Reboot all nodes in this order
+# ? - servers
+# ? - agents
+# ? - data
+#
+- name: Reboot k3s server hosts
+  hosts: k3s_servers
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Reboot 1 node at the time + wait up to 2 mins
+      throttle: 1
+      ansible.builtin.reboot:
+        reboot_timeout: 120
+
+- name: Reboot k3s agent hosts
+  hosts: k3s_agents
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Reboot 1 node at the time + wait up to 2 mins
+      throttle: 1
+      ansible.builtin.reboot:
+        reboot_timeout: 120
+
+- name: Reboot k3s data hosts
+  hosts: k3s_data
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Reboot 1 node at the time + wait up to 2 mins
+      throttle: 1
+      ansible.builtin.reboot:
+        reboot_timeout: 120

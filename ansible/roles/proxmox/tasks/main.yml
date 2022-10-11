@@ -1,0 +1,6 @@
+---
+- name: Install packages
+  ansible.builtin.import_tasks: apt.yml
+
+- name: Default file contents
+  ansible.builtin.import_tasks: files.yml

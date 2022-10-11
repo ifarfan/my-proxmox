@@ -1,0 +1,35 @@
+---
+- name: Configure portainer
+  block:
+
+    - name: Create portainer directory
+      ansible.builtin.file:
+        path: "{{ portainer_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ portainer_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Create and start portainer
+      community.docker.docker_compose:
+        project_src: "{{ portainer_directory }}"
+
+    - name: Wait until site is up
+      ansible.builtin.uri:
+        url: "https://portainer.{{ global_domain }}/"
+        validate_certs: yes
+        status_code:
+          - 200
+      until: uri_output.status == 200
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
+      delay: 10
+      register: uri_output
+
+  tags: portainer

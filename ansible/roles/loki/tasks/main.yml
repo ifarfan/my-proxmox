@@ -1,0 +1,35 @@
+---
+- name: Configure loki
+  block:
+
+    - name: Create loki directory
+      ansible.builtin.file:
+        path: "{{ loki_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ loki_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Create and start loki
+      community.docker.docker_compose:
+        project_src: "{{ loki_directory }}"
+
+    - name: Wait until site is up
+      ansible.builtin.uri:
+        url: "https://loki.{{ global_domain }}/"
+        validate_certs: yes
+        status_code:
+          - 200
+      until: uri_output.status == 200
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
+      delay: 10
+      register: uri_output
+
+  tags: loki

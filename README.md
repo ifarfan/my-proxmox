@@ -1,5 +1,5 @@
 # my-proxmox
-My **Proxmox** setup + divers accoutrements
+My **Proxmox** setup + diverse accoutrements
 
 - Configure + manage **Proxmox** nodes via `Ansible`
 - Create VMs + LXC containers via `Terraform`

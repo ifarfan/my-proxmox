@@ -1,0 +1,18 @@
+---
+- name: Global aliases
+  copy:
+    dest: /etc/profile.d/10-aliases.sh
+    content: |
+      {{ aliases }}
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Default gitconfig
+  copy:
+    dest: /root/.gitconfig
+    content: |
+      {{ git_config }}
+    owner: root
+    group: root
+    mode: 0644

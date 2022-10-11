@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: Include global Ansible variables
+      include_vars:
+        dir: ../../../../group_vars/all
+
+    - name: Install modern_unix
+      include_role:
+        name: modern_unix

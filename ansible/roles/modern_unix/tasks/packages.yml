@@ -1,0 +1,18 @@
+---
+- name: Install modern packages (apt)
+  ansible.builtin.apt:
+    pkg: "{{ apt_pkgs_modern }}"
+    state: present
+
+- name: Install modern packages (deb)
+  ansible.builtin.apt:
+    deb: "{{ item }}"
+  loop: "{{ apt_debs_modern }}"
+  ignore_errors: true
+
+- name: Unarchive zipped flat execs
+  ansible.builtin.unarchive:
+    src: "{{ item }}"
+    dest: /usr/local/bin
+    remote_src: true
+  loop: "{{ zip_flat_modern }}"

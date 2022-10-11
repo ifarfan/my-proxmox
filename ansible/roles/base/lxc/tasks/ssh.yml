@@ -1,0 +1,16 @@
+---
+- name: Install latest SSH  # noqa package-latest 403
+  ansible.builtin.apt:
+    pkg: openssh-server
+    state: latest
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Copy secure, global sshd_config
+  ansible.builtin.copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0444
+  notify: reload ssh

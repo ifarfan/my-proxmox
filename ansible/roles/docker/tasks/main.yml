@@ -1,0 +1,55 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    name: "{{ docker_pkgs_dependencies }}"
+    state: present
+
+- name: Add Docker apt key
+  ansible.builtin.get_url:
+    url: "{{ docker_apt_gpg_key }}"
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: 0644
+    force: true
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "{{ docker_apt_repository }}"
+    state: present
+    update_cache: true
+
+- name: Update apt caches
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: "{{ docker_pkgs }}"
+    state: present
+  notify: restart docker
+
+- name: Ensure /etc/docker/ directory exists
+  file:
+    path: /etc/docker
+    state: directory
+    mode: 0755
+
+- name: Configure Docker daemon options
+  copy:
+    content: "{{ docker_daemon_options | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+    mode: 0644
+  notify: restart docker
+
+- name: Install docker pip dependencies
+  ansible.builtin.pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: Uninstall conflicting packages
+  ansible.builtin.apt:
+    pkg:
+      - apparmor
+    state: absent
+    purge: true

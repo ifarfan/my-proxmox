@@ -1,0 +1,18 @@
+---
+file:
+  /etc/pam.d/common-session:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - session required pam_limits.so
+  /etc/pam.d/common-session-noninteractive:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - session required pam_limits.so

@@ -1,0 +1,56 @@
+---
+- name: Install MOTD pkg
+  ansible.builtin.apt:
+    pkg: landscape-common
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Copy landscape config
+  ansible.builtin.copy:
+    src: motd/client.conf
+    dest: /etc/landscape/client.conf
+    owner: landscape
+    group: root
+    mode: 0600
+
+- name: List of local custom MOTD files
+  ansible.builtin.command:
+    ls -1 "{{ role_path }}/files/motd/update-motd.d/"
+  delegate_to: localhost
+  become: false
+  changed_when: false
+  register: managed_files
+
+- name: List of remote unmanaged MOTD files
+  ansible.builtin.command:
+    ls -1 /etc/update-motd.d/
+  register: unmanaged_files
+  changed_when: false
+
+- name: Remove remote unmanaged MOTD files but leave managed files
+  ansible.builtin.file:
+    path: "/etc/update-motd.d/{{ item }}"
+    state: absent
+  loop: "{{ unmanaged_files.stdout_lines }}"
+  when: item not in managed_files.stdout_lines
+
+- name: Copy custom MOTD files
+  ansible.builtin.copy:
+    src: "motd/update-motd.d/{{ item }}"
+    dest: /etc/update-motd.d/
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ managed_files.stdout_lines }}"
+
+- name: Copy /etc/issue files
+  ansible.builtin.copy:
+    src: "motd/{{ item }}"
+    dest: "/etc/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - issue
+    - issue.net

@@ -1,0 +1,24 @@
+---
+file:
+  /etc/ssh/sshd_config:
+    exists: true
+    mode: "0444"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - ClientAliveCountMax 0
+      - ClientAliveInterval 300
+      - LogLevel VERBOSE
+      - MaxAuthTries 2
+      - X11Forwarding no
+
+package:
+  openssh-server:
+    installed: true
+
+port:
+  tcp:22:
+    listening: true
+    ip:
+      - 0.0.0.0

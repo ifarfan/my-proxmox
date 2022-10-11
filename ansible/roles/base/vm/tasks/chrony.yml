@@ -1,0 +1,34 @@
+---
+# yamllint disable rule:line-length
+- name: Install chrony
+  ansible.builtin.apt:
+    pkg: chrony
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Use AWS free time sync server
+  ansible.builtin.lineinfile:
+    dest: /etc/chrony/chrony.conf
+    regexp: '^pool ntp.ubuntu.com'
+    insertbefore: 'pool ntp.ubuntu.com'
+    line: 'pool 169.254.169.123 iburst'
+  notify: restart chrony
+
+- name: Ensure systemd restarts chrony
+  ansible.builtin.lineinfile:
+    dest: /lib/systemd/system/chrony.service
+    regexp: '^Restart'
+    insertafter: '\[Service\]'
+    line: 'Restart=always'
+  notify: restart chrony
+
+# ! Changes to support Mac arm64
+- name: Correct /run directory permissions
+  # See https://github.com/systemd/systemd/issues/8085
+  ansible.builtin.file:
+    path: /run/chrony
+    state: directory
+    owner: root
+    mode: 0755
+  when: is_molecule_running is true

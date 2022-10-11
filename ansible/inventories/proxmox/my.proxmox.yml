@@ -1,0 +1,30 @@
+plugin: community.general.proxmox
+url: "{{ lookup('ansible.builtin.ini', 'url', section='proxmox', file='credentials.ini') }}"
+user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
+password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+want_facts: true
+keyed_groups:
+  - key: proxmox_node
+    separator: "_"
+    prefix: group
+groups:
+  # k3s
+  k3s: '"k3s" in proxmox_hostname'
+  k3s-servers: '"k3s-server" in proxmox_hostname'
+  k3s-agents: '"k3s-agent" in proxmox_hostname'
+  k3s-data: '"k3s-data" in proxmox_hostname'
+  # k3os
+  k3os: '"k3os" in proxmox_hostname'
+  k3os-servers: '"k3os-server" in proxmox_hostname'
+  k3os-agents: '"k3os-agent" in proxmox_hostname'
+  k3os-data: '"k3so-data" in proxmox_hostname'
+  # k8s
+  k8s: '"k8s" in proxmox_hostname'
+  k8s-servers: '"k8s-server" in proxmox_hostname'
+  k8s-agents: '"k8s-agent" in proxmox_hostname'
+  k8s-data: '"k8s-data" in proxmox_hostname'
+  # other
+  portainer: '"portainer" in proxmox_hostname'
+compose:
+  ansible_host: proxmox_net0.ip | replace("/32", "")
+want_proxmox_nodes_ansible_host: false
