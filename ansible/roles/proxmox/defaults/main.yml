@@ -4,25 +4,25 @@ cloudinit_folder: /var/lib/vz/cloud-init
 apt_cache_time: 1800
 
 apt_pkgs_to_install:
-- aptitude
-- curl
-- git
-- grc
-- hddtemp
-- htop
-- lm-sensors
-- locate
-- lsof
-- multitail
-- nano
-- ncdu
-- net-tools
-- nmap
-- tar
-- tree
-- unzip
-- wget
-- zip
+  - aptitude
+  - curl
+  - git
+  - grc
+  - hddtemp
+  - htop
+  - lm-sensors
+  - locate
+  - lsof
+  - multitail
+  - nano
+  - ncdu
+  - net-tools
+  - nmap
+  - tar
+  - tree
+  - unzip
+  - wget
+  - zip
 
 aliases: |
   #

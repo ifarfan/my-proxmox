@@ -1,0 +1,90 @@
+---
+version: 2.1
+
+executors:
+
+commands:
+
+jobs:
+  yamllint:
+    docker:
+      - image: cytopia/yamllint:latest
+    steps:
+      - checkout
+      - run:
+          name: Check YAML formatting
+          command: yamllint .
+  ansiblelint:
+    docker:
+      - image: cytopia/ansible-lint:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Ansible linting
+          command: ansible-lint
+  terraform_fmt:
+    docker:
+      - image: hashicorp/terraform:1.2.9
+    steps:
+      - checkout
+      - run:
+          name: Check terraform formatting
+          command: terraform fmt -check -recursive .
+      - run:
+          name: Upgrade findutils
+          command: apk add --no-cache findutils
+      - run:
+          name: Check for missing newline at EOF
+          # yamllint disable-line rule:line-length
+          command: (find . -type f -not -path '*/\.*' -print0 | xargs -0 -L1 sh -c 'test "$(tail -c 1 "$0")" && echo "Missing new line at end of $0"') && false || true
+  tflint:
+    docker:
+      - image: ghcr.io/terraform-linters/tflint:latest
+    steps:
+      - checkout
+      - run:
+          name: Install plugins
+          command: tflint --init
+      - run:
+          name: Lint Terraform files
+          command: tflint .
+          environment:
+            TFLINT_LOG: "error"
+  checkov:
+    docker:
+      - image: bridgecrew/checkov:2
+    steps:
+      - checkout
+      - run:
+          name: Run checkov security scanning
+          command: checkov --framework terraform --quiet --download-external-modules --directory .
+  trufflehog:
+    docker:
+      - image: ghcr.io/trufflesecurity/trufflehog:latest
+        user: root
+    steps:
+      - checkout
+      - run:
+          name: Scan commits in PR for credentials/tokens/secrets
+          command: filesystem .
+
+workflows:
+  version: 2
+  devops_workflow:
+    jobs:
+      - yamllint
+      - ansiblelint
+      - terraform_fmt
+      - tflint
+      - checkov:
+          requires:
+            - yamllint
+            - ansiblelint
+            - terraform_fmt
+            - tflint
+      - trufflehog:
+          requires:
+            - yamllint
+            - ansiblelint
+            - terraform_fmt
+            - tflint

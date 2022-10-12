@@ -13,18 +13,18 @@
     dest: "{{ repo_sources_folder }}/pve-enterprise.list"
     regexp: '(?i)^(deb.*)'
     line: '# \1'
-    backrefs: yes
+    backrefs: true
     state: present
 
 - name: Update apt caches
   apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: "{{ apt_cache_time }}"
 
 - name: Update all packages to the latest version
   apt:
     upgrade: dist
-    update_cache: yes
+    update_cache: true
 
 - name: Install default packages
   apt:

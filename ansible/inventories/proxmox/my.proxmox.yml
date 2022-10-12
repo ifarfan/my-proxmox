@@ -1,3 +1,4 @@
+---
 plugin: community.general.proxmox
 url: "{{ lookup('ansible.builtin.ini', 'url', section='proxmox', file='credentials.ini') }}"
 user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"

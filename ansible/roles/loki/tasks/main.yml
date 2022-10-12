@@ -15,7 +15,7 @@
         owner: root
         group: root
         mode: 0644
-        backup: yes
+        backup: true
 
     - name: Create and start loki
       community.docker.docker_compose:
@@ -24,7 +24,7 @@
     - name: Wait until site is up
       ansible.builtin.uri:
         url: "https://loki.{{ global_domain }}/"
-        validate_certs: yes
+        validate_certs: true
         status_code:
           - 200
       until: uri_output.status == 200

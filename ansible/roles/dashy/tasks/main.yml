@@ -15,7 +15,7 @@
         owner: root
         group: root
         mode: 0644
-        backup: yes
+        backup: true
 
     - name: Copy config.yml file
       ansible.builtin.template:
@@ -24,7 +24,7 @@
         owner: root
         group: root
         mode: 0644
-        backup: yes
+        backup: true
 
     - name: Create and start dashy
       community.docker.docker_compose:
@@ -33,7 +33,7 @@
     - name: Wait until site is up
       ansible.builtin.uri:
         url: "https://dashy.{{ global_domain }}/"
-        validate_certs: yes
+        validate_certs: true
         status_code:
           - 200
       until: uri_output.status == 200
