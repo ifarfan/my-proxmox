@@ -3,17 +3,17 @@ variable "proxmox_pwd" {
 }
 
 variable "mac1_vms" {
-  type = list
+  type    = list(any)
   default = []
 }
 
 variable "mac2_vms" {
-  type = list
+  type    = list(any)
   default = []
 }
 
 variable "mac3_vms" {
-  type = list
+  type    = list(any)
   default = []
 }
 
@@ -23,23 +23,23 @@ locals {
   proxmox_nodes = {
     mac1 = {
       name = "macmini1",
-      ip = "192.168.136.11"
+      ip   = "192.168.136.11"
     },
     mac2 = {
       name = "macmini2",
-      ip =  "192.168.136.12"
+      ip   = "192.168.136.12"
     }
     mac3 = {
       name = "macmini3",
-      ip = "192.168.136.13"
+      ip   = "192.168.136.13"
     }
   }
 
   # VM settings
   gw_ip = "192.168.136.1"
 
-  vm_boot     = "cdn"               # boot order: hard disk (c), CD-ROM (d), or network (n)
-  vm_onboot   = false               # start at boot
+  vm_boot     = "cdn" # boot order: hard disk (c), CD-ROM (d), or network (n)
+  vm_onboot   = false # start at boot
   vm_os_type  = "cloud-init"
   vm_tag      = "terraform"
   vm_template = "ubuntu-20-04-iso-tmpl"
