@@ -4,7 +4,7 @@ use_default_rules: true
 exclude_paths:
   - ansible/roles/base/lxc/molecule/tests
   - ansible/roles/base/vm/molecule/tests
-  - ansible/roles/cloud-init/molecule/tests
+  - ansible/roles/cloud_init/molecule/tests
   - ansible/roles/dashy/molecule/tests
   - ansible/roles/docker/molecule/tests
   - ansible/roles/goss/molecule/tests
@@ -18,4 +18,3 @@ exclude_paths:
   - ansible/roles/proxmox/molecule/tests
   - ansible/roles/traefik/molecule/tests
   - ansible/roles/uptime_kuma/molecule/tests
-  - ansible/roles//molecule/tests
