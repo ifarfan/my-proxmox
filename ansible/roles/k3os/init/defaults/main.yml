@@ -1,4 +1,0 @@
----
-proxmox_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
-proxmox_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
-proxmox_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"

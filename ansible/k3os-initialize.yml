@@ -1,23 +1,107 @@
 ---
 #
-# ? Initialize Servers
+# ? Playbook vars + copy k3os script
 #
-- name: k3os server initialization
-  hosts: k3os_servers
+- name: Playbook vars + copy k3os script
+  hosts: m1.macminis.net
+  become: true
   gather_facts: false
   tasks:
-    - name: Initialize k3os server
-      ansible.builtin.include_role:
-        name: k3os/init
+    - name: Define global vars
+      ansible.builtin.set_fact:
+        cmd_cluster_init: []
+        cmd_servers: []
+        cmd_agents: []
+    - name: Copy k3os init script
+      ansible.builtin.copy:
+        src: files/k3os-vm-init
+        dest: /usr/local/bin/
+        owner: root
+        group: root
+        mode: 0755
 
-# #
-# # ? Initialize Agents
-# #
-# - name: k3os nodes initialization
-#   hosts: k3os_agents, k3os_data
-#   become: true
-#   gather_facts: true
-#   tasks:
-#     - name: Initialize k3os agents
-#       ansible.builtin.include_role:
-#         name: k3os/init
+#
+# ? Generate cluster + servers + agents script commands
+#
+- name: Generate cluster init command
+  hosts: k3os_servers[0]
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Define cluster init command
+      ansible.builtin.set_fact:
+        cmd_string: "k3os-vm-init --proxmox_node {{ proxmox_node }} --vm_id {{ proxmox_vmid }} --vm_name {{ inventory_hostname_short }}"
+
+    - name: Append cluster init command to list
+      ansible.builtin.set_fact:
+        cmd_cluster_init: "{{ hostvars['m1.macminis.net'].cmd_cluster_init + [ cmd_string ] }}"
+      delegate_to: m1.macminis.net
+      delegate_facts: true
+
+- name: Generate servers init commands
+  hosts: k3os_servers[1:]
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Define server command
+      ansible.builtin.set_fact:
+        cmd_string: "k3os-vm-init --proxmox_node {{ proxmox_node }} --vm_id {{ proxmox_vmid }} --vm_name {{ inventory_hostname_short }}"
+
+    - name: Append server command to list
+      ansible.builtin.set_fact:
+        cmd_servers: "{{ hostvars['m1.macminis.net'].cmd_servers + [ cmd_string ] }}"
+      delegate_to: m1.macminis.net
+      delegate_facts: true
+
+- name: Generate agents init commands
+  hosts: k3os_agents, k3os_data
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Define agent command
+      ansible.builtin.set_fact:
+        cmd_string: "k3os-vm-init --proxmox_node {{ proxmox_node }} --vm_id {{ proxmox_vmid }} --vm_name {{ inventory_hostname_short }}"
+
+    - name: Append agent command to list
+      ansible.builtin.set_fact:
+        cmd_agents: "{{ hostvars['m1.macminis.net'].cmd_agents + [ cmd_string ] }}"
+      delegate_to: m1.macminis.net
+      delegate_facts: true
+
+#
+# ? Initialize entire cluster
+#
+- name: Initialize entire cluster
+  hosts: m1.macminis.net
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Initialize cluster
+      ansible.builtin.command: "{{ item }}"
+      register: cluster_init_output
+      with_items: "{{ cmd_cluster_init }}"
+
+    - name: Initialize + join servers to cluster
+      ansible.builtin.command: "{{ item }}"
+      register: cmd_servers_output
+      with_items: "{{ cmd_servers }}"
+
+    - name: Initialize + join agents to cluster
+      ansible.builtin.command: "{{ item }}"
+      register: cmd_agents_output
+      with_items: "{{ cmd_agents }}"
+
+    # - name: Initialize cluster
+    #   ansible.builtin.debug:
+    #     var: "{{ item }}"
+    #   with_items: cmd_cluster_init
+
+    # - name: Initialize + join servers to cluster
+    #   ansible.builtin.debug:
+    #     var: "{{ item }}"
+    #   with_items: cmd_servers
+
+    # - name: Initialize + join agents to cluster
+    #   ansible.builtin.debug:
+    #     var: "{{ item }}"
+    #   with_items: cmd_agents
