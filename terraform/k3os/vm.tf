@@ -2,7 +2,7 @@
 resource "proxmox_vm_qemu" "servers" {
   for_each = { for index, server in local.servers : server.hostname => server }
 
-  name        = each.value.hostname
+  name        = "${each.value.hostname}.${local.domain}"
   desc        = each.value.description
   target_node = each.value.target_node
 
@@ -31,7 +31,7 @@ resource "proxmox_vm_qemu" "servers" {
 resource "proxmox_vm_qemu" "agents" {
   for_each = { for index, agent in local.agents : agent.hostname => agent }
 
-  name        = each.value.hostname
+  name        = "${each.value.hostname}.${local.domain}"
   desc        = each.value.description
   target_node = each.value.target_node
 
@@ -61,7 +61,7 @@ resource "proxmox_vm_qemu" "agents" {
 resource "proxmox_vm_qemu" "data" {
   for_each = { for index, data in local.data : data.hostname => data }
 
-  name        = each.value.hostname
+  name        = "${each.value.hostname}.${local.domain}"
   desc        = each.value.description
   target_node = each.value.target_node
 

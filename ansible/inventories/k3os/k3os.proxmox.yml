@@ -1,0 +1,16 @@
+---
+plugin: community.general.proxmox
+url: "{{ lookup('ansible.builtin.ini', 'url', section='proxmox', file='credentials.ini') }}"
+user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
+password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+want_facts: true
+filters:
+  - '"k3os" in proxmox_name'
+groups:
+  k3os: '"k3os" in proxmox_name'
+  k3os-servers: '"k3os-server" in proxmox_name'
+  k3os-agents: '"k3os-agent" in proxmox_name'
+  k3os-data: '"k3os-data" in proxmox_name'
+compose:
+  ansible_host: proxmox_net0.ip | replace("/32", "")
+want_proxmox_nodes_ansible_host: false

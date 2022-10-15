@@ -1,0 +1,222 @@
+#!/usr/bin/env bash
+#
+#  VM-INIT: Initialize k3os VM
+#
+config() {
+    # Sleep lapses
+    SLEEP_SECS_SHORT=2
+    SLEEP_SECS_MEDIUM=5
+    SLEEP_SECS_LONG=20
+
+    # Reset global timer
+    SECONDS=0
+
+    PROXMOX_NODES=(
+      'macmini1'
+      'macmini2'
+      'macmini3'
+    )
+
+    # Colors
+    NOCOLOR=0
+    BLACK=$(tput setaf 0)
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    BLUE=$(tput setaf 4)
+    BOLD=$(tput bold)
+    NORMAL=$(tput sgr0)
+}
+
+
+log_line() {
+    #
+    #  Write message to console, with optional alert flag
+    #  - "":  None
+    #  - "E": Error (red)
+    #  - "O": OK (green)
+    #  - "W": Warning (yellow)
+    #
+    local MSG_TYPE=$1; local MSG=$2
+
+    case "$MSG_TYPE" in
+        'E') echo -e "${BLACK}${BOLD}[${NORMAL}k3os${BLACK}${BOLD}]${NORMAL} ${RED}${BOLD}Error:${NORMAL} ${MSG}";;
+        'O') echo -e "${BLACK}${BOLD}[${NORMAL}k3os${BLACK}${BOLD}]${NORMAL} ${GREEN}${BOLD}OK:${NORMAL} ${MSG}";;
+        'W') echo -n "${BLACK}${BOLD}[${NORMAL}k3os${BLACK}${BOLD}]${NORMAL} ${YELLOW}${BOLD}Wait:${NORMAL} ${MSG}";;
+        *)   echo -e "${BLACK}${BOLD}[${NORMAL}k3os${BLACK}${BOLD}]${NORMAL} ${MSG}";;
+    esac
+}
+
+
+usage() {
+  #
+  #  Show usage + send output also to stderr
+  #
+  echo -e "Usage${BLACK}${BOLD}:${NORMAL} ${GREEN}${BOLD}${0##*/}${NORMAL} ${YELLOW}${BOLD}--proxmox_node${NORMAL} ${BLUE}<PROXMOX_NODE>${NORMAL} ${YELLOW}${BOLD}--vm_id${NORMAL} ${BLUE}<VM_ID>${NORMAL} ${YELLOW}${BOLD}--vm_name${NORMAL} ${BLUE}<VM_NAME>${NORMAL}
+
+Parameters${BLACK}${BOLD}:${NORMAL}
+${YELLOW}${BOLD}--proxmox_node${NORMAL}${BLACK} ${BLUE}<PROXMOX_NODE>${NORMAL}${BLACK}${BOLD}:${NORMAL}
+  Available proxmox_node(s)${BLACK}${BOLD}:${NORMAL} ${BOLD}${PROXMOX_NODES[*]}${NORMAL}
+
+${YELLOW}${BOLD}--vm_id${NORMAL}${BLACK} ${BLUE}<VM_ID>${NORMAL}${BLACK}${BOLD}:${NORMAL}
+  A valid VM ID ${BLACK}${BOLD}(${NORMAL}integer${BLACK}${BOLD})${NORMAL}
+
+${YELLOW}${BOLD}--vm_name${NORMAL}${BLACK} ${BLUE}<VM_NAME>${NORMAL}${BLACK}${BOLD}:${NORMAL}
+  A valid VM hostname ${BLACK}${BOLD}(${NORMAL}string${BLACK}${BOLD})${NORMAL}
+" 1>&2
+
+  exit 1
+}
+
+
+init() {
+    # Cloud-init URL
+    CLOUD_INIT_URL="https://github.com/ifarfan/my-proxmox/blob/main/terraform/k3os/configs/${VM_NAME}.yml"
+
+    #  Show debug values
+    log_line 'O' "All checks passed!"
+    log_line '' "- PROXMOX_NODE   : ${YELLOW}${BOLD}${PROXMOX_NODE}${NORMAL}"
+    log_line '' "- VM_ID          : ${YELLOW}${BOLD}${VM_ID}${NORMAL}"
+    log_line '' "- VM_NAME        : ${YELLOW}${BOLD}${VM_NAME}${NORMAL}"
+    log_line '' "- CLOUD_INIT_URL : ${YELLOW}${BOLD}${CLOUD_INIT_URL}${NORMAL}"
+    log_line '' ""
+    log_line '' "Executing ${GREEN}${BOLD}VM Initialization${NORMAL} now...\n"
+
+    # Start VM
+    log_line 'O' "Start VM: '${GREEN}${BOLD}${VM_NAME}${NORMAL}'"
+    pvesh create /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/status/start
+    sleep ${SLEEP_SECS_MEDIUM}
+
+    # Install sequence
+
+    # Do install: "Down arrow"
+    log_line 'O' "Begin Installation"
+    pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key down-kp_enter
+    sleep ${SLEEP_SECS_LONG}
+
+    # Use cloud-init: "Y"
+    log_line 'O' "Use Cloud-init configuration"
+    pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key shift-y-kp_enter
+    sleep ${SLEEP_SECS_SHORT}
+
+    # Enter cloud-init URL
+    log_line 'O' "Type remote Cloud-init URL:"
+    log_line 'W' ""
+    for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
+        CHAR="${CLOUD_INIT_URL:$I:1}"
+        case ${CHAR} in
+            ':') CHAR='shift-semicolon';;
+            '/') CHAR='slash';;
+            '.') CHAR='dot';;
+            '-') CHAR='minus';;
+        esac
+        echo -n "${BLACK}${BOLD}.${NORMAL}"
+        pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${CHAR}
+    done
+    pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key kp_enter
+    sleep ${SLEEP_SECS_SHORT}
+    echo ''
+
+    # Accept disk format: "enter"
+    log_line 'O' "Reformat Disk "
+    pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key shift-y-kp_enter
+    sleep ${SLEEP_SECS_LONG}
+
+    # Show timer
+    log_line '' ""
+    log_line '' "${BLUE}${BOLD}Time elapsed${NORMAL}: $(time_elapsed)"
+}
+
+
+check_values() {
+    #
+    #  Check parameters supplied
+    #
+
+    #  Check for valid <PROXMOX_NODE>
+    # shellcheck disable=SC2076
+    if [[ ! ${PROXMOX_NODES[*]} =~ "${PROXMOX_NODE}" ]]; then
+        log_line 'E' "Invalid ${YELLOW}${BOLD}proxmox_node${NORMAL}: '${RED}${BOLD}${PROXMOX_NODE}${NORMAL}'"
+        log_line 'E' "Valid values for --${YELLOW}${BOLD}proxmox_node${NORMAL}: ${BOLD}${PROXMOX_NODES[*]}${NORMAL}\n"
+        usage
+    fi
+
+    #  Check for valid <VM_ID>
+    if ! [[ "$VM_ID" =~ ^[0-9]+$ ]]; then
+        log_line 'E' "Invalid ${YELLOW}${BOLD}vm_id${NORMAL}: '${RED}${BOLD}${VM_ID}${NORMAL}'"
+        log_line 'E' "Valid values for --${YELLOW}${BOLD}vm_id${NORMAL}: ${BOLD}any valid integer${NORMAL}\n"
+        usage
+    fi
+
+    #  Check for valid <VM_NAME>
+    if [[ -z "$VM_NAME" ]]; then
+        log_line 'E' "Invalid ${YELLOW}${BOLD}vm_name${NORMAL}: '${RED}${BOLD}${VM_NAME}${NORMAL}'"
+        log_line 'E' "Valid values for --${YELLOW}${BOLD}vm_name${NORMAL}: ${BOLD}any valid hostname${NORMAL}\n"
+        usage
+    fi
+}
+
+
+time_elapsed() {
+    #
+    #  Format-friendly time counter
+    #
+    local SECS_CNT=$SECONDS
+
+    local MINS=0; local SECS=0;
+    if [[ $SECS_CNT -gt 59 ]]; then
+        SECS=$(( SECS_CNT%60 ))
+        SECS_CNT=$(( SECS_CNT/60 ))
+        [[ $SECS_CNT -gt 59 ]] && MINS=$(( SECS_CNT%60 )) || MINS=${SECS_CNT}
+    else
+        SECS=${SECS_CNT}
+    fi
+    echo "${BOLD}${MINS}${NORMAL} mins, ${BOLD}${SECS}${NORMAL} secs"
+}
+
+
+#
+#  Main()
+#
+config
+
+[[ $# -eq 0 ]] && usage                         #  No parameters passed, exit out
+
+PARAMS=""
+while (( "$#" )); do                            #  Parse parameters
+    [[ $1 == --*=* || $1 == -*=* ]] && set -- "${1%%=*}" "${1#*=}" "${@:2}"
+
+    # shellcheck disable=SC2221,SC2222,SC2034
+    case "$1" in
+        --proxmox_node)
+            [[ -n "$2" ]] && PROXMOX_NODE=$2; shift 2 || break
+            ;;
+        --vm_id)
+            [[ -n "$2" ]] && VM_ID=$2; shift 2 || break
+            ;;
+        --vm_name)
+            [[ -n "$2" ]] && VM_NAME=$2; shift 2 || break
+            ;;
+        -h|--help)
+            usage
+            ;;
+        --)                                     # end argument parsing
+            shift
+            break
+            ;;
+        -*|--*=)                                # unsupported flags
+            log_line 'E' "Unknown parameter ${RED}${BOLD}${1}${NORMAL}\n"
+            usage
+            ;;
+        *)                                      # preserve positional arguments
+            PARAM="$PARAMS $1"
+            shift
+            ;;
+    esac
+done
+
+eval set -- "$PARAMS"                           # Set positional arguments in their proper place
+check_values                                    # Check for valid values
+init                                            # Run initialization steps
+
+exit 0

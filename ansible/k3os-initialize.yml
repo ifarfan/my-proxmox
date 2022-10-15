@@ -1,0 +1,23 @@
+---
+#
+# ? Initialize Servers
+#
+- name: k3os server initialization
+  hosts: k3os_servers
+  gather_facts: false
+  tasks:
+    - name: Initialize k3os server
+      ansible.builtin.include_role:
+        name: k3os/init
+
+# #
+# # ? Initialize Agents
+# #
+# - name: k3os nodes initialization
+#   hosts: k3os_agents, k3os_data
+#   become: true
+#   gather_facts: true
+#   tasks:
+#     - name: Initialize k3os agents
+#       ansible.builtin.include_role:
+#         name: k3os/init

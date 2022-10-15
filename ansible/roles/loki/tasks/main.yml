@@ -8,6 +8,15 @@
         state: directory
         mode: 0755
 
+    - name: Copy config file
+      ansible.builtin.template:
+        src: config.yml.j2
+        dest: "{{ loki_directory }}/config.yml"
+        owner: root
+        group: root
+        mode: 0644
+        backup: true
+
     - name: Copy docker-compose file
       ansible.builtin.template:
         src: docker-compose.yml.j2
@@ -23,8 +32,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "https://loki.{{ global_domain }}/"
-        validate_certs: true
+        url: "http://loki.{{ global_domain }}:{{ loki_port }}/"
         status_code:
           - 200
       until: uri_output.status == 200
