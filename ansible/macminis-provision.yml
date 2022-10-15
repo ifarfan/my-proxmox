@@ -4,13 +4,13 @@
   become: true
   gather_facts: true
   tasks:
-    # - name: Proxmox node default configuration
-    #   ansible.builtin.include_role:
-    #     name: proxmox
+    - name: Proxmox node default configuration
+      ansible.builtin.include_role:
+        name: proxmox
 
-    # - name: Install modern Unix utilities
-    #   ansible.builtin.include_role:
-    #     name: modern_unix
+    - name: Install modern Unix utilities
+      ansible.builtin.include_role:
+        name: modern_unix
 
     - name: Install Prometheus Node Exporter
       ansible.builtin.include_role:

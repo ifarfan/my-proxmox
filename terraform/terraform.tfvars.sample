@@ -1,0 +1,15 @@
+#
+# 1. Fill in appropriate values below
+# 2. Rename file to terraform.tfvars
+# 3. Symlink to it from individual terraform template folder
+#
+
+# Proxmox
+proxmox_url = "XXXXXXXXX"
+proxmox_host = "XXXXXXXXX"
+proxmox_user = "XXXXXXXXX"
+proxmox_password = "XXXXXXXXX"
+
+# Cloudflare
+cloudflare_email = "XXXXXXXXXX"
+cloudflare_api_token = "XXXXXXXXXX"

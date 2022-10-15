@@ -2,6 +2,55 @@
 #
 #  VM-INIT: Initialize k3os VM
 #
+init2() {
+    # Cloud-init URL
+    CLOUD_INIT_URL="https://github.com/ifarfan/my-proxmox/blob/main/terraform/k3os/configs/${VM_NAME}.yml"
+
+    #  Show debug values
+    log_line 'O' "All checks passed!"
+    log_line '' "- PROXMOX_NODE   : ${YELLOW}${BOLD}${PROXMOX_NODE}${NORMAL}"
+    log_line '' "- VM_ID          : ${YELLOW}${BOLD}${VM_ID}${NORMAL}"
+    log_line '' "- VM_NAME        : ${YELLOW}${BOLD}${VM_NAME}${NORMAL}"
+    log_line '' "- CLOUD_INIT_URL : ${YELLOW}${BOLD}${CLOUD_INIT_URL}${NORMAL}"
+    log_line '' ""
+    log_line '' "Executing ${GREEN}${BOLD}VM Initialization${NORMAL} now...\n"
+
+
+    # Split URL into single, non-char-repeatable strings
+    local PREV_CHAR=''; local I; local STR_COUNTER=0
+    local STR_SO_FAR=''; local STR_LIST=();
+    for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
+        # Fetch 1 char
+        CHAR=$(char_escape "${CLOUD_INIT_URL:$I:1}")
+
+        # Increase char counter
+        ((STR_COUNTER+=1))
+
+        if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "10"]]; then
+            # Add to list and reset running string + counter
+            STR_LIST+=(${STR_SO_FAR})
+            STR_SO_FAR="${CHAR}"
+            STR_COUNTER=0
+        else
+            # Append to running string
+            [[ "$I" -eq "0" ]] && STR_SO_FAR="${CHAR}" || STR_SO_FAR+="-${CHAR}"
+        fi
+
+        # Keep track of last character
+        PREV_CHAR="${CHAR}"
+    done
+    # Capture last string into list
+    STR_LIST+=(${STR_SO_FAR})
+
+    # Show substrings
+    for I in "${STR_LIST[@]}"; do
+        echo "${I}"
+        DOTS=$(dot_string "${I}")
+        echo "${DOTS}"
+    done
+}
+
+
 config() {
     # Sleep lapses
     SLEEP_SECS_SHORT=2
@@ -29,6 +78,63 @@ config() {
 }
 
 
+char_escape() {
+    #
+    # Get keymap value from /usr/share/kvm/keymaps/en-us
+    #
+    local CHAR
+    case ${1} in
+        "'") CHAR='apostrophe';;
+        ' ') CHAR='spc';;
+        '!') CHAR='shift-1';;
+        '"') CHAR='shift-apostrophe';;
+        '#') CHAR='shift-3';;
+        '$') CHAR='shift-4';;
+        '%') CHAR='shift-5';;
+        '&') CHAR='shift-7';;
+        '(') CHAR='shift-9';;
+        ')') CHAR='shift-0';;
+        '*') CHAR='shift-8';;
+        '+') CHAR='shift-equal';;
+        ',') CHAR='comma';;
+        '-') CHAR='minus';;
+        '.') CHAR='dot';;
+        '/') CHAR='slash';;
+        ':') CHAR='shift-semicolon';;
+        ';') CHAR='semicolon';;
+        '<') CHAR='shift-comma';;
+        '=') CHAR='equal';;
+        '>') CHAR='shift-dot';;
+        '?') CHAR='shift-slash';;
+        '@') CHAR='shift-2';;
+        '[') CHAR='bracket_left';;
+        '\') CHAR='backslash';;
+        ']') CHAR='bracket_right';;
+        '^') CHAR='shift-6';;
+        '_') CHAR='shift-minus';;
+        '`') CHAR='grave';;
+        '{') CHAR='shift-bracket_left';;
+        '|') CHAR='shift-backslash';;
+        '}') CHAR='shift-bracket_right';;
+        '~') CHAR='shift-grave';;
+        *) CHAR=${1};;
+    esac
+    echo "${CHAR}"
+}
+
+
+dot_string() {
+    #
+    #  Get string of dots
+    #
+    local DOTS=''
+    for (( I=0; I<${#1}; I++ )); do
+        DOTS+='.'
+    done
+    echo "${DOTS}"
+}
+
+
 log_line() {
     #
     #  Write message to console, with optional alert flag
@@ -49,10 +155,10 @@ log_line() {
 
 
 usage() {
-  #
-  #  Show usage + send output also to stderr
-  #
-  echo -e "Usage${BLACK}${BOLD}:${NORMAL} ${GREEN}${BOLD}${0##*/}${NORMAL} ${YELLOW}${BOLD}--proxmox_node${NORMAL} ${BLUE}<PROXMOX_NODE>${NORMAL} ${YELLOW}${BOLD}--vm_id${NORMAL} ${BLUE}<VM_ID>${NORMAL} ${YELLOW}${BOLD}--vm_name${NORMAL} ${BLUE}<VM_NAME>${NORMAL}
+    #
+    #  Show usage + send output also to stderr
+    #
+    echo -e "Usage${BLACK}${BOLD}:${NORMAL} ${GREEN}${BOLD}${0##*/}${NORMAL} ${YELLOW}${BOLD}--proxmox_node${NORMAL} ${BLUE}<PROXMOX_NODE>${NORMAL} ${YELLOW}${BOLD}--vm_id${NORMAL} ${BLUE}<VM_ID>${NORMAL} ${YELLOW}${BOLD}--vm_name${NORMAL} ${BLUE}<VM_NAME>${NORMAL}
 
 Parameters${BLACK}${BOLD}:${NORMAL}
 ${YELLOW}${BOLD}--proxmox_node${NORMAL}${BLACK} ${BLUE}<PROXMOX_NODE>${NORMAL}${BLACK}${BOLD}:${NORMAL}
@@ -65,13 +171,13 @@ ${YELLOW}${BOLD}--vm_name${NORMAL}${BLACK} ${BLUE}<VM_NAME>${NORMAL}${BLACK}${BO
   A valid VM hostname ${BLACK}${BOLD}(${NORMAL}string${BLACK}${BOLD})${NORMAL}
 " 1>&2
 
-  exit 1
+    exit 1
 }
 
 
 init() {
     # Cloud-init URL
-    CLOUD_INIT_URL="https://github.com/ifarfan/my-proxmox/blob/main/terraform/k3os/configs/${VM_NAME}.yml"
+    CLOUD_INIT_URL="https://raw.githubusercontent.com/ifarfan/my-proxmox/main/terraform/k3os/configs/${VM_NAME}.yml"
 
     #  Show debug values
     log_line 'O' "All checks passed!"
@@ -113,6 +219,44 @@ init() {
         echo -n "${BLACK}${BOLD}.${NORMAL}"
         pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${CHAR}
     done
+
+    # # Split URL into single, non-char-repeatable strings
+    # local PREV_CHAR=''; local I; local STR_COUNTER=0
+    # local STR_SO_FAR=''; local STR_LIST=();
+    # for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
+    #     # Fetch 1 char
+    #     CHAR=$(char_escape "${CLOUD_INIT_URL:$I:1}")
+    #
+    #     # Increase char counter
+    #     ((STR_COUNTER+=1))
+
+    #     if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "10"]]; then
+    #        # Add to list and reset running string + counter
+    #        STR_LIST+=(${STR_SO_FAR})
+    #        STR_SO_FAR="${CHAR}"
+    #        STR_COUNTER=0
+    #     else
+    #         # Append to running string
+    #         [[ "$I" -eq "0" ]] && STR_SO_FAR="${CHAR}" || STR_SO_FAR+="-${CHAR}"
+    #     fi
+
+    #     # Keep track of last character
+    #     PREV_CHAR="${CHAR}"
+    # done
+
+    # # Capture last string into list
+    # STR_LIST+=(${STR_SO_FAR})
+
+    # for I in "${STR_LIST[@]}"; do
+    #     # Send string
+    #     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${I}
+    #     sleep ${SLEEP_SECS_SHORT}
+
+    #     # Display dots
+    #     DOTS=$(dot_string "${I}")
+    #     echo -n "${BLACK}${BOLD}${DOTS}${NORMAL}"
+    # done
+
     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key kp_enter
     sleep ${SLEEP_SECS_SHORT}
     echo ''
@@ -120,7 +264,6 @@ init() {
     # Accept disk format: "enter"
     log_line 'O' "Reformat Disk "
     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key shift-y-kp_enter
-    sleep ${SLEEP_SECS_LONG}
 
     # Show timer
     log_line '' ""

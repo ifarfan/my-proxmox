@@ -12,6 +12,9 @@
         cmd_cluster_init: []
         cmd_servers: []
         cmd_agents: []
+        list_custer_init: []
+        list_servers: []
+        list_agents: []
     - name: Copy k3os init script
       ansible.builtin.copy:
         src: files/k3os-vm-init
@@ -24,7 +27,7 @@
 # ? Generate cluster + servers + agents script commands
 #
 - name: Generate cluster init command
-  hosts: k3os_servers[0]
+  hosts: k3os-server-01.macminis.net
   gather_facts: false
   serial: 1
   tasks:
@@ -35,11 +38,12 @@
     - name: Append cluster init command to list
       ansible.builtin.set_fact:
         cmd_cluster_init: "{{ hostvars['m1.macminis.net'].cmd_cluster_init + [ cmd_string ] }}"
+        list_custer_init: "{{ hostvars['m1.macminis.net'].list_custer_init + [ inventory_hostname ] }}"
       delegate_to: m1.macminis.net
       delegate_facts: true
 
 - name: Generate servers init commands
-  hosts: k3os_servers[1:]
+  hosts: k3os_servers:!k3os-server-01.macminis.net
   gather_facts: false
   serial: 1
   tasks:
@@ -50,6 +54,7 @@
     - name: Append server command to list
       ansible.builtin.set_fact:
         cmd_servers: "{{ hostvars['m1.macminis.net'].cmd_servers + [ cmd_string ] }}"
+        list_servers: "{{ hostvars['m1.macminis.net'].list_servers + [ inventory_hostname ] }}"
       delegate_to: m1.macminis.net
       delegate_facts: true
 
@@ -65,43 +70,73 @@
     - name: Append agent command to list
       ansible.builtin.set_fact:
         cmd_agents: "{{ hostvars['m1.macminis.net'].cmd_agents + [ cmd_string ] }}"
+        list_agents: "{{ hostvars['m1.macminis.net'].list_agents + [ inventory_hostname ] }}"
       delegate_to: m1.macminis.net
       delegate_facts: true
 
 #
-# ? Initialize entire cluster
+# ? Initialize cluster
 #
-- name: Initialize entire cluster
+- name: Initialize cluster
   hosts: m1.macminis.net
   become: true
   gather_facts: false
   tasks:
+    - name: Show cluster init commands
+      ansible.builtin.debug:
+        var: "{{ item }}"
+      with_items: cmd_cluster_init
+
     - name: Initialize cluster
       ansible.builtin.command: "{{ item }}"
       register: cluster_init_output
       with_items: "{{ cmd_cluster_init }}"
+
+    - name: Wait until cluster-init server is accesible (timeout 5 mins)
+      ansible.builtin.wait_for:
+        port: 6443
+        host: "{{ item }}"
+        delay: 5
+      with_items: "{{ list_custer_init }}"
+
+#
+# ? Initialize + join remaining servers + agents to cluster
+#
+- name: Initialize nodes
+  hosts: m1.macminis.net
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Show servers join cluster commands
+      ansible.builtin.debug:
+        var: "{{ item }}"
+      with_items: cmd_servers
+
+    - name: Wait until servers are accesible (timeout 5 mins)
+      ansible.builtin.wait_for:
+        port: 6443
+        host: "{{ item }}"
+        delay: 5
+      with_items: "{{ list_servers }}"
 
     - name: Initialize + join servers to cluster
       ansible.builtin.command: "{{ item }}"
       register: cmd_servers_output
       with_items: "{{ cmd_servers }}"
 
+    - name: Show agents join cluster commands
+      ansible.builtin.debug:
+        var: "{{ item }}"
+      with_items: cmd_agents
+
     - name: Initialize + join agents to cluster
       ansible.builtin.command: "{{ item }}"
       register: cmd_agents_output
       with_items: "{{ cmd_agents }}"
 
-    # - name: Initialize cluster
-    #   ansible.builtin.debug:
-    #     var: "{{ item }}"
-    #   with_items: cmd_cluster_init
-
-    # - name: Initialize + join servers to cluster
-    #   ansible.builtin.debug:
-    #     var: "{{ item }}"
-    #   with_items: cmd_servers
-
-    # - name: Initialize + join agents to cluster
-    #   ansible.builtin.debug:
-    #     var: "{{ item }}"
-    #   with_items: cmd_agents
+    - name: Wait until agents are accesible (timeout 5 mins)
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ item }}"
+        delay: 5
+      with_items: "{{ list_agents }}"

@@ -1,14 +1,28 @@
+# Fetch values from terraform.tfvars
+variable "proxmox_api_url" {
+  type = string
+}
+
+variable "proxmox_user" {
+  type = string
+}
+
+variable "proxmox_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "cloudflare_api_token" {
+  type      = string
+  sensitive = true
+}
+
 locals {
   # ?
   # ? Global variables
   # ?
   domain          = "macminis.net"
   github_username = "ifarfan"
-  pm_node         = "m1"
-
-  # ? Proxmox
-  pm_api_url = "https://${local.pm_node}.${local.domain}:8006/api2/json"
-  pm_user    = "root@pam"
 
   # ? Proxmox servers
   proxmox_nodes = [
