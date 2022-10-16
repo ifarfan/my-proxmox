@@ -4,7 +4,6 @@ Base `Ubuntu 22.04` role with default OS configurations
 
 Configuring the following items:
 - `apt` (behavior update configs)
-- `aws`-cli (AWS)
 - `chrony` (NTP replacement)
 - `cron` (configs + removing default files)
 - `files` (some /etc/ files)

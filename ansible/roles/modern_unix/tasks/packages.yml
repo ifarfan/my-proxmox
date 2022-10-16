@@ -4,15 +4,72 @@
     pkg: "{{ apt_pkgs_modern }}"
     state: present
 
-- name: Install modern packages (deb)
-  ansible.builtin.apt:
-    deb: "{{ item }}"
-  loop: "{{ apt_debs_modern }}"
-  ignore_errors: true
+- name: Install x86_64 packages
+  block:
 
-- name: Unarchive zipped flat execs
-  ansible.builtin.unarchive:
-    src: "{{ item }}"
-    dest: /usr/local/bin
-    remote_src: true
-  loop: "{{ zip_flat_modern }}"
+    - name: Install modern packages (deb)
+      ansible.builtin.apt:
+        deb: "{{ item }}"
+      loop: "{{ apt_debs_modern_x86_64 }}"
+      ignore_errors: true
+
+    - name: Unarchive zipped flat execs
+      ansible.builtin.unarchive:
+        src: "{{ item }}"
+        dest: /usr/local/bin
+        remote_src: true
+      loop: "{{ zip_flat_modern_x86_64 }}"
+
+    - name: Unarchive zipped fat execs
+      unarchive:
+        src: "{{ item.url }}"
+        dest: /tmp/
+        remote_src: true
+      loop: "{{ zip_fat_modern_x86_64 }}"
+
+    - name: Move downloaded execs
+      copy:
+        src: "/tmp/{{ item.file }}"
+        dest: /usr/local/bin
+        owner: root
+        group: root
+        mode: '0755'
+        remote_src: true
+      loop: "{{ zip_fat_modern_x86_64 }}"
+
+  when: ansible_architecture == "x86_64"
+
+- name: Install aarch64 packages
+  block:
+
+    - name: Install modern packages (deb)
+      ansible.builtin.apt:
+        deb: "{{ item }}"
+      loop: "{{ apt_debs_modern_aarch64 }}"
+      ignore_errors: true
+
+    - name: Unarchive zipped flat execs
+      ansible.builtin.unarchive:
+        src: "{{ item }}"
+        dest: /usr/local/bin
+        remote_src: true
+      loop: "{{ zip_flat_modern_aarch64 }}"
+
+    - name: Unarchive zipped fat execs
+      unarchive:
+        src: "{{ item.url }}"
+        dest: /tmp/
+        remote_src: true
+      loop: "{{ zip_fat_modern_aarch64 }}"
+
+    - name: Move downloaded execs
+      copy:
+        src: "/tmp/{{ item.file }}"
+        dest: /usr/local/bin
+        owner: root
+        group: root
+        mode: '0755'
+        remote_src: true
+      loop: "{{ zip_fat_modern_aarch64 }}"
+
+  when: ansible_architecture == "aarch64"

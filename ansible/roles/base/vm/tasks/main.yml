@@ -14,9 +14,6 @@
 - name: Configure rsyslog
   ansible.builtin.import_tasks: rsyslog.yml
 
-- name: Configure AWS utilities
-  ansible.builtin.import_tasks: aws.yml
-
 - name: Configure logrotate
   ansible.builtin.import_tasks: logrotate.yml
 

@@ -1,0 +1,13 @@
+---
+- name: Oracle Cloud provisioning
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Server default configuration
+      ansible.builtin.include_role:
+        name: base/vm
+
+    - name: Install modern Unix utilities
+      ansible.builtin.include_role:
+        name: modern_unix

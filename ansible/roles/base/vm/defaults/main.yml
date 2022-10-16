@@ -52,13 +52,6 @@ services_2_disable:
   - packagekit                # Used during package updates when using GUI
   - systemd-timesyncd         # Replaced by "chrony"
 
-aws_cli_url: https://awscli.amazonaws.com/awscli-exe-linux-{{ ansible_architecture }}.zip
-aws_cli_region: us-east-2
-aws_cli_output: json
-
-aws_apt_pkgs:
-  - s3cmd
-
 cron_job_to_remove:
   # ? NOTE:
   # ? Removing jobs that are either resource hogs (cough, sysstat, cough)

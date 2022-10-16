@@ -4,7 +4,8 @@ apt_pkgs_modern:
   - fd-find
   - jq
 
-apt_debs_modern:
+# amd64 packages
+apt_debs_modern_x86_64:
   - https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
   - https://github.com/ClementTsang/bottom/releases/download/0.6.8/bottom_0.6.8_amd64.deb
   - https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd-musl_0.23.1_amd64.deb
@@ -13,8 +14,25 @@ apt_debs_modern:
   - https://github.com/muesli/duf/releases/download/v0.8.1/duf_0.8.1_linux_amd64.deb
   - https://github.com/rs/curlie/releases/download/v1.6.9/curlie_1.6.9_linux_amd64.deb
 
-zip_flat_modern:
+zip_flat_modern_x86_64:
   - https://github.com/dalance/procs/releases/download/v0.13.1/procs-v0.13.1-x86_64-linux.zip
+
+zip_fat_modern_x86_64: []
+
+# arm64 packages
+apt_debs_modern_aarch64:
+  - https://github.com/ClementTsang/bottom/releases/download/0.6.8/bottom_aarch64-unknown-linux-gnu.deb
+  - https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd-musl_0.23.1_arm64.deb
+  - https://github.com/dandavison/delta/releases/download/0.14.0/git-delta_0.14.0_arm64.deb
+  - https://github.com/muesli/duf/releases/download/v0.8.1/duf_0.8.1_linux_arm64.deb
+  - https://github.com/rs/curlie/releases/download/v1.6.9/curlie_1.6.9_linux_arm64.deb
+
+zip_flat_modern_aarch64: []
+
+zip_fat_modern_aarch64:
+  -
+    url: https://github.com/bootandy/dust/releases/download/v0.8.3/dust-v0.8.3-aarch64-unknown-linux-musl.tar.gz
+    file: dust-v0.8.3-aarch64-unknown-linux-musl/dust
 
 # File contents
 aliases: |

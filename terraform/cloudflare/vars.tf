@@ -47,6 +47,11 @@ locals {
       desc  = "k3os kube-vip",
       name  = "k3os",
       value = "192.168.136.40"
+    },
+    {
+      desc  = "Oracle Cloud box",
+      name  = "cloudybox",
+      value = "150.136.116.1"
     }
   ]
 
