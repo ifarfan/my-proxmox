@@ -22,4 +22,5 @@ k3os:
     - "--cluster-init"
     - "--disable=servicelb"
     - "--bind-address=192.168.136.41"
+    - "--tls-san=192.168.136.40"    # kube-vip IP address
     - "--token=e6saw26p88bhukn7uuyr9ay8t45xyz4pw6664km5erzw5utr5vjhdrutbwz9s7zkejnz6yhuts8bm2p3u6zzht4ydphw3pyenqc"
