@@ -20,7 +20,7 @@
     cmd: /usr/bin/cloud-init clean
     removes: /var/lib/cloud/instance
 
-- name: Reset machine-id
+- name: Reset machine-id  # noqa 208
   copy:
     content: ''
     dest: /etc/machine-id

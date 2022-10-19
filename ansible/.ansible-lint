@@ -2,4 +2,19 @@
 use_default_rules: true
 
 exclude_paths:
-  - terraform/*
+  - roles/base/lxc/molecule/tests
+  - roles/base/vm/molecule/tests
+  - roles/cloud_init/molecule/tests
+  - roles/dashy/molecule/tests
+  - roles/docker/molecule/tests
+  - roles/goss/molecule/tests
+  - roles/grafana/molecule/tests
+  - roles/heimdall/molecule/tests
+  - roles/loki/molecule/tests
+  - roles/modern_unix/molecule/tests
+  - roles/node_exporter/molecule/tests
+  - roles/portainer/molecule/tests
+  - roles/prometheus/molecule/tests
+  - roles/proxmox/molecule/tests
+  - roles/traefik/molecule/tests
+  - roles/uptime_kuma/molecule/tests

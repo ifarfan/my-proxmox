@@ -21,7 +21,7 @@ jobs:
       - checkout
       - run:
           name: Run Ansible linting
-          command: ansible-lint
+          command: cd ansible && ansible-lint
   terraform_fmt:
     docker:
       - image: hashicorp/terraform:1.2.9
