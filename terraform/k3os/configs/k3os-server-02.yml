@@ -21,6 +21,5 @@ k3os:
     - server
     - "--disable=servicelb"
     - "--bind-address=192.168.136.42"
-    - "--node-taint='node-role.kubernetes.io/master=true:NoSchedule'"   # needed by kube-vip
   token: "e6saw26p88bhukn7uuyr9ay8t45xyz4pw6664km5erzw5utr5vjhdrutbwz9s7zkejnz6yhuts8bm2p3u6zzht4ydphw3pyenqc"
   server_url: https://192.168.136.41:6443
