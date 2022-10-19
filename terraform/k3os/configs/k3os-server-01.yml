@@ -124,7 +124,7 @@ write_files:
         numberMisscheduled: 0
         numberReady: 0
     owner: root
-    permissions: '0755'
+    permissions: '0644'
 k3os:
   ntp_servers:
     - 0.us.pool.ntp.org
