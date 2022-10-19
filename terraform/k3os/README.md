@@ -12,7 +12,7 @@ terraform plan -compact-warnings
 terraform apply -auto-approve
 
 # To destroy stack
-terraform destroy -auto-approve
+terraform destroy -auto-approve -compact-warnings
 ```
 
 #### Run `ansible` provisioning on 1st boot
