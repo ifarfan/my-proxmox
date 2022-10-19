@@ -23,7 +23,7 @@
     mode: 0755
   register: node_exporter_download_check
 
-- name: Move node_exporter binary
+- name: Move node_exporter binary   # noqa 503
   ansible.builtin.copy:
     src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
     dest: "{{ node_exporter_bin_path }}"

@@ -11,7 +11,7 @@
   tasks:
     - name: Start server nodes
       throttle: 1
-      local_action:
+      local_action:   # noqa 504
         module: community.general.proxmox
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
@@ -26,7 +26,7 @@
   tasks:
     - name: Start data nodes
       throttle: 1
-      local_action:
+      local_action:   # noqa 504
         module: community.general.proxmox
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
@@ -41,7 +41,7 @@
   tasks:
     - name: Start agent nodes
       throttle: 1
-      local_action:
+      local_action:   # noqa 504
         module: community.general.proxmox
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
