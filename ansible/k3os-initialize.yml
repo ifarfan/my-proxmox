@@ -107,10 +107,16 @@
   become: true
   gather_facts: false
   tasks:
+    # Servers joining cluster
     - name: Show servers join cluster commands
       ansible.builtin.debug:
         var: "{{ item }}"
       with_items: cmd_servers
+
+    - name: Initialize + join servers to cluster
+      ansible.builtin.command: "{{ item }}"
+      register: cmd_servers_output
+      with_items: "{{ cmd_servers }}"
 
     - name: Wait until servers are accesible (timeout 5 mins)
       ansible.builtin.wait_for:
@@ -119,11 +125,7 @@
         delay: 5
       with_items: "{{ list_servers }}"
 
-    - name: Initialize + join servers to cluster
-      ansible.builtin.command: "{{ item }}"
-      register: cmd_servers_output
-      with_items: "{{ cmd_servers }}"
-
+    # Agents joining cluster
     - name: Show agents join cluster commands
       ansible.builtin.debug:
         var: "{{ item }}"

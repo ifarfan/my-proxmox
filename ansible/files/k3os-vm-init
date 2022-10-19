@@ -4,8 +4,7 @@
 #
 init2() {
     # Cloud-init URL
-    CLOUD_INIT_URL="https://github.com/ifarfan/my-proxmox/blob/main/terraform/k3os/configs/${VM_NAME}.yml"
-
+    CLOUD_INIT_URL="https://raw.githubusercontent.com/ifarfan/my-proxmox/main/terraform/k3os/configs/${VM_NAME}.yml"
     #  Show debug values
     log_line 'O' "All checks passed!"
     log_line '' "- PROXMOX_NODE   : ${YELLOW}${BOLD}${PROXMOX_NODE}${NORMAL}"
@@ -17,8 +16,9 @@ init2() {
 
 
     # Split URL into single, non-char-repeatable strings
-    local PREV_CHAR=''; local I; local STR_COUNTER=0
+    local PREV_CHAR=''; local I; local STR_COUNTER=0; local IS_STR_RESET=false
     local STR_SO_FAR=''; local STR_LIST=();
+    local DOT_SO_FAR=''; local DOT_LIST=();
     for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
         # Fetch 1 char
         CHAR=$(char_escape "${CLOUD_INIT_URL:$I:1}")
@@ -26,14 +26,43 @@ init2() {
         # Increase char counter
         ((STR_COUNTER+=1))
 
-        if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "10"]]; then
+        # Stop if chars repeat or we've reached the max length
+        if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "20" ]]; then
             # Add to list and reset running string + counter
             STR_LIST+=(${STR_SO_FAR})
             STR_SO_FAR="${CHAR}"
             STR_COUNTER=0
+
+            # Keep track of dots
+            DOT_LIST+=(${DOT_SO_FAR});
+            DOT_SO_FAR='.'
+        # Stop if char uses "shift"
+        elif [[ "${CHAR}" == *"shift"* ]]; then
+            # Add to list and reset running string + counter
+            STR_SO_FAR+="-${CHAR}"
+            STR_LIST+=(${STR_SO_FAR})
+            STR_SO_FAR=""
+            STR_COUNTER=0
+            IS_STR_RESET=true
+
+            # Keep track of dots
+            DOT_SO_FAR+='.'
+            DOT_LIST+=(${DOT_SO_FAR});
         else
             # Append to running string
-            [[ "$I" -eq "0" ]] && STR_SO_FAR="${CHAR}" || STR_SO_FAR+="-${CHAR}"
+            if [[ "$I" -eq "0" || "${IS_STR_RESET}" = true ]]; then
+                # 1st char of string
+                STR_SO_FAR="${CHAR}"
+                IS_STR_RESET=false
+
+                # Keep track of dots
+                DOT_SO_FAR='.'
+            else
+                STR_SO_FAR+="-${CHAR}"
+
+                # Keep track of dots
+                DOT_SO_FAR+='.'
+            fi
         fi
 
         # Keep track of last character
@@ -41,13 +70,26 @@ init2() {
     done
     # Capture last string into list
     STR_LIST+=(${STR_SO_FAR})
+    DOT_LIST+=(${DOT_SO_FAR})
 
-    # Show substrings
-    for I in "${STR_LIST[@]}"; do
-        echo "${I}"
-        DOTS=$(dot_string "${I}")
-        echo "${DOTS}"
+    for (( I=0; I<${#STR_LIST[@]}; I++ )); do
+        echo "${STR_LIST[$I]}"
+        echo "${DOT_LIST[$I]}"
     done
+
+    # # Show substrings
+    # for I in "${STR_LIST[@]}"; do
+    #     echo "${I}"
+    #     # DOTS=$(dot_string "${I}")
+    #     # echo "${DOTS}"
+    # done
+
+    # # Show dots
+    # for I in "${DOT_LIST[@]}"; do
+    #     echo "${I}"
+    #     # DOTS=$(dot_string "${I}")
+    #     # echo "${DOTS}"
+    # done
 }
 
 
@@ -123,16 +165,16 @@ char_escape() {
 }
 
 
-dot_string() {
-    #
-    #  Get string of dots
-    #
-    local DOTS=''
-    for (( I=0; I<${#1}; I++ )); do
-        DOTS+='.'
-    done
-    echo "${DOTS}"
-}
+# dot_string() {
+#     #
+#     #  Get string of dots
+#     #
+#     local DOTS=''
+#     for (( I=0; I<${#1}; I++ )); do
+#         DOTS+='.'
+#     done
+#     echo "${DOTS}"
+# }
 
 
 log_line() {
@@ -193,9 +235,9 @@ init() {
     pvesh create /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/status/start
     sleep ${SLEEP_SECS_MEDIUM}
 
-    # Install sequence
+    # Install steps via console
 
-    # Do install: "Down arrow"
+    # Do full install: "Down arrow"
     log_line 'O' "Begin Installation"
     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key down-kp_enter
     sleep ${SLEEP_SECS_LONG}
@@ -205,58 +247,98 @@ init() {
     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key shift-y-kp_enter
     sleep ${SLEEP_SECS_SHORT}
 
-    # Enter cloud-init URL
-    log_line 'O' "Type remote Cloud-init URL:"
-    log_line 'W' ""
-    for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
-        CHAR="${CLOUD_INIT_URL:$I:1}"
-        case ${CHAR} in
-            ':') CHAR='shift-semicolon';;
-            '/') CHAR='slash';;
-            '.') CHAR='dot';;
-            '-') CHAR='minus';;
-        esac
-        echo -n "${BLACK}${BOLD}.${NORMAL}"
-        pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${CHAR}
-    done
-
-    # # Split URL into single, non-char-repeatable strings
-    # local PREV_CHAR=''; local I; local STR_COUNTER=0
-    # local STR_SO_FAR=''; local STR_LIST=();
+    # # Enter cloud-init URL
+    # log_line 'O' "Type remote Cloud-init URL:"
+    # log_line 'W' ""
     # for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
-    #     # Fetch 1 char
-    #     CHAR=$(char_escape "${CLOUD_INIT_URL:$I:1}")
-    #
-    #     # Increase char counter
-    #     ((STR_COUNTER+=1))
-
-    #     if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "10"]]; then
-    #        # Add to list and reset running string + counter
-    #        STR_LIST+=(${STR_SO_FAR})
-    #        STR_SO_FAR="${CHAR}"
-    #        STR_COUNTER=0
-    #     else
-    #         # Append to running string
-    #         [[ "$I" -eq "0" ]] && STR_SO_FAR="${CHAR}" || STR_SO_FAR+="-${CHAR}"
-    #     fi
-
-    #     # Keep track of last character
-    #     PREV_CHAR="${CHAR}"
+    #     CHAR="${CLOUD_INIT_URL:$I:1}"
+    #     case ${CHAR} in
+    #         ':') CHAR='shift-semicolon';;
+    #         '/') CHAR='slash';;
+    #         '.') CHAR='dot';;
+    #         '-') CHAR='minus';;
+    #     esac
+    #     echo -n "${BLACK}${BOLD}.${NORMAL}"
+    #     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${CHAR}
     # done
 
-    # # Capture last string into list
-    # STR_LIST+=(${STR_SO_FAR})
-
+    # # Send URL in non-colliding strings
     # for I in "${STR_LIST[@]}"; do
     #     # Send string
     #     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${I}
-    #     sleep ${SLEEP_SECS_SHORT}
 
     #     # Display dots
     #     DOTS=$(dot_string "${I}")
     #     echo -n "${BLACK}${BOLD}${DOTS}${NORMAL}"
     # done
 
+    # Split URL into single, non-char-repeatable strings
+    local PREV_CHAR=''; local I; local STR_COUNTER=0; local IS_STR_RESET=false
+    local STR_SO_FAR=''; local STR_LIST=();
+    local DOT_SO_FAR=''; local DOT_LIST=();
+    for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
+        # Fetch 1 char
+        CHAR=$(char_escape "${CLOUD_INIT_URL:$I:1}")
+
+        # Increase char counter
+        ((STR_COUNTER+=1))
+
+        # Stop if chars repeat or we've reached the max length
+        if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "20" ]]; then
+            # Add to list and reset running string + counter
+            STR_LIST+=(${STR_SO_FAR})
+            STR_SO_FAR="${CHAR}"
+            STR_COUNTER=0
+
+            # Keep track of dots
+            DOT_LIST+=(${DOT_SO_FAR});
+            DOT_SO_FAR='.'
+        # Stop if char uses "shift"
+        elif [[ "${CHAR}" == *"shift"* ]]; then
+            # Add to list and reset running string + counter
+            STR_SO_FAR+="-${CHAR}"
+            STR_LIST+=(${STR_SO_FAR})
+            STR_SO_FAR=""
+            STR_COUNTER=0
+            IS_STR_RESET=true
+
+            # Keep track of dots
+            DOT_SO_FAR+='.'
+            DOT_LIST+=(${DOT_SO_FAR});
+        else
+            # Append to running string
+            if [[ "$I" -eq "0" || "${IS_STR_RESET}" = true ]]; then
+                # 1st char of string
+                STR_SO_FAR="${CHAR}"
+                IS_STR_RESET=false
+
+                # Keep track of dots
+                DOT_SO_FAR='.'
+            else
+                STR_SO_FAR+="-${CHAR}"
+
+                # Keep track of dots
+                DOT_SO_FAR+='.'
+            fi
+        fi
+
+        # Keep track of last character
+        PREV_CHAR="${CHAR}"
+    done
+    # Capture last string into list
+    STR_LIST+=(${STR_SO_FAR})
+    DOT_LIST+=(${DOT_SO_FAR})
+
+    # Send URL in non-colliding strings
+    for (( I=0; I<${#STR_LIST[@]}; I++ )); do
+        # Send string
+        pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${STR_LIST[$I]}
+
+        # Display dots
+        echo -n "${BLACK}${BOLD}${DOT_LIST[$I]}${NORMAL}"
+    done
+
+    # Last enter after URL
     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key kp_enter
     sleep ${SLEEP_SECS_SHORT}
     echo ''
