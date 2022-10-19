@@ -30,6 +30,10 @@ spec:
         - args:
             - manager
           env:
+            # - name : lb_enable
+            #   value: "true"
+            # - name: lb_port
+            #   value: "6443"
             - name: vip_arp
               value: "true"
             - name: port
