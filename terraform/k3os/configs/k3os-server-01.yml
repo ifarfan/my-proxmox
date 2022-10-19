@@ -13,6 +13,10 @@ write_files:
   - path: /var/lib/rancher/k3s/server/manifests/kube-vip.yml
     encoding: ""
     content: |-
+      ---
+      #
+      # See: https://kube-vip.io/manifests/rbac.yaml
+      #
       apiVersion: v1
       kind: ServiceAccount
       metadata:
@@ -46,6 +50,9 @@ write_files:
         name: kube-vip
         namespace: kube-system
       ---
+      #
+      # See: https://kube-vip.io/docs/installation/daemonset/#example-arp-manifest
+      #
       apiVersion: apps/v1
       kind: DaemonSet
       metadata:

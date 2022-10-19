@@ -1,4 +1,7 @@
 ---
+#
+# See: https://kube-vip.io/docs/installation/daemonset/#example-arp-manifest
+#
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
