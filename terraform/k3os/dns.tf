@@ -27,3 +27,11 @@ resource "cloudflare_record" "dns_record_data" {
   type    = local.dns_record.type
   ttl     = local.dns_record.ttl
 }
+
+resource "cloudflare_record" "vip_record" {
+  zone_id = lookup(data.cloudflare_zones.domain_zone.zones[0], "id")
+  name    = local.kube_vip_dns_record.name
+  value   = local.kube_vip_dns_record.value
+  type    = "A"
+  ttl     = 1 # auto
+}

@@ -39,18 +39,8 @@ locals {
       value = "192.168.136.21"
     },
     {
-      desc  = "k3s kube-vip",
-      name  = "k3s",
-      value = "192.168.136.30"
-    },
-    {
-      desc  = "k3os kube-vip",
-      name  = "k3os",
-      value = "192.168.136.40"
-    },
-    {
       desc  = "Oracle Cloud box",
-      name  = "cloudybox",
+      name  = "cloudy-box",
       value = "150.136.116.1"
     }
   ]

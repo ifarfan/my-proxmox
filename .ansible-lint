@@ -18,3 +18,5 @@ exclude_paths:
   - ansible/roles/proxmox/molecule/tests
   - ansible/roles/traefik/molecule/tests
   - ansible/roles/uptime_kuma/molecule/tests
+  - terraform/*
+  - kubernetes/*

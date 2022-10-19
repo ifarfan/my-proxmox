@@ -151,4 +151,10 @@ locals {
     ttl  = 3600,
     type = "A"
   }
+
+  # ? DNS kube-vip record
+  kube_vip_dns_record = {
+    name  = "k3os",
+    value = "192.168.136.40"
+  }
 }

@@ -33,6 +33,7 @@
   tasks:
     - name: Define cluster init command
       ansible.builtin.set_fact:
+        # yamllint disable-line rule:line-length
         cmd_string: "k3os-vm-init --proxmox_node {{ proxmox_node }} --vm_id {{ proxmox_vmid }} --vm_name {{ inventory_hostname_short }}"
 
     - name: Append cluster init command to list
@@ -49,6 +50,7 @@
   tasks:
     - name: Define server command
       ansible.builtin.set_fact:
+        # yamllint disable-line rule:line-length
         cmd_string: "k3os-vm-init --proxmox_node {{ proxmox_node }} --vm_id {{ proxmox_vmid }} --vm_name {{ inventory_hostname_short }}"
 
     - name: Append server command to list
@@ -65,6 +67,7 @@
   tasks:
     - name: Define agent command
       ansible.builtin.set_fact:
+        # yamllint disable-line rule:line-length
         cmd_string: "k3os-vm-init --proxmox_node {{ proxmox_node }} --vm_id {{ proxmox_vmid }} --vm_name {{ inventory_hostname_short }}"
 
     - name: Append agent command to list
