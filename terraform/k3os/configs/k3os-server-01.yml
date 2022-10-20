@@ -147,6 +147,7 @@ k3os:
     - server
     - "--cluster-init"
     - "--disable=servicelb"
+    - "--disable=traefik"
     - "--bind-address=192.168.136.41"
     - "--tls-san=192.168.136.40"                                        # kube-vip IP address
     - "--node-taint=node-role.kubernetes.io/master=true:NoSchedule"     # needed by kube-vip

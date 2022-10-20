@@ -2,97 +2,6 @@
 #
 #  VM-INIT: Initialize k3os VM
 #
-init2() {
-    # Cloud-init URL
-    CLOUD_INIT_URL="https://raw.githubusercontent.com/ifarfan/my-proxmox/main/terraform/k3os/configs/${VM_NAME}.yml"
-    #  Show debug values
-    log_line 'O' "All checks passed!"
-    log_line '' "- PROXMOX_NODE   : ${YELLOW}${BOLD}${PROXMOX_NODE}${NORMAL}"
-    log_line '' "- VM_ID          : ${YELLOW}${BOLD}${VM_ID}${NORMAL}"
-    log_line '' "- VM_NAME        : ${YELLOW}${BOLD}${VM_NAME}${NORMAL}"
-    log_line '' "- CLOUD_INIT_URL : ${YELLOW}${BOLD}${CLOUD_INIT_URL}${NORMAL}"
-    log_line '' ""
-    log_line '' "Executing ${GREEN}${BOLD}VM Initialization${NORMAL} now...\n"
-
-
-    # Split URL into single, non-char-repeatable strings
-    local PREV_CHAR=''; local I; local STR_COUNTER=0; local IS_STR_RESET=false
-    local STR_SO_FAR=''; local STR_LIST=();
-    local DOT_SO_FAR=''; local DOT_LIST=();
-    for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
-        # Fetch 1 char
-        CHAR=$(char_escape "${CLOUD_INIT_URL:$I:1}")
-
-        # Increase char counter
-        ((STR_COUNTER+=1))
-
-        # Stop if chars repeat or we've reached the max length
-        if [[ "${PREV_CHAR}" == "${CHAR}" || "${STR_COUNTER}" -eq "20" ]]; then
-            # Add to list and reset running string + counter
-            STR_LIST+=(${STR_SO_FAR})
-            STR_SO_FAR="${CHAR}"
-            STR_COUNTER=0
-
-            # Keep track of dots
-            DOT_LIST+=(${DOT_SO_FAR});
-            DOT_SO_FAR='.'
-        # Stop if char uses "shift"
-        elif [[ "${CHAR}" == *"shift"* ]]; then
-            # Add to list and reset running string + counter
-            STR_SO_FAR+="-${CHAR}"
-            STR_LIST+=(${STR_SO_FAR})
-            STR_SO_FAR=""
-            STR_COUNTER=0
-            IS_STR_RESET=true
-
-            # Keep track of dots
-            DOT_SO_FAR+='.'
-            DOT_LIST+=(${DOT_SO_FAR});
-        else
-            # Append to running string
-            if [[ "$I" -eq "0" || "${IS_STR_RESET}" = true ]]; then
-                # 1st char of string
-                STR_SO_FAR="${CHAR}"
-                IS_STR_RESET=false
-
-                # Keep track of dots
-                DOT_SO_FAR='.'
-            else
-                STR_SO_FAR+="-${CHAR}"
-
-                # Keep track of dots
-                DOT_SO_FAR+='.'
-            fi
-        fi
-
-        # Keep track of last character
-        PREV_CHAR="${CHAR}"
-    done
-    # Capture last string into list
-    STR_LIST+=(${STR_SO_FAR})
-    DOT_LIST+=(${DOT_SO_FAR})
-
-    for (( I=0; I<${#STR_LIST[@]}; I++ )); do
-        echo "${STR_LIST[$I]}"
-        echo "${DOT_LIST[$I]}"
-    done
-
-    # # Show substrings
-    # for I in "${STR_LIST[@]}"; do
-    #     echo "${I}"
-    #     # DOTS=$(dot_string "${I}")
-    #     # echo "${DOTS}"
-    # done
-
-    # # Show dots
-    # for I in "${DOT_LIST[@]}"; do
-    #     echo "${I}"
-    #     # DOTS=$(dot_string "${I}")
-    #     # echo "${DOTS}"
-    # done
-}
-
-
 config() {
     # Sleep lapses
     SLEEP_SECS_SHORT=2
@@ -165,18 +74,6 @@ char_escape() {
 }
 
 
-# dot_string() {
-#     #
-#     #  Get string of dots
-#     #
-#     local DOTS=''
-#     for (( I=0; I<${#1}; I++ )); do
-#         DOTS+='.'
-#     done
-#     echo "${DOTS}"
-# }
-
-
 log_line() {
     #
     #  Write message to console, with optional alert flag
@@ -246,31 +143,6 @@ init() {
     log_line 'O' "Use Cloud-init configuration"
     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key shift-y-kp_enter
     sleep ${SLEEP_SECS_SHORT}
-
-    # # Enter cloud-init URL
-    # log_line 'O' "Type remote Cloud-init URL:"
-    # log_line 'W' ""
-    # for (( I=0; I<${#CLOUD_INIT_URL}; I++ )); do
-    #     CHAR="${CLOUD_INIT_URL:$I:1}"
-    #     case ${CHAR} in
-    #         ':') CHAR='shift-semicolon';;
-    #         '/') CHAR='slash';;
-    #         '.') CHAR='dot';;
-    #         '-') CHAR='minus';;
-    #     esac
-    #     echo -n "${BLACK}${BOLD}.${NORMAL}"
-    #     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${CHAR}
-    # done
-
-    # # Send URL in non-colliding strings
-    # for I in "${STR_LIST[@]}"; do
-    #     # Send string
-    #     pvesh set /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/sendkey --key ${I}
-
-    #     # Display dots
-    #     DOTS=$(dot_string "${I}")
-    #     echo -n "${BLACK}${BOLD}${DOTS}${NORMAL}"
-    # done
 
     # Split URL into single, non-char-repeatable strings
     local PREV_CHAR=''; local I; local STR_COUNTER=0; local IS_STR_RESET=false

@@ -16,7 +16,7 @@ terraform destroy -auto-approve -compact-warnings
 ```
 
 #### Run `ansible` provisioning on 1st boot
-Also, this takes a long time (`20+ mins`), go do laundry or dinner in the meantime
+This takes some time (`10+ mins`), go do laundry or dinner in the meantime
 ```shell
 cd ../ansible
 ansible-playbook -i inventories/k3os k3os-initialize.yml
