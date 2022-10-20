@@ -88,7 +88,7 @@ write_files:
                   - name: vip_arp
                     value: "true"
                   - name: port
-                    value: "6443"
+                    value: "6444"
                   - name: vip_interface
                     value: eth0
                   - name: vip_cidr
