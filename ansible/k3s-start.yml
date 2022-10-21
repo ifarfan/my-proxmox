@@ -9,9 +9,9 @@
   hosts: k3s_servers
   gather_facts: false
   tasks:
-    - name: Start server nodes
+    - name: Start server nodes   # noqa 504
       throttle: 1
-      local_action:   # noqa 504
+      local_action:
         module: community.general.proxmox
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
@@ -24,9 +24,9 @@
   hosts: k3s_data
   gather_facts: false
   tasks:
-    - name: Start data nodes
+    - name: Start data nodes   # noqa 504
       throttle: 1
-      local_action:   # noqa 504
+      local_action:
         module: community.general.proxmox
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
@@ -39,9 +39,9 @@
   hosts: k3s_agents
   gather_facts: false
   tasks:
-    - name: Start agent nodes
+    - name: Start agent nodes   # noqa 504
       throttle: 1
-      local_action:   # noqa 504
+      local_action:
         module: community.general.proxmox
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
