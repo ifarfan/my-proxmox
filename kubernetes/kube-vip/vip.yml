@@ -5,16 +5,20 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  labels:
+    app.kubernetes.io/name: kube-vip-ds
+    app.kubernetes.io/version: v0.5.5
   name: kube-vip-ds
   namespace: kube-system
 spec:
   selector:
     matchLabels:
-      name: kube-vip-ds
+      app.kubernetes.io/name: kube-vip-ds
   template:
     metadata:
       labels:
-        name: kube-vip-ds
+        app.kubernetes.io/name: kube-vip-ds
+        app.kubernetes.io/version: v0.5.5
     spec:
       affinity:
         nodeAffinity:
@@ -30,8 +34,8 @@ spec:
         - args:
             - manager
           env:
-            # - name : lb_enable
-            #   value: "true"
+            - name : lb_enable
+              value: "true"
             # - name: lb_port
             #   value: "6443"
             - name: vip_arp
@@ -60,7 +64,9 @@ spec:
               value: "2"
             - name: address
               value: 192.168.136.40     # kube-vip IP address
-          image: ghcr.io/kube-vip/kube-vip:v0.5.0
+            - name: prometheus_server
+              value: :2112
+          image: ghcr.io/kube-vip/kube-vip:v0.5.5
           imagePullPolicy: Always
           name: kube-vip
           resources: {}
@@ -69,7 +75,7 @@ spec:
               add:
                 - NET_ADMIN
                 - NET_RAW
-                - SYS_TIME
+                # - SYS_TIME
       hostNetwork: true
       serviceAccountName: kube-vip
       tolerations:

@@ -56,33 +56,39 @@ write_files:
       apiVersion: apps/v1
       kind: DaemonSet
       metadata:
+        labels:
+          app.kubernetes.io/name: kube-vip-ds
+          app.kubernetes.io/version: v0.5.5
         name: kube-vip-ds
         namespace: kube-system
       spec:
         selector:
           matchLabels:
-            name: kube-vip-ds
+            app.kubernetes.io/name: kube-vip-ds
         template:
           metadata:
             labels:
-              name: kube-vip-ds
+              app.kubernetes.io/name: kube-vip-ds
+              app.kubernetes.io/version: v0.5.5
           spec:
             affinity:
               nodeAffinity:
                 requiredDuringSchedulingIgnoredDuringExecution:
                   nodeSelectorTerms:
                     - matchExpressions:
-                      - key: node-role.kubernetes.io/master
-                        operator: Exists
+                        - key: node-role.kubernetes.io/master
+                          operator: Exists
                     - matchExpressions:
-                      - key: node-role.kubernetes.io/control-plane
-                        operator: Exists
+                        - key: node-role.kubernetes.io/control-plane
+                          operator: Exists
             containers:
               - args:
                   - manager
                 env:
                   - name : lb_enable
                     value: "true"
+                  # - name: lb_port
+                  #   value: "6443"
                   - name: vip_arp
                     value: "true"
                   - name: port
@@ -109,7 +115,9 @@ write_files:
                     value: "2"
                   - name: address
                     value: 192.168.136.40     # kube-vip IP address
-                image: ghcr.io/kube-vip/kube-vip:v0.5.0
+                  - name: prometheus_server
+                    value: :2112
+                image: ghcr.io/kube-vip/kube-vip:v0.5.5
                 imagePullPolicy: Always
                 name: kube-vip
                 resources: {}
@@ -118,7 +126,7 @@ write_files:
                     add:
                       - NET_ADMIN
                       - NET_RAW
-                      - SYS_TIME
+                      # - SYS_TIME
             hostNetwork: true
             serviceAccountName: kube-vip
             tolerations:
@@ -132,6 +140,15 @@ write_files:
         desiredNumberScheduled: 0
         numberMisscheduled: 0
         numberReady: 0
+
+
+
+
+
+
+
+
+
     owner: root
     permissions: '0644'
 k3os:
