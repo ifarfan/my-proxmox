@@ -85,10 +85,10 @@ write_files:
               - args:
                   - manager
                 env:
-                  - name : lb_enable
+                  - name: lb_enable
                     value: "true"
-                  - name: lb_port
-                    value: "6444"
+                  # - name: lb_port
+                  #   value: "6444"
                   - name: vip_arp
                     value: "true"
                   - name: port

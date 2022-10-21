@@ -151,7 +151,7 @@
     dest: ~{{ ansible_user }}/.kube/config
     owner: "{{ ansible_user }}"
     mode: "u=rw,g=,o="
-    remote_src: yes
+    remote_src: true
 
 - name: Configure kubectl cluster to {{ endpoint_url }}
   ansible.builtin.command: >-
