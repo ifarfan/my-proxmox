@@ -140,15 +140,6 @@ write_files:
         desiredNumberScheduled: 0
         numberMisscheduled: 0
         numberReady: 0
-
-
-
-
-
-
-
-
-
     owner: root
     permissions: '0644'
 k3os:
