@@ -119,10 +119,10 @@ locals {
   # ? VM "server" overrides
   server = {
     cores  = 1,
-    memory = 2048,
+    memory = 3072,
 
     disk = {
-      size = "4G"
+      size = "8G"
     }
   }
 
@@ -152,9 +152,15 @@ locals {
     type = "A"
   }
 
-  # ? DNS kube-vip record
-  kube_vip_dns_record = {
+  # # ? DNS kube-vip record
+  # kube_vip_dns_record = {
+  #   name  = "k3os",
+  #   value = "192.168.136.40"
+  # }
+
+  # ? DNS traefik-lb record
+  traefik_lb_dns_record = {
     name  = "k3os",
-    value = "192.168.136.40"
+    value = "portainer.${local.domain}"
   }
 }
