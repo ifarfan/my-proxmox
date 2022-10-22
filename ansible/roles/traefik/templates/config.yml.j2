@@ -9,12 +9,27 @@ http:
         - default-headers
       tls: {}
       service: plex
+    k3os:
+      entryPoints:
+        - "https"
+      rule: "Host(`k3os.{{ global_domain }}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: k3os
 
   services:
     plex:
       loadBalancer:
         servers:
           - url: "http://192.168.136.21:32400"
+        passHostHeader: true
+    k3os:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.136.41:6433"
+          - url: "https://192.168.136.42:6433"
+          - url: "https://192.168.136.43:6433"
         passHostHeader: true
 
   middlewares:

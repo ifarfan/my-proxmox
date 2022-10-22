@@ -15,8 +15,8 @@
         list_cluster_init: []
         list_servers: []
         list_agents: []
-        list_short_workers: []
-        list_short_data: []
+        short_list_workers: []
+        short_list_data: []
     - name: Copy k3os init script
       ansible.builtin.copy:
         src: files/k3os-vm-init
@@ -86,7 +86,7 @@
   tasks:
     - name: Append agent command to list
       ansible.builtin.set_fact:
-        list_short_workers: "{{ hostvars['m1.macminis.net'].list_short_workers + [ inventory_hostname_short ] }}"
+        short_list_workers: "{{ hostvars['m1.macminis.net'].short_list_workers + [ inventory_hostname_short ] }}"
       delegate_to: m1.macminis.net
       delegate_facts: true
 
@@ -97,7 +97,7 @@
   tasks:
     - name: Append agent command to list
       ansible.builtin.set_fact:
-        list_short_data: "{{ hostvars['m1.macminis.net'].list_short_data + [ inventory_hostname_short ] }}"
+        short_list_data: "{{ hostvars['m1.macminis.net'].short_list_data + [ inventory_hostname_short ] }}"
       delegate_to: m1.macminis.net
       delegate_facts: true
 
@@ -187,13 +187,13 @@
     - name: Set agents role
       ansible.builtin.command:
         kubectl label nodes {{ item }} kubernetes.io/role=worker --overwrite
-      with_items: "{{ list_short_workers }}"
+      with_items: "{{ short_list_workers }}"
       changed_when: false
       delegate_to: localhost
 
     - name: Set data role
       ansible.builtin.command:
         kubectl label nodes {{ item }} kubernetes.io/role=data --overwrite
-      with_items: "{{ list_short_data }}"
+      with_items: "{{ short_list_data }}"
       changed_when: false
       delegate_to: localhost
