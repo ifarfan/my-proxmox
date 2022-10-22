@@ -12,13 +12,18 @@
   tasks:
     - name: Reboot server nodes
       throttle: 1
-      community.general.proxmox:
+      community.general.proxmox_kvm:
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
         api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
-        hostname: "{{ inventory_hostname }}"
-        unprivileged: true
+        name: "{{ inventory_hostname }}"
         state: restarted
+
+    - name: Wait until server nodes are accesible (timeout 5 mins)
+      ansible.builtin.wait_for:
+        port: 6443
+        host: "{{ inventory_hostname }}"
+        delay: 5
 
 - name: Reboot k3os agent hosts
   hosts: k3os_agents
@@ -27,13 +32,18 @@
   tasks:
     - name: Reboot agent nodes
       throttle: 1
-      community.general.proxmox:
+      community.general.proxmox_kvm:
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
         api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
-        hostname: "{{ inventory_hostname }}"
-        unprivileged: true
+        name: "{{ inventory_hostname }}"
         state: restarted
+
+    - name: Wait until agent nodes are accesible (timeout 5 mins)
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ inventory_hostname }}"
+        delay: 5
 
 - name: Reboot k3os data hosts
   hosts: k3os_data
@@ -42,10 +52,15 @@
   tasks:
     - name: Reboot data nodes
       throttle: 1
-      community.general.proxmox:
+      community.general.proxmox_kvm:
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
         api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
-        hostname: "{{ inventory_hostname }}"
-        unprivileged: true
+        name: "{{ inventory_hostname }}"
         state: restarted
+
+    - name: Wait until data nodes are accesible (timeout 5 mins)
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ inventory_hostname }}"
+        delay: 5

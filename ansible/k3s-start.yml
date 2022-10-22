@@ -11,14 +11,14 @@
   tasks:
     - name: Start server nodes   # noqa 504
       throttle: 1
-      local_action:
-        module: community.general.proxmox
+      community.general.proxmox:
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
         api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
         hostname: "{{ inventory_hostname }}"
         unprivileged: true
         state: started
+      delegate_to: localhost
 
 - name: Start k3s data hosts
   hosts: k3s_data
@@ -26,14 +26,14 @@
   tasks:
     - name: Start data nodes   # noqa 504
       throttle: 1
-      local_action:
-        module: community.general.proxmox
+      community.general.proxmox:
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
         api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
         hostname: "{{ inventory_hostname }}"
         unprivileged: true
         state: started
+      delegate_to: localhost
 
 - name: Start k3s agent hosts
   hosts: k3s_agents
@@ -41,11 +41,11 @@
   tasks:
     - name: Start agent nodes   # noqa 504
       throttle: 1
-      local_action:
-        module: community.general.proxmox
+      community.general.proxmox:
         api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
         api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
         api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
         hostname: "{{ inventory_hostname }}"
         unprivileged: true
         state: started
+      delegate_to: localhost
