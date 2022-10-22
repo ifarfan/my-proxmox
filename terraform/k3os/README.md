@@ -29,13 +29,13 @@ scp rancher@192.168.136.41:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 
 #### Label agent nodes as `workers`
 ```shell
-kubectl label nodes k3os-agent-01 kubernetes.io/role=worker
-kubectl label nodes k3os-agent-02 kubernetes.io/role=worker
-kubectl label nodes k3os-agent-03 kubernetes.io/role=worker
+kubectl label nodes k3os-agent-01 kubernetes.io/role=worker --overwrite
+kubectl label nodes k3os-agent-02 kubernetes.io/role=worker --overwrite
+kubectl label nodes k3os-agent-03 kubernetes.io/role=worker --overwrite
 
-kubectl label nodes k3os-data-01 kubernetes.io/role=data
-kubectl label nodes k3os-data-02 kubernetes.io/role=data
-kubectl label nodes k3os-data-03 kubernetes.io/role=data
+kubectl label nodes k3os-data-01 kubernetes.io/role=data --overwrite
+kubectl label nodes k3os-data-02 kubernetes.io/role=data --overwrite
+kubectl label nodes k3os-data-03 kubernetes.io/role=data --overwrite
 ```
 
 #### Install metal-lb

@@ -12,9 +12,11 @@
         cmd_cluster_init: []
         cmd_servers: []
         cmd_agents: []
-        list_custer_init: []
+        list_cluster_init: []
         list_servers: []
         list_agents: []
+        list_short_workers: []
+        list_short_data: []
     - name: Copy k3os init script
       ansible.builtin.copy:
         src: files/k3os-vm-init
@@ -39,7 +41,7 @@
     - name: Append cluster init command to list
       ansible.builtin.set_fact:
         cmd_cluster_init: "{{ hostvars['m1.macminis.net'].cmd_cluster_init + [ cmd_string ] }}"
-        list_custer_init: "{{ hostvars['m1.macminis.net'].list_custer_init + [ inventory_hostname ] }}"
+        list_cluster_init: "{{ hostvars['m1.macminis.net'].list_cluster_init + [ inventory_hostname ] }}"
       delegate_to: m1.macminis.net
       delegate_facts: true
 
@@ -77,6 +79,28 @@
       delegate_to: m1.macminis.net
       delegate_facts: true
 
+- name: Generate workers list
+  hosts: k3os_agents
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Append agent command to list
+      ansible.builtin.set_fact:
+        list_short_workers: "{{ hostvars['m1.macminis.net'].list_short_workers + [ inventory_hostname_short ] }}"
+      delegate_to: m1.macminis.net
+      delegate_facts: true
+
+- name: Generate data list
+  hosts: k3os_data
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Append agent command to list
+      ansible.builtin.set_fact:
+        list_short_data: "{{ hostvars['m1.macminis.net'].list_short_data + [ inventory_hostname_short ] }}"
+      delegate_to: m1.macminis.net
+      delegate_facts: true
+
 #
 # ? Initialize cluster
 #
@@ -100,7 +124,7 @@
         port: 6443
         host: "{{ item }}"
         delay: 5
-      with_items: "{{ list_custer_init }}"
+      with_items: "{{ list_cluster_init }}"
 
 #
 # ? Initialize + join remaining servers + agents to cluster
@@ -145,3 +169,31 @@
         host: "{{ item }}"
         delay: 5
       with_items: "{{ list_agents }}"
+
+#
+# ? Fetch kube_config from 1st master
+# ? Note: k3os servers don't have python, need to use scp directly
+#
+- name: Fetch kube_config
+  hosts: m1.macminis.net
+  gather_facts: false
+  tasks:
+    - name: Fetch kube_config
+      ansible.builtin.command:
+        scp rancher@{{ list_cluster_init[0] }}:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+      changed_when: false
+      delegate_to: localhost
+
+    - name: Set agents role
+      ansible.builtin.command:
+        kubectl label nodes {{ item }} kubernetes.io/role=worker --overwrite
+      with_items: "{{ list_short_workers }}"
+      changed_when: false
+      delegate_to: localhost
+
+    - name: Set data role
+      ansible.builtin.command:
+        kubectl label nodes {{ item }} kubernetes.io/role=data --overwrite
+      with_items: "{{ list_short_data }}"
+      changed_when: false
+      delegate_to: localhost
