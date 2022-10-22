@@ -118,12 +118,21 @@ init() {
     # Cloud-init URL
     CLOUD_INIT_URL="https://raw.githubusercontent.com/ifarfan/my-proxmox/main/terraform/k3os/configs/${VM_NAME}.yml"
 
+    # Check that VM is off, if not exit gracefully
+    local VM_STATE=$(pvesh get /nodes/${PROXMOX_NODE}/qemu/${VM_ID}/status/current --noborder --noheader | grep ^status | tr -s ' ' | cut -d ' ' -f 2)
+    echo "${YELLOW}${BOLD}${VM_STATE}${NORMAL}"
+    if [[ "${VM_STATE}" != "stopped" ]]; then
+        log_line 'O' "VM in ${YELLOW}${BOLD}${VM_STATE}${NORMAL} state. Exiting..."
+        exit 0
+    fi
+
     #  Show debug values
     log_line 'O' "All checks passed!"
     log_line '' "- PROXMOX_NODE   : ${YELLOW}${BOLD}${PROXMOX_NODE}${NORMAL}"
     log_line '' "- VM_ID          : ${YELLOW}${BOLD}${VM_ID}${NORMAL}"
     log_line '' "- VM_NAME        : ${YELLOW}${BOLD}${VM_NAME}${NORMAL}"
     log_line '' "- CLOUD_INIT_URL : ${YELLOW}${BOLD}${CLOUD_INIT_URL}${NORMAL}"
+    log_line '' "- VM_STATE       : ${YELLOW}${BOLD}${VM_STATE}${NORMAL}"
     log_line '' ""
     log_line '' "Executing ${GREEN}${BOLD}VM Initialization${NORMAL} now...\n"
 
