@@ -1,0 +1,76 @@
+---
+version: '3'
+
+vars:
+  K3OS_TF_DIR: "{{.TERRAFORM_DIR}}/k3os"
+
+tasks:
+  #
+  # VMs
+  #
+  list-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List k3os cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3os k3os-start.yml --list-hosts
+
+  start-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Start k3os cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3os k3os-start.yml
+
+  stop-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Stop k3os cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3os k3os-stop.yml
+
+  reboot-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Reboot k3os cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3os k3os-reboot.yml
+
+  #
+  # Cluster
+  #
+  create-cluster:
+    desc: Create k3os cluster
+    cmds:
+      - task: terraform-apply
+      - task: ansible-initialize
+
+  destroy-cluster:
+    desc: Destroy k3os cluster
+    cmds:
+      - task: terraform-destroy
+
+  rebuild-cluster:
+    desc: Rebuild k3os cluster
+    cmds:
+      - task: terraform-destroy
+      - sleep 60
+      - task: create-cluster
+
+
+  #
+  # Internal
+  #
+  ansible-initialize:
+    internal: true
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook -i inventories/k3os k3os-initialize.yml
+
+  terraform-apply:
+    internal: true
+    dir: "{{.K3OS_TF_DIR}}"
+    cmds:
+      - terraform apply -auto-approve
+
+  terraform-destroy:
+    internal: true
+    dir: "{{.K3OS_TF_DIR}}"
+    cmds:
+      - terraform destroy -auto-approve -compact-warnings

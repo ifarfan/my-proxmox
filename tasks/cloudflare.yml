@@ -1,0 +1,38 @@
+---
+version: '3'
+
+vars:
+  CLOUDFLARE_TF_DIR: "{{.TERRAFORM_DIR}}/cloudflare"
+
+tasks:
+  terraform-fmt:
+    internal: true
+    dir: "{{.CLOUDFLARE_TF_DIR}}"
+    cmds:
+      - terraform plan -compact-warnings
+
+  terraform-plan:
+    internal: true
+    dir: "{{.CLOUDFLARE_TF_DIR}}"
+    cmds:
+      - terraform plan -compact-warnings
+
+  terraform-apply:
+    internal: true
+    dir: "{{.CLOUDFLARE_TF_DIR}}"
+    cmds:
+      - terraform apply -auto-approve
+
+  check:
+    dir: "{{.CLOUDFLARE_TF_DIR}}"
+    desc: Update Cloudflare DNS entries
+    cmds:
+      - task: terraform-fmt
+      - task: terraform-plan
+
+  update:
+    dir: "{{.CLOUDFLARE_TF_DIR}}"
+    desc: Update Cloudflare DNS entries
+    cmds:
+      - task: terraform-fmt
+      - task: terraform-apply

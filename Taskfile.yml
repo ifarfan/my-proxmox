@@ -1,0 +1,16 @@
+---
+#
+# - Docs: https://taskfile.dev/
+# - Examples: https://dev.to/stack-labs/introduction-to-taskfile-a-makefile-alternative-h92
+#
+version: '3'
+
+vars:
+  ANSIBLE_DIR: ansible
+  TERRAFORM_DIR: terraform
+
+includes:
+  cloudflare: ./tasks/cloudflare.yml
+  k3os: ./tasks/k3os.yml
+  portainer: ./tasks/portainer.yml
+  proxmox: ./tasks/proxmox.yml

@@ -1,0 +1,27 @@
+---
+version: '3'
+
+tasks:
+  list-lxc:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List LXCs
+    cmds:
+      - ansible-playbook -i inventories/proxmox lxc-provision.yml --list-hosts
+
+  provision-lxc:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision LXCs
+    cmds:
+      - ansible-playbook -i inventories/proxmox lxc-provision.yml
+
+  list-nodes:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List Proxmox nodes
+    cmds:
+      - ansible-playbook -i inventories/macminis macminis-provision.yml --list-hosts
+
+  provision-nodes:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision Proxmox nodes
+    cmds:
+      - ansible-playbook -i inventories/macminis macminis-provision.yml

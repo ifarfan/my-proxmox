@@ -1,0 +1,39 @@
+---
+version: '3'
+
+tasks:
+  provision:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml
+
+  provision-heimdall:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Heimdall" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag heimdall
+
+  provision-uptime-kuma:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Uptime-Kuma" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag uptime-kuma
+
+  provision-grafana:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Grafana" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag grafana
+
+  provision-traefik:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Traefik" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag traefik
+
+  provision-prometheus:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Prometheus" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag prometheus
