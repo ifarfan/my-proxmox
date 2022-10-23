@@ -12,5 +12,6 @@ vars:
 includes:
   cloudflare: ./tasks/cloudflare.yml
   k3os: ./tasks/k3os.yml
+  oracle: ./tasks/oracle.yml
   portainer: ./tasks/portainer.yml
   proxmox: ./tasks/proxmox.yml
