@@ -11,3 +11,7 @@
     - name: Install modern Unix utilities
       ansible.builtin.include_role:
         name: modern_unix
+
+    - name: Install Prometheus Node Exporter
+      ansible.builtin.include_role:
+        name: node_exporter

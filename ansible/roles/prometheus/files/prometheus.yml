@@ -23,7 +23,8 @@ scrape_configs:
         'node_exporter:9100',
         'm1.macminis.net:9100',
         'm2.macminis.net:9100',
-        'm3.macminis.net:9100'
+        'm3.macminis.net:9100',
+        'cloudy-box.macminis.net:9100'
       ]
 
   - job_name: 'cadvisor'

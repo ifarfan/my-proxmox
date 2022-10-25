@@ -1,0 +1,18 @@
+---
+#
+#  See:
+#  https://blogs.oracle.com/developers/post/enabling-network-traffic-to-ubuntu-images-in-oracle-cloud-infrastructure
+#
+- name: Check if on Oracle Cloud box
+  stat:
+    path: /etc/systemd/system/snap.oracle-cloud-agent.oracle-cloud-agent.service
+  register: oracle_file
+
+- name: Add node_exporter port to iptables allowed list
+  ansible.builtin.lineinfile:
+    path: /etc/iptables/rules.v4
+    search_string: "-A INPUT -p tcp -m state --state NEW -m tcp --dport {{ node_exporter_port }} -j ACCEPT"
+    insertafter: "-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT"
+    line: "-A INPUT -p tcp -m state --state NEW -m tcp --dport {{ node_exporter_port }} -j ACCEPT"
+  notify: reload iptables
+  when: oracle_file.stat.exists

@@ -28,6 +28,7 @@ apt_pkgs_to_install:
   - multitail
   - nano
   - ncdu
+  - net-tools
   - nmap
   - nscd
   - peco
