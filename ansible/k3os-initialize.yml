@@ -171,6 +171,24 @@
       with_items: "{{ list_agents }}"
 
 #
+# ? Wait until k3s service is running on all agents
+# ? Note: there's no python in k3os
+#
+- name: Wait for "k3s" service
+  hosts: k3os_agents, k3os_data
+  gather_facts: false
+  vars:
+    ansible_user: rancher
+  tasks:
+    - name: Wait for "k3s" to be running (timeout 5 mins)
+      raw:
+        ps aux | grep k3s-service
+      register: result
+      until: "'supervise-daemon' in result.stdout"
+      retries: 60
+      delay: 5
+
+#
 # ? Fetch kube_config from 1st master
 # ? Note: k3os servers don't have python, need to use scp directly
 #

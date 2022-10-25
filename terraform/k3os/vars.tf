@@ -152,15 +152,15 @@ locals {
     type = "A"
   }
 
-  # # ? DNS kube-vip record
-  # kube_vip_dns_record = {
-  #   name  = "k3os",
-  #   value = "192.168.136.40"
-  # }
-
-  # ? DNS traefik-lb record
-  traefik_lb_dns_record = {
+  # ? DNS kube-vip record
+  kube_vip_dns_record = {
     name  = "k3os",
-    value = "portainer.${local.domain}"
+    value = "192.168.136.40"
   }
+
+  # # ? DNS traefik-lb record
+  # traefik_lb_dns_record = {
+  #   name  = "k3os",
+  #   value = "portainer.${local.domain}"
+  # }
 }

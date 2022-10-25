@@ -28,18 +28,18 @@ resource "cloudflare_record" "dns_record_data" {
   ttl     = local.dns_record.ttl
 }
 
-# resource "cloudflare_record" "vip_record" {
-#   zone_id = lookup(data.cloudflare_zones.domain_zone.zones[0], "id")
-#   name    = local.kube_vip_dns_record.name
-#   value   = local.kube_vip_dns_record.value
-#   type    = "A"
-#   ttl     = 1 # auto
-# }
-
-resource "cloudflare_record" "lb_record" {
+resource "cloudflare_record" "vip_record" {
   zone_id = lookup(data.cloudflare_zones.domain_zone.zones[0], "id")
-  name    = local.traefik_lb_dns_record.name
-  value   = local.traefik_lb_dns_record.value
-  type    = "CNAME"
+  name    = local.kube_vip_dns_record.name
+  value   = local.kube_vip_dns_record.value
+  type    = "A"
   ttl     = 1 # auto
 }
+
+# resource "cloudflare_record" "lb_record" {
+#   zone_id = lookup(data.cloudflare_zones.domain_zone.zones[0], "id")
+#   name    = local.traefik_lb_dns_record.name
+#   value   = local.traefik_lb_dns_record.value
+#   type    = "CNAME"
+#   ttl     = 1 # auto
+# }

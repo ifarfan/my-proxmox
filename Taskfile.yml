@@ -8,6 +8,7 @@ version: '3'
 vars:
   ANSIBLE_DIR: ansible
   TERRAFORM_DIR: terraform
+  KUBERNETES_DIR: kubernetes
 
 includes:
   cloudflare: ./tasks/cloudflare.yml
