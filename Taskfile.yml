@@ -9,6 +9,10 @@ vars:
   ANSIBLE_DIR: ansible
   TERRAFORM_DIR: terraform
   KUBERNETES_DIR: kubernetes
+  WAIT_SECS_LONG: 120
+  WAIT_SECS_MEDIUM: 30
+  WAIT_SECS_SHORT: 5
+
 
 includes:
   cloudflare: ./tasks/cloudflare.yml
@@ -16,3 +20,4 @@ includes:
   oracle: ./tasks/oracle.yml
   portainer: ./tasks/portainer.yml
   proxmox: ./tasks/proxmox.yml
+  talos: ./tasks/talos.yml

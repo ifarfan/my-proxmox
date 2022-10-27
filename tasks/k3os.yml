@@ -38,10 +38,11 @@ tasks:
   create-cluster:
     desc: Create k3os cluster
     cmds:
-      # - task: terraform-apply
-      # - task: ansible-initialize
+      - task: terraform-apply
+      - task: ansible-initialize
       - task: kubernetes-metal-lb
       - task: kubernetes-longhorn
+      - sleep {{ .WAIT_SECS_LONG }}
       - task: kubernetes-monitoring
       # - task: kubernetes-argo-cd
 
@@ -53,8 +54,9 @@ tasks:
   rebuild-cluster:
     desc: Rebuild k3os cluster
     cmds:
-      - task: terraform-destroy
-      - sleep 60
+      - task: destroy-cluster
+      # Wait until old VM records are flushed off Proxmox
+      - sleep {{ .WAIT_SECS_LONG }}
       - task: create-cluster
 
   #
@@ -95,9 +97,10 @@ tasks:
       - helm repo update
       # Create secret
       - kubectl create namespace monitoring
+      # yamllint disable-line rule:line-length
       - kubectl create secret generic grafana-admin-credentials --from-literal=admin-password='XXXXXXXXXXXX' --from-literal=admin-user='admin' -n monitoring
       # Install helm chart
-      - helm install -n monitoring prometheus prometheus-community/kube-prometheus-stack -f values.yaml
+      - helm upgrade -n monitoring prometheus prometheus-community/kube-prometheus-stack -f values.yaml
       # Wait until deployments are complete
       - kubectl rollout status deployment grafana --namespace monitoring --timeout=300s
       - kubectl rollout status deployment prometheus-operator --namespace monitoring --timeout=300s
@@ -113,7 +116,7 @@ tasks:
       - while ! kubectl get deployment/csi-resizer --namespace longhorn-system; do sleep 5; done
       - kubectl rollout status deployment csi-resizer --namespace longhorn-system --timeout=300s
 
-  # kubernetes-argo-cd:
-  #   internal: true
-  #   dir: "{{.KUBERNETES_DIR}}/argo-cd"
-  #   cmds:
+  kubernetes-argo-cd:
+    internal: true
+    dir: "{{.KUBERNETES_DIR}}/argo-cd"
+    cmds:

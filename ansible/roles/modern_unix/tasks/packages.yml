@@ -21,14 +21,14 @@
       loop: "{{ zip_flat_modern_x86_64 }}"
 
     - name: Unarchive zipped fat execs
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ item.url }}"
         dest: /tmp/
         remote_src: true
       loop: "{{ zip_fat_modern_x86_64 }}"
 
     - name: Move downloaded execs
-      copy:
+      ansible.builtin.copy:
         src: "/tmp/{{ item.file }}"
         dest: /usr/local/bin
         owner: root
@@ -56,14 +56,14 @@
       loop: "{{ zip_flat_modern_aarch64 }}"
 
     - name: Unarchive zipped fat execs
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{ item.url }}"
         dest: /tmp/
         remote_src: true
       loop: "{{ zip_fat_modern_aarch64 }}"
 
     - name: Move downloaded execs
-      copy:
+      ansible.builtin.copy:
         src: "/tmp/{{ item.file }}"
         dest: /usr/local/bin
         owner: root

@@ -12,7 +12,7 @@
     force: true
 
 - name: Add Docker repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ docker_apt_repository }}"
     state: present
     update_cache: true
@@ -29,13 +29,13 @@
   notify: restart docker
 
 - name: Ensure /etc/docker/ directory exists
-  file:
+  ansible.builtin.file:
     path: /etc/docker
     state: directory
     mode: 0755
 
 - name: Configure Docker daemon options
-  copy:
+  ansible.builtin.copy:
     content: "{{ docker_daemon_options | to_nice_json }}"
     dest: /etc/docker/daemon.json
     mode: 0644

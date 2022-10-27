@@ -1,6 +1,6 @@
 ---
 - name: Add no-subscription community repo
-  copy:
+  ansible.builtin.copy:
     dest: "{{ repo_sources_folder }}/pve-no-subscription.list"
     content: |
       deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
@@ -9,7 +9,7 @@
     mode: 0644
 
 - name: Disable subscription repo
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ repo_sources_folder }}/pve-enterprise.list"
     regexp: '(?i)^(deb.*)'
     line: '# \1'
@@ -17,16 +17,16 @@
     state: present
 
 - name: Update apt caches
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     cache_valid_time: "{{ apt_cache_time }}"
 
 - name: Update all packages to the latest version
-  apt:
+  ansible.builtin.apt:
     upgrade: dist
     update_cache: true
 
 - name: Install default packages
-  apt:
+  ansible.builtin.apt:
     pkg: "{{ apt_pkgs_to_install }}"
     state: present

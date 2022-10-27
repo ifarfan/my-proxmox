@@ -4,7 +4,7 @@
   become: true
   tasks:
     - name: Include global Ansible variables
-      include_vars:
+      ansible.builtin.include_vars:
         dir: ../../../../group_vars/all
 
     #
@@ -12,12 +12,12 @@
     # ! Include below any tasks you need to execute prior to running any tests
     #
     - name: Update apt caches
-      apt:
+      ansible.builtin.apt:
         update_cache: true
         cache_valid_time: "{{ apt_cache_time }}"
 
     - name: Install dependencies
-      apt:
+      ansible.builtin.apt:
         pkg: "{{ item }}"
         state: present
       loop:

@@ -64,7 +64,7 @@ kubelet:
 
 kubeControllerManager:
   enabled: true
-  endpoints: # ips of servers
+  endpoints:          # ips of servers
     - 192.168.136.41
     - 192.168.136.42
     - 192.168.136.43
@@ -77,7 +77,7 @@ kubeDns:
 
 kubeEtcd:
   enabled: true
-  endpoints: # ips of servers
+  endpoints:          # ips of servers
     - 192.168.136.41
     - 192.168.136.42
     - 192.168.136.43
@@ -88,14 +88,14 @@ kubeEtcd:
 
 kubeScheduler:
   enabled: true
-  endpoints: # ips of servers
+  endpoints:          # ips of servers
     - 192.168.136.41
     - 192.168.136.42
     - 192.168.136.43
 
 kubeProxy:
   enabled: true
-  endpoints: # ips of servers
+  endpoints:          # ips of servers
     - 192.168.136.41
     - 192.168.136.42
     - 192.168.136.43

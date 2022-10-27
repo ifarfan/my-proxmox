@@ -1,6 +1,6 @@
 ---
 - name: Set global aliases
-  copy:
+  ansible.builtin.copy:
     dest: /etc/profile.d/00-aliases.sh
     content: |
       {{ aliases }}
@@ -9,7 +9,7 @@
     mode: 0755
 
 - name: Set global prompt
-  copy:
+  ansible.builtin.copy:
     dest: /etc/profile.d/10-prompt.sh
     content: |
       {{ prompt }}
@@ -19,7 +19,7 @@
 
 
 - name: Set global prompt
-  copy:
+  ansible.builtin.copy:
     dest: /etc/resolv.conf
     content: |
       {{ dns }}

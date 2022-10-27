@@ -1,6 +1,6 @@
 ---
 - name: Global aliases
-  copy:
+  ansible.builtin.copy:
     dest: /etc/profile.d/10-aliases.sh
     content: |
       {{ aliases }}
@@ -9,7 +9,7 @@
     mode: 0644
 
 - name: Default gitconfig
-  copy:
+  ansible.builtin.copy:
     dest: /root/.gitconfig
     content: |
       {{ git_config }}

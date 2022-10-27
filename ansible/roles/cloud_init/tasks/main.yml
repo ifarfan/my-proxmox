@@ -2,25 +2,25 @@
 # ? Note:
 # ? Install cloud-init package and prepare for run on next boot
 - name: Install cloud-init
-  apt:
+  ansible.builtin.apt:
     pkg: cloud-init
     state: present
     update_cache: true
     cache_valid_time: "{{ apt_cache_time }}"
 
 - name: Comment out unused cloud-init modules
-  replace:
+  ansible.builtin.replace:
     path: /etc/cloud/cloud.cfg
     regexp: '(^\s*- {{ item }}.*)'
     replace: '#\1'
   loop: "{{ cloud_modules_disabled }}"
 
 - name: Clean cloud-init so it runs again on next boot
-  command:
+  ansible.builtin.command:
     cmd: /usr/bin/cloud-init clean
     removes: /var/lib/cloud/instance
 
 - name: Reset machine-id  # noqa 208
-  copy:
+  ansible.builtin.copy:
     content: ''
     dest: /etc/machine-id

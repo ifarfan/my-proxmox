@@ -1,6 +1,6 @@
 ---
 - name: Install node_exporter
-  import_tasks: install.yml
+  ansible.builtin.import_tasks: install.yml
 
 - name: Enable port if on Oracle Cloud
-  import_tasks: oracle.yml
+  ansible.builtin.import_tasks: oracle.yml

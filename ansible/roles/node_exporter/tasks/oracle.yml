@@ -4,7 +4,7 @@
 #  https://blogs.oracle.com/developers/post/enabling-network-traffic-to-ubuntu-images-in-oracle-cloud-infrastructure
 #
 - name: Check if on Oracle Cloud box
-  stat:
+  ansible.builtin.stat:
     path: /etc/systemd/system/snap.oracle-cloud-agent.oracle-cloud-agent.service
   register: oracle_file
 
