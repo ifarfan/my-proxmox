@@ -57,7 +57,7 @@ jobs:
       - checkout
       - run:
           name: Run checkov security scanning
-          command: checkov --framework terraform --quiet --download-external-modules --directory .
+          command: checkov --framework terraform --quiet --directory .
   trufflehog:
     docker:
       - image: ghcr.io/trufflesecurity/trufflehog:latest
@@ -66,7 +66,7 @@ jobs:
       - checkout
       - run:
           name: Scan commits in PR for credentials/tokens/secrets
-          command: filesystem .
+          command: filesystem --directory .
 
 workflows:
   version: 2
