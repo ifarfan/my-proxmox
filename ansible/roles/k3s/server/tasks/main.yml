@@ -88,7 +88,7 @@
           {{ lookup('ansible.builtin.env', 'ANSIBLE_K3S_LOG_DIR', default=False) }}
 
     - name: Kill the temporary service used for initialization
-      systemd:
+      ansible.builtin.systemd:
         name: k3s-init
         state: stopped
       failed_when: false
