@@ -11,5 +11,4 @@ proxmox_user = "XXXXXXXXX"
 proxmox_password = "XXXXXXXXX"
 
 # Cloudflare
-cloudflare_email = "XXXXXXXXXX"
 cloudflare_api_token = "XXXXXXXXXX"

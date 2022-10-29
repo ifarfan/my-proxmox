@@ -13,9 +13,9 @@ tfenv list
 ## Usage
 For virtually all **Terraform** plans, from `terraform` root folder:
 
-1. Create `stack` folder + default files
+1. Create `template` folder + default files
    ```shell
-   mkdir new-stack && cd new-stack
+   mkdir new-template && cd new-template
    ln -s ../terraform.tfvars terraform.tfvars
    ```
 2. Copy template contents and edit accordingly:
@@ -25,8 +25,6 @@ For virtually all **Terraform** plans, from `terraform` root folder:
    cat > main.tf <<EOF
    module "<< NAME_THIS_STACK >>" {
      source = "../modules/stacks"
-
-     proxmox_pwd = var.proxmox_pwd
 
      mac1_vms = local.mac1_vms
      mac2_vms = local.mac2_vms
@@ -62,13 +60,13 @@ For virtually all **Terraform** plans, from `terraform` root folder:
    ```
    :warning: **NOTE**:
    - Ensure `ip` addresses are unique per `VM`
-   - Combined `cores`, `memory` and `disk` values don't exist each **Proxmox** `node` capacity
+   - Combined `cores`, `memory` and `disk` values don't exceed each **Proxmox** `node` capacity
 
 1. Proceed with `Terrafom` as usual
    ```shell
    tf init
    tf validate && tf fmt
-   tf plan
+   tf plan -compact-warnings
    tf apply -auto-approve
    ```
 
