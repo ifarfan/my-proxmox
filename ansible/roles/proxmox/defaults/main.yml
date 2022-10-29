@@ -134,13 +134,22 @@ os_image_list:
     version: 20.04
     iso: ubuntu_20_04_minimal.iso
     url: http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/mini.iso
+    checksum: sha256:0e79e00bf844929d40825b1f0e8634415cda195ba23bae0b041911fde4dfe018
   -
-    codename: ubuntu_jammy_minimal
+    codename: ubuntu_jammy
     version: 22.04
-    iso: ubuntu_22_04.iso
-    url: http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/mini.iso
+    iso: ubuntu-22.04.1-live-server-amd64.iso
+    url: https://releases.ubuntu.com/22.04/ubuntu-22.04.1-live-server-amd64.iso
+    checksum: sha256:10f19c5b2b8d6db711582e0e27f5116296c34fe4b313ba45f9b201a5007056cb
   -
     codename: k3os
     version: 0.22.2
     iso: k3os-amd64.iso
     url: https://github.com/rancher/k3os/releases/download/v0.22.2-k3s2r0/k3os-amd64.iso
+    checksum: sha256:eae289cf81bdd68f23154b42c751ca571604625a1cfdbc239141c78287dd587c
+  -
+    codename: talos
+    version: 1.2.6
+    iso: talos-amd64.iso
+    url: https://github.com/siderolabs/talos/releases/download/v1.2.6/talos-amd64.iso
+    checksum: sha256:8bcfab6c28df52549e7c787d97757466f7ff601e058ffd54e3cc3f957c57a89f

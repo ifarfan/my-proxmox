@@ -3,6 +3,8 @@
   hosts: proxmox
   become: true
   gather_facts: false
+  vars_files:
+    - roles/proxmox/defaults/main.yml
   tasks:
     - name: Create OS images root directory
       ansible.builtin.file:
@@ -15,6 +17,7 @@
       ansible.builtin.get_url:
         url: "{{ item.url }}"
         dest: "{{ os_image_folder }}/{{ item.iso }}"
+        checksum: "{{ item.checksum }}"
         mode: 0600
       loop: "{{ os_image_list }}"
       run_once: true
