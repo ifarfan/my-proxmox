@@ -5,6 +5,7 @@ My **Proxmox** setup + diverse accoutrements
 - Create VMs + LXC containers via `Terraform`
 - Manage VMs + LXC containers via `Ansible`
 - Create VM templates via `Packer`
+- Launch kubernetes clusters via `Terraform` + perform initial configuration via `Ansible`
 
 
 ### Hardware
@@ -38,5 +39,12 @@ macmini3:
 ```
 
 ### Runbooks
+1. All operations have been encapsulated into **tasks**:
+   ```shell
+   # From repo root
+   task --list
+   ```
+
+### Notes
 1. Enable LetsEncrypt certificates for Proxmox nodes:
    [https://www.smarthomebeginner.com/proxmox-ssl-certificate-with-letsencrypt/](https://www.smarthomebeginner.com/proxmox-ssl-certificate-with-letsencrypt/)
