@@ -122,3 +122,25 @@ dns: |
   search local
   nameserver 1.1.1.1
   nameserver 1.0.0.1
+
+#
+#  ISO images
+#
+os_image_folder: /mnt/pve/remote-nfs/template/iso
+os_image_list:
+  -
+    # ! No longer available for download, keep "as-is"
+    codename: ubuntu_focal_minimal
+    version: 20.04
+    iso: ubuntu_20_04_minimal.iso
+    url: http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/mini.iso
+  -
+    codename: ubuntu_jammy_minimal
+    version: 22.04
+    iso: ubuntu_22_04.iso
+    url: http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/mini.iso
+  -
+    codename: k3os
+    version: 0.22.2
+    iso: k3os-amd64.iso
+    url: https://github.com/rancher/k3os/releases/download/v0.22.2-k3s2r0/k3os-amd64.iso

@@ -1,0 +1,20 @@
+---
+- name: Download latest ISOs to shared NFS mount
+  hosts: proxmox
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Create OS images root directory
+      ansible.builtin.file:
+        path: "{{ os_image_folder }}"
+        state: directory
+        mode: 0755
+      run_once: true
+
+    - name: Download ISO images
+      ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ os_image_folder }}/{{ item.iso }}"
+        mode: 0600
+      loop: "{{ os_image_list }}"
+      run_once: true

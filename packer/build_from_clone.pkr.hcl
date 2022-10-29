@@ -26,13 +26,13 @@ source "proxmox-clone" "clone_install" {
   sockets  = local.sockets
 
   network_adapters {
-    bridge = local.network_bridge
-    model  = local.network_model
+    bridge = local.network.bridge
+    model  = local.network.model
   }
 
   vga {
-    memory = local.vga_memory
-    type   = local.vga_type
+    memory = local.vga.memory
+    type   = local.vga.type
   }
 }
 

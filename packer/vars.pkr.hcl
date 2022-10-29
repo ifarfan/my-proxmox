@@ -99,21 +99,30 @@ locals {
   cpu_type = "host"
   sockets  = 1
 
-  disk_storage_pool      = "local-lvm"
-  disk_storage_pool_type = "lvm"
-  disk_type              = "scsi"
+  # Store Template locally on each node
+  disks = {
+    storage_pool      = "local-lvm"
+    storage_pool_type = "lvm"
+    type              = "scsi"
+  }
 
-  # disk_storage_pool      = "remote-nfs"
-  # disk_storage_pool_type = "nfs"
-  # disk_type              = "scsi"
-  # disk_format            = "qcow2"
-  # # scsi_controller = "virtio-scsi-single"
+  # # Store Template in shared NFS mount
+  # disks = {
+  #   storage_pool      = "remote-nfs"
+  #   storage_pool_type = "nfs"
+  #   type              = "scsi"
+  #   format            = "qcow2"
+  # }
 
-  network_bridge = "vmbr0"
-  network_model  = "virtio"
+  network = {
+    bridge = "vmbr0"
+    model  = "virtio"
+  }
 
-  vga_memory = 32
-  vga_type   = "qxl" # qxl=SPICE, std=Standard
+  vga = {
+    memory = 32
+    type   = "qxl" # qxl=SPICE, std=Standard
+  }
 
   # SSH on VM
   ssh_password = "p@ck3r-t3mp!"

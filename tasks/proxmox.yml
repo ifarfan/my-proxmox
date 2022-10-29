@@ -2,6 +2,12 @@
 version: '3'
 
 tasks:
+  download-iso-files:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Download latest ISOs
+    cmds:
+      - ansible-playbook -i inventories/macminis macminis-download-iso-files.yml
+
   list-lxc:
     dir: "{{.ANSIBLE_DIR}}"
     desc: List LXCs

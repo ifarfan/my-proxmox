@@ -34,19 +34,19 @@ source "proxmox" "iso_install" {
   disks {
     disk_size = var.vm_disksize
     # format            = local.disk_format
-    storage_pool      = local.disk_storage_pool
-    storage_pool_type = local.disk_storage_pool_type
-    type              = local.disk_type
+    storage_pool      = local.disks.storage_pool
+    storage_pool_type = local.disks.storage_pool_type
+    type              = local.disks.type
   }
 
   network_adapters {
-    bridge = local.network_bridge
-    model  = local.network_model
+    bridge = local.network.bridge
+    model  = local.network.model
   }
 
   vga {
-    memory = local.vga_memory
-    type   = local.vga_type
+    memory = local.vga.memory
+    type   = local.vga.type
   }
 }
 

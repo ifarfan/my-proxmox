@@ -6,4 +6,5 @@ tasks:
     dir: "{{.PACKER_DIR}}"
     desc: Build Ubuntu 22.04 template from ISO
     cmds:
-      - build --node macmini2 --template ubuntu-22-04-iso
+      # Always store initial template on "macmini1"
+      - ./build --node macmini1 --template ubuntu-22-04-iso
