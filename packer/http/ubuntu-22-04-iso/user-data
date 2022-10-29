@@ -1,0 +1,85 @@
+#cloud-config
+#
+# See:
+# - https://ubuntu.com/server/docs/install/autoinstall-quickstart
+# - https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+#
+autoinstall:
+  version: 1
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports
+  ssh:
+    allow-pw: true
+    install-server: true
+  timezone: UTC
+  user-data:
+    disable_root: false
+    users:
+      #  Account setup + encrypted passwords
+      #  - Use "mkpasswd -s -m md5" or "mkpasswd -m sha-512" to hash password
+      #  - Command "mkpasswd" is part of "whois" package
+      #  - Temp user 'packer'
+      # - default
+      # - name: ubuntu
+      #   lock_passwd: false
+      #   passwd: "$6$RF8y3rMqB$8XfcjMSI0wvWnOAvCItqbXdJ4Z1Mdj2l6cKwKq/lOo7NNgjfpMRubLtwKZtxxpvbGz1HzoOS7qbLiZFexQ2D9/"
+      #   ssh_import_id:
+      #     - gh:ifarfan
+      #   sudo: ALL=(ALL) NOPASSWD:ALL
+      - default
+      - name: packer
+        gecos: Packer
+        lock_passwd: false
+        passwd: "$6$CnVx7VV3ebD$z9mrBzi3QEzJv.22.G4FWba8./W4/qTdh66ZKIqr4NQnqSY7E852xIZHwaTLV1D5NBCIlIk2A13lX4lp1HYcF/"
+        ssh_import_id:
+          - gh:ifarfan
+        sudo: ALL=(ALL) NOPASSWD:ALL
+    system_info:
+      default_user:
+        name: ubuntu
+        gecos: Ubuntu
+        lock_passwd: false
+        passwd: "$6$RF8y3rMqB$8XfcjMSI0wvWnOAvCItqbXdJ4Z1Mdj2l6cKwKq/lOo7NNgjfpMRubLtwKZtxxpvbGz1HzoOS7qbLiZFexQ2D9/"
+        ssh_import_id:
+          - gh:ifarfan
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        # groups: [adm, audio, cdrom, dialout, floppy, video, plugdev, dip, netdev]
+    # write_files:
+    #   - content: |
+    #       ubuntu ALL=(ALL) NOPASSWD:ALL
+    #     path: /etc/sudoers.d/10-ubuntu
+    #     owner: root:root
+    #     permissions: '0400'
+    #   - content: |
+    #       packer ALL=(ALL) NOPASSWD:ALL
+    #     path: /etc/sudoers.d/90-packer
+    #     owner: root:root
+    #     permissions: '0400'
+  locale: en_US
+  keyboard:
+    layout: en
+  packages:
+    - qemu-guest-agent
+  updates: security
+  storage:
+    layout:
+      name: direct
+    config:
+      - type: disk
+        id: disk0
+        match:
+          size: largest
+      - type: partition
+        id: boot-partition
+        device: disk0
+        size: 500M
+      - type: partition
+        id: root-partition
+        device: disk0
+        size: -1

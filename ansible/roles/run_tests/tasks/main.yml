@@ -4,55 +4,42 @@
     that:
       - role_to_test is defined
 
-- name: Create goss folder for tests
-  ansible.builtin.file:
-    path: "{{ goss_test_directory }}"
-    state: directory
-    mode: 0755
-  loop:
-    - absent
-    - directory
-
 - name: Set Role tests path
   ansible.builtin.set_fact:
     path_to_tests: "roles/{{ role_to_test }}/molecule/tests/*.yml"
 
-- name: Find Role tests
-  ansible.builtin.set_fact:
-    goss_fixed_files: "{{ lookup('fileglob', path_to_tests, wantlist=True) | sort }}"
+- name: Create goss folder for test files
+  ansible.builtin.file:
+    path: "{{ goss_folder }}"
+    state: directory
+    mode: 0755
 
-- name: Copy tests to remote
+- name: Find goss files
+  ansible.builtin.set_fact:
+    goss_files: "{{ lookup('fileglob', path_to_tests, wantlist=True) | sort }}"
+
+- name: Copy goss tests to remote
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "{{ goss_test_directory }}/{{ item | basename }}"
+    dest: "{{ goss_folder }}/{{ item | basename }}"
     mode: 0755
   with_items:
-    - "{{ goss_fixed_files }}"
-
-- name: Tally all tests
-  ansible.builtin.shell: ls *.yml
-  args:
-    executable: /bin/bash
-    chdir: "{{ goss_test_directory }}"
-  register: test_files
-  changed_when: false
-
-- name: list tests
-  ansible.builtin.debug:
-    msg: "{{ item }}"
-  loop: "{{ test_files.stdout_lines }}"
+    - "{{ goss_files }}"
 
 - name: Run goss tests
   ansible.builtin.command:
-    goss --gossfile {{ goss_test_directory }}/{{ item }} validate --format documentation
+    goss --gossfile {{ goss_folder }}/{{ item | basename }} validate --format documentation
   register: test_results
-  with_items: "{{ test_files.stdout_lines }}"
+  with_items: "{{ goss_files }}"
   failed_when: false
   changed_when: false
 
 - name: Display goss tests results
   ansible.builtin.debug:
-    msg: "[command]:\n{{ item.cmd | join(' ') }}\n\n[output]:\n{{ item.stdout }}\n\n[return code]:\n{{ item.rc }}"
+    msg:
+      - "[command]: {{ item.cmd | join(' ') }}"
+      - "[return code]: {{ item.rc }}"
+      - "[output]:\n{{ item.stdout }}"
   loop: "{{ test_results.results }}"
   loop_control:
     label: "{{ item.changed }}"

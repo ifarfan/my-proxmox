@@ -1,0 +1,48 @@
+---
+- name: Set apt settings tweaks
+  ansible.builtin.copy:
+    src: "apt/{{ item }}"
+    dest: /etc/apt/apt.conf.d
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - 20auto-upgrades
+    - 50unattended-upgrades
+    - 99no-recommends
+    - 99disable-translations
+
+- name: Update apt caches
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Update all packages to the latest version
+  ansible.builtin.apt:
+    upgrade: dist
+
+- name: Install default packages
+  ansible.builtin.apt:
+    pkg: "{{ apt_pkgs_to_install }}"
+    state: present
+
+- name: Stop and disable unnecessary daemons
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+    masked: true
+  loop: "{{ services_2_disable }}"
+  ignore_errors: true                     # noqa ignore-errors
+  when: is_lxc == false
+
+- name: Enable HTTPS transport for apt
+  ansible.builtin.apt:
+    pkg: apt-transport-https
+    state: present
+
+- name: Uninstall Packages
+  ansible.builtin.apt:
+    pkg: "{{ apt_pkgs_to_remove }}"
+    state: absent
+    purge: true

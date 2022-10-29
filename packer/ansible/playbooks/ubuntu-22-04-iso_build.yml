@@ -1,8 +1,8 @@
 ---
 #
-# ? Ubuntu 20.04 provisioning
+# ? Ubuntu 22.04 provisioning
 #
-- name: Provision Ubuntu 20.04
+- name: Provision Ubuntu 22.04
   hosts: default
   become: true
   gather_facts: true

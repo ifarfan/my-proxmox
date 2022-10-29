@@ -2,8 +2,7 @@
 use_default_rules: true
 
 exclude_paths:
-  - roles/base/lxc/molecule/tests
-  - roles/base/vm/molecule/tests
+  - roles/base/molecule/tests
   - roles/cloud_init/molecule/tests
   - roles/dashy/molecule/tests
   - roles/docker/molecule/tests

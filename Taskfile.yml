@@ -9,6 +9,7 @@ vars:
   ANSIBLE_DIR: ansible
   TERRAFORM_DIR: terraform
   KUBERNETES_DIR: kubernetes
+  PACKER_DIR: packer
   WAIT_SECS_LONG: 120
   WAIT_SECS_MEDIUM: 30
   WAIT_SECS_SHORT: 5
@@ -18,6 +19,7 @@ includes:
   cloudflare: ./tasks/cloudflare.yml
   k3os: ./tasks/k3os.yml
   oracle: ./tasks/oracle.yml
+  packer: ./tasks/packer.yml
   portainer: ./tasks/portainer.yml
   proxmox: ./tasks/proxmox.yml
   talos: ./tasks/talos.yml

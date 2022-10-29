@@ -2,7 +2,7 @@
 #
 # ? Ubuntu post-provisioning testing
 #
-- name: Test Ubuntu 20.04
+- name: Test Ubuntu 22.04
   hosts: default
   become: true
   gather_facts: true

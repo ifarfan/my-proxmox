@@ -1,0 +1,39 @@
+---
+- name: Configure apt + OS packages
+  ansible.builtin.import_tasks: apt.yml
+
+- name: Configure timezone
+  ansible.builtin.import_tasks: timezone.yml
+
+- name: Configure locale
+  ansible.builtin.import_tasks: locale.yml
+
+- name: Copy default config files
+  ansible.builtin.import_tasks: files.yml
+
+- name: Configure rsyslog
+  ansible.builtin.import_tasks: rsyslog.yml
+
+- name: Configure logrotate
+  ansible.builtin.import_tasks: logrotate.yml
+
+- name: Configure ssh
+  ansible.builtin.import_tasks: ssh.yml
+
+- name: Skip tasks for LXC
+  block:
+    - name: Configure sysctl
+      ansible.builtin.import_tasks: sysctl.yml
+
+    - name: Configure PAM
+      ansible.builtin.import_tasks: pam.yml
+
+    - name: Install chrony
+      ansible.builtin.import_tasks: chrony.yml
+  when: is_lxc == false
+
+- name: Configure cron
+  ansible.builtin.import_tasks: cron.yml
+
+- name: Configure motd
+  ansible.builtin.import_tasks: motd.yml

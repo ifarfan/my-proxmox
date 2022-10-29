@@ -1,0 +1,43 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  vars:
+    goss_folder: /tmp/molecule/goss
+  tasks:
+    - name: Create goss folder for test files
+      ansible.builtin.file:
+        path: "{{ goss_folder }}"
+        state: directory
+        mode: 0755
+
+    - name: Find goss files
+      ansible.builtin.set_fact:
+        goss_files: "{{ lookup('fileglob', '../tests/*.yml', wantlist=True) | sort }}"
+
+    - name: Copy goss tests to remote
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ goss_folder }}/{{ item | basename }}"
+        mode: 0755
+      with_items:
+        - "{{ goss_files }}"
+
+    - name: Run goss tests
+      ansible.builtin.command:
+        goss --gossfile {{ goss_folder }}/{{ item | basename }} validate --format documentation
+      register: test_results
+      with_items: "{{ goss_files }}"
+      failed_when: false
+      changed_when: false
+
+    - name: Display goss tests results
+      ansible.builtin.debug:
+        msg:
+          - "[command]: {{ item.cmd | join(' ') }}"
+          - "[return code]: {{ item.rc }}"
+          - "[output]:\n{{ item.stdout }}"
+      loop: "{{ test_results.results }}"
+      loop_control:
+        label: "{{ item.changed }}"
+      failed_when: item.rc != 0

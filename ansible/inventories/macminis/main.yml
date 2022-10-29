@@ -1,7 +1,17 @@
 ---
 all:
   hosts:
+    localhost:
+      ansible_connection: local
     m1.macminis.net:
     m2.macminis.net:
     m3.macminis.net:
+  children:
+    proxmox:
+      hosts:
+        m1.macminis.net:
+        m2.macminis.net:
+        m3.macminis.net:
   vars:
+    ansible_connection: ssh
+    ansible_user: root

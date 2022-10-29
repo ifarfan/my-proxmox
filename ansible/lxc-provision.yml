@@ -6,7 +6,9 @@
   tasks:
     - name: Install Ubuntu 22.04 lxc
       ansible.builtin.include_role:
-        name: base/lxc
+        name: base
+      vars:
+        is_lxc: true
 
     - name: Install modern Unix utilities
       ansible.builtin.include_role:

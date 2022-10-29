@@ -56,14 +56,36 @@ locals {
 
   # Boot
   boot_command = [
-    "<esc><wait>",
-    "install",
-    " initrd=initrd.gz",
-    " auto=true",
-    " priority=critical",
-    " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}.preseed.cfg",
-    " --- <wait>",
-    "<enter><wait>"
+    "<esc>e<wait><wait>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "<del><del><del><del><del><del><del><del>",
+    "set gfxpayload=keep<enter><wait3s>",
+    "linux /casper/vmlinuz --- autoinstall ds='nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}/'<enter><wait3s>",
+    "initrd /casper/initrd<enter><wait3s>",
+    "boot<enter><wait3s>",
+    "<f10><wait3s>"
+
+    # "<esc><wait>",
+    # "install",
+    # " initrd=initrd.gz",
+    # " auto=true",
+    # " priority=critical",
+    # " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}.preseed.cfg",
+    # " --- <wait>",
+    # "<enter><wait>"
   ]
   boot_wait      = "10s"
   http_directory = "http"
@@ -91,7 +113,7 @@ locals {
   network_model  = "virtio"
 
   vga_memory = 32
-  vga_type   = "vmware"
+  vga_type   = "qxl" # qxl=SPICE, std=Standard
 
   # SSH on VM
   ssh_password = "p@ck3r-t3mp!"

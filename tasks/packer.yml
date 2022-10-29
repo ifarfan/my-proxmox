@@ -1,0 +1,9 @@
+---
+version: '3'
+
+tasks:
+  build:
+    dir: "{{.PACKER_DIR}}"
+    desc: Build Ubuntu 22.04 template from ISO
+    cmds:
+      - build --node macmini2 --template ubuntu-22-04-iso
