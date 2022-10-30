@@ -85,10 +85,8 @@ write_files:
               - args:
                   - manager
                 env:
-                  - name: lb_enable
-                    value: "true"
-                  # - name: lb_port
-                  #   value: "6444"
+                  # - name: lb_enable
+                  #   value: "true"
                   - name: vip_arp
                     value: "true"
                   - name: port
@@ -131,9 +129,12 @@ write_files:
             serviceAccountName: kube-vip
             tolerations:
               - effect: NoSchedule
+                key: node-role.kubernetes.io/master
                 operator: Exists
-              - effect: NoExecute
-                operator: Exists
+              # - effect: NoSchedule
+              #   operator: Exists
+              # - effect: NoExecute
+              #   operator: Exists
         updateStrategy: {}
       status:
         currentNumberScheduled: 0
