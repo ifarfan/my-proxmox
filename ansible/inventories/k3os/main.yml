@@ -4,6 +4,7 @@ all:
     m1.macminis.net:
     m2.macminis.net:
     m3.macminis.net:
+    k3os.macminis.net:
   children:
     macminis:
       hosts:

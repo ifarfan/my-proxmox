@@ -1,6 +1,6 @@
 #
 # 1. Fill in appropriate values below
-# 2. Rename file to proxmox.tfvars
+# 2. Rename file to proxmox.auto.tfvars
 # 3. Symlink to it from individual terraform template folder
 #
 

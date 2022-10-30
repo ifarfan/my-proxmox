@@ -20,4 +20,4 @@ k3os:
   k3s_args:
     - agent
   token: "e6saw26p88bhukn7uuyr9ay8t45xyz4pw6664km5erzw5utr5vjhdrutbwz9s7zkejnz6yhuts8bm2p3u6zzht4ydphw3pyenqc"
-  server_url: https://192.168.136.40:6443
+  server_url: https://192.168.136.41:6443

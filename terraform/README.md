@@ -16,8 +16,8 @@ For virtually all **Terraform** plans, from `terraform` root folder:
 1. Create `template` folder + symlink appropriate secret values files
    ```shell
    mkdir new-template && cd new-template
-   ln -s ../proxmox.tfvars    proxmox.tfvars
-   ln -s ../cloudflare.tfvars cloudflare.tfvars
+   ln -s ../proxmox.auto.tfvars    proxmox.auto.tfvars
+   ln -s ../cloudflare.auto.tfvars cloudflare.auto.tfvars
    ```
 2. Copy template contents and edit accordingly:
 
