@@ -18,17 +18,10 @@ config() {
 
     #  Format: "Hostname | IP"
     PROXMOX_NODES=(
-        'macmini1|192.168.136.11'
-        'macmini2|192.168.136.12'
-        'macmini3|192.168.136.13'
+        'macmini1'
+        'macmini2'
+        'macmini3'
     )
-
-    #  Find <NODES> dynamically
-    for NODE_X in "${PROXMOX_NODES[@]}"; do
-        # shellcheck disable=SC2206
-        NODE_ARRAY=(${NODE_X//|/ })
-        NODES+=("${NODE_ARRAY[0]}")
-    done
 
     #  Colors
     BLACK=$(tput setaf 0)
@@ -87,7 +80,7 @@ usage() {
 
 Parameters${BLACK}${BOLD}:${NORMAL}
 ${YELLOW}${BOLD}--node${NORMAL}${BLACK}${BOLD}|${NORMAL}${YELLOW}${BOLD}-n${NORMAL} ${BLUE}<NODE>${NORMAL}${BLACK}${BOLD}:${NORMAL}
-  Available node(s)${BLACK}${BOLD}:${NORMAL} ${BOLD}${NODES[*]}${NORMAL}
+  Available node(s)${BLACK}${BOLD}:${NORMAL} ${BOLD}${PROXMOX_NODES[*]}${NORMAL}
 
 ${YELLOW}${BOLD}--template${NORMAL}${BLACK}${BOLD}|${NORMAL}${YELLOW}${BOLD}-t${NORMAL} ${BLUE}<TEMPLATE>${NORMAL}${BLACK}${BOLD}:${NORMAL}
   Available templates(s)${BLACK}${BOLD}:${NORMAL} ${BOLD}${TEMPLATES[*]}${NORMAL}
@@ -121,9 +114,9 @@ check_values() {
 
     #  Check for valid <NODE>
     # shellcheck disable=SC2076
-    if [[ ! ${NODES[*]} =~ "${NODE}" ]]; then
+    if [[ ! ${PROXMOX_NODES[*]} =~ "${NODE}" ]]; then
         log_line 'E' "Invalid node: '${RED}${BOLD}${NODE}${NORMAL}'"
-        log_line 'E' "Valid values for --${YELLOW}${BOLD}node${NORMAL}: ${BOLD}${NODES[*]}${NORMAL}\n"
+        log_line 'E' "Valid values for --${YELLOW}${BOLD}node${NORMAL}: ${BOLD}${PROXMOX_NODES[*]}${NORMAL}\n"
         usage
     fi
 
@@ -200,7 +193,6 @@ build() {
     log_line '' "${BOLD}–––––––––––${NORMAL}"
     log_line '' "- Template          : ${YELLOW}${TEMPLATE}${NORMAL}"
     log_line '' "- Proxmox Node      : ${YELLOW}${NODE}${NORMAL}"
-    log_line '' "- Proxmox Node IP   : ${YELLOW}${NODE_IP}${NORMAL}"
     log_line '' "- Build Type        : ${YELLOW}${BUILD_FROM}${NORMAL}"
     log_line '' ""
     log_line '' "${BOLD}Files:${NORMAL}"
@@ -212,11 +204,6 @@ build() {
     log_line '' "- Packer Log        : ${YELLOW}${FILE_PACKER_LOG}${NORMAL}"
     log_line '' "- Packer Manifest   : ${YELLOW}${FILE_MANIFEST}${NORMAL}"
     log_line '' "- Packer Vars       : ${YELLOW}${FILE_PACKER_VARS}${NORMAL}"
-    log_line '' ""
-
-    # read -s -p "- Proxmox password for ${YELLOW}${NODE}${NORMAL}: " NODE_PWD
-
-    log_line '' ""
     log_line '' ""
     log_line '' "Executing ${GREEN}${BOLD}packer${NORMAL} now..."
     log_line '' ""
