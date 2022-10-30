@@ -39,6 +39,8 @@ packer/logs/*
 !packer/logs/.gitkeep
 packer/manifests/*
 !packer/manifests/.gitkeep
+# Magic, autoloading variable files
+*.auto.pkrvars.hcl
 
 # Editors
 .vscode/

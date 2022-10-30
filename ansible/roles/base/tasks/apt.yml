@@ -1,4 +1,30 @@
 ---
+#
+# Remove unused packages
+#
+- name: Stop and disable unnecessary daemons
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+    masked: true
+  loop: "{{ services_2_disable }}"
+  ignore_errors: true                     # noqa ignore-errors
+  when: is_lxc == false
+
+- name: Uninstall Packages
+  ansible.builtin.apt:
+    pkg: "{{ apt_pkgs_to_remove }}"
+    state: absent
+    purge: true
+
+- name: Run "apt-get clean"
+  ansible.builtin.apt:
+    clean: true
+
+#
+# Install packages
+#
 - name: Set apt settings tweaks
   ansible.builtin.copy:
     src: "apt/{{ item }}"
@@ -26,23 +52,7 @@
     pkg: "{{ apt_pkgs_to_install }}"
     state: present
 
-- name: Stop and disable unnecessary daemons
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: stopped
-    enabled: false
-    masked: true
-  loop: "{{ services_2_disable }}"
-  ignore_errors: true                     # noqa ignore-errors
-  when: is_lxc == false
-
 - name: Enable HTTPS transport for apt
   ansible.builtin.apt:
     pkg: apt-transport-https
     state: present
-
-- name: Uninstall Packages
-  ansible.builtin.apt:
-    pkg: "{{ apt_pkgs_to_remove }}"
-    state: absent
-    purge: true

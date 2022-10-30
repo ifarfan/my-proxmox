@@ -2,14 +2,14 @@ source "proxmox" "iso_install" {
   # Proxmox
   node        = var.proxmox_node
   password    = var.proxmox_password
-  proxmox_url = local.proxmox_url
-  username    = local.proxmox_username
+  proxmox_url = var.proxmox_api_url
+  username    = var.proxmox_user
 
   # VM
   insecure_skip_tls_verify = true
   os                       = local.os
   qemu_agent               = true
-  template_description     = var.vm_description
+  template_description     = "${var.vm_description} (${local.build_timestamp})"
   template_name            = local.template_name
   vm_name                  = var.vm_name
 
@@ -86,7 +86,7 @@ build {
     output     = local.manifest_file
     strip_path = true
     custom_data = {
-      vm_description = var.vm_description
+      vm_description = "${var.vm_description} (${local.build_timestamp})"
       vm_name        = var.vm_name
     }
   }

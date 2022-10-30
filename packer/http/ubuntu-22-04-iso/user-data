@@ -3,18 +3,12 @@
 # See:
 # - https://ubuntu.com/server/docs/install/autoinstall-quickstart
 # - https://ubuntu.com/server/docs/install/autoinstall-reference
+# - https://github.com/canonical/subiquity/tree/main/examples
 # - https://cloudinit.readthedocs.io/en/latest/topics/examples.html
 #
 autoinstall:
   version: 1
-  apt:
-    geoip: true
-    preserve_sources_list: false
-    primary:
-    - arches: [amd64, i386]
-      uri: http://archive.ubuntu.com/ubuntu
-    - arches: [default]
-      uri: http://ports.ubuntu.com/ubuntu-ports
+  id: ubuntu-server-minimal
   keyboard:
     layout: en
   locale: en_US
@@ -47,20 +41,17 @@ autoinstall:
       #  Account setup + encrypted passwords
       #  - Use "mkpasswd -s -m md5" or "mkpasswd -m sha-512" to hash password
       #  - Command "mkpasswd" is part of "whois" package
-      - default
+      - name: ubuntu
+        gecos: Ubuntu
+        lock_passwd: false
+        passwd: "$6$RF8y3rMqB$8XfcjMSI0wvWnOAvCItqbXdJ4Z1Mdj2l6cKwKq/lOo7NNgjfpMRubLtwKZtxxpvbGz1HzoOS7qbLiZFexQ2D9/"
+        ssh_import_id:
+          - gh:ifarfan
+        sudo: ALL=(ALL) NOPASSWD:ALL
       - name: packer
         gecos: Packer
         lock_passwd: false
         passwd: "$6$CnVx7VV3ebD$z9mrBzi3QEzJv.22.G4FWba8./W4/qTdh66ZKIqr4NQnqSY7E852xIZHwaTLV1D5NBCIlIk2A13lX4lp1HYcF/"
-        ssh_import_id:
-          - gh:ifarfan
-        sudo: ALL=(ALL) NOPASSWD:ALL
-    system_info:
-      default_user:
-        name: ubuntu
-        gecos: Ubuntu
-        lock_passwd: false
-        passwd: "$6$RF8y3rMqB$8XfcjMSI0wvWnOAvCItqbXdJ4Z1Mdj2l6cKwKq/lOo7NNgjfpMRubLtwKZtxxpvbGz1HzoOS7qbLiZFexQ2D9/"
         ssh_import_id:
           - gh:ifarfan
         sudo: ALL=(ALL) NOPASSWD:ALL

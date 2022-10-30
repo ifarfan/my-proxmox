@@ -1,15 +1,21 @@
 # Build Proxmox Templates via Packer
 
-Build **Proxmox** VM templates
+Build **Proxmox** VM templates with Packer
 
-## Installation
+### Installation
 Install **packer**:
 ```shell
 brew install packer
 packer version
 ```
 
-## Usage
+Symlink secret values from `terraform` folder into `magic`/`autoloading` variables file
+```shell
+cd packer
+ln -s ../terraform/terraform.tfvars packer.auto.pkrvars.hcl
+```
+
+### Usage
 **build** script:
 ```shell
 $> ./build -h
@@ -21,11 +27,11 @@ Parameters:
   Available node(s): macmini1 macmini2 macmini3
 
 --template|-t <TEMPLATE>:
-  Available templates(s): ubuntu-20-04-base ubuntu-20-04-iso
+  Available templates(s): ubuntu-22-04-iso ubuntu-20-04-iso
 ```
 
 
-Build **Ubuntu** template on `macmini1` node:
+Build **Ubuntu 22.04** Proxmox template on `macmini1` node:
 ```shell
-./build -n macmini1 -t ubuntu-20-04-iso
+./build -n macmini1 -t ubuntu-22-04-iso
 ```

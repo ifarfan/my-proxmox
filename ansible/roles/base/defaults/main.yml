@@ -2,14 +2,47 @@
 is_lxc: false
 
 apt_pkgs_to_remove:
+  - apparmor
+  - apport
+  - bcache-tools
+  - binutils
+  - bolt
+  - busybox-initramfs
   - byobu
+  - cloud-guest-utils
+  - cryptsetup
+  - eatmydata
   - eject
   - g++
   - g++-9
+  - gdisk
+  - mdadm
+  - modemmanager
+  - motd-news-config
+  - multipath-tools
+  - os-prober
+  - overlayroot
+  - packagekit-tools
+  - pastebinit
   - popularity-contest
+  - powermgmt-base
+  - python3-debconf
+  - python3-debian
+  - run-one
+  - sbsigntool
+  - secureboot-db
+  - tcl
   - telnet
+  - thermald
   - ubuntu-advantage-tools
+  - upower
+  - usb-modeswitch
+  - usb-modeswitch-data
+  - usbmuxd
+  - wireless-regdb
+  - xfsprogs
   - xkb-data
+  - zstd
 
 apt_pkgs_to_install:
   - apt-file

@@ -1,17 +1,21 @@
-# Proxmox
-variable "proxmox_node" {
-  type    = string
-  default = ""
+# Fetch values from packer.auto.pkvars.hcl
+variable "proxmox_api_url" {
+  type = string
 }
 
-variable "proxmox_ip" {
-  type    = string
-  default = ""
+variable "proxmox_user" {
+  type = string
 }
 
 variable "proxmox_password" {
   type      = string
   sensitive = true
+}
+
+# Proxmox
+variable "proxmox_node" {
+  type    = string
+  default = ""
 }
 
 # VM
@@ -50,9 +54,8 @@ variable "clone_vm" {
 }
 
 locals {
-  # Proxmox
-  proxmox_url      = "https://${var.proxmox_ip}:8006/api2/json"
-  proxmox_username = "root@pam"
+  # Record Timestamp
+  build_timestamp = formatdate("YYYY-MM-DD-hhmm", timestamp())
 
   # Boot
   boot_command = [

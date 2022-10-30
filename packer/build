@@ -30,9 +30,6 @@ config() {
         NODES+=("${NODE_ARRAY[0]}")
     done
 
-    NODE_IP=""
-    NODE_PWD=""
-
     #  Colors
     BLACK=$(tput setaf 0)
     RED=$(tput setaf 1)
@@ -44,9 +41,8 @@ config() {
     NORMAL=$(tput sgr0)
 
     #  Find <TEMPLATES> dynamically
-    CUR_DIR=$(pwd)
-    EXE_DIR=$(dirname "$0")
-    TEMPLATES=(); TEMPLATE_FILES=("${CUR_DIR}"/"${EXE_DIR}"/vars/*.pkrvars.hcl)
+    TEMPLATES=();
+    TEMPLATE_FILES=("${PWD}"/vars/*.pkrvars.hcl)
     for TEMPLATE_FILE in "${TEMPLATE_FILES[@]}"; do
         # shellcheck disable=SC2207,SC2001
         TEMPLATES+=($(echo "${TEMPLATE_FILE##*/}" | sed -e 's/\.pkrvars\.hcl$//g'))
@@ -105,12 +101,14 @@ check_values() {
     #
     #  Check cmd-line executables + file paths + params supplied
     #
-    local NODE_X
 
     #  Ensure we're at the script's directory
+    local EXE_DIR=$(dirname "$0")
     if [[ "${EXE_DIR}" != "." ]]; then
-        log_line 'E' "Invoke script from its directory location: 'cd ${BOLD}${CUR_DIR}/${EXE_DIR}${NORMAL}'\n"
-        usage
+        if [[ "${EXE_DIR}" != "${PWD}" ]]; then
+            log_line 'E' "Invoke script from its directory location: 'cd ${BOLD}${PWD}/${EXE_DIR}${NORMAL}'\n"
+            usage
+        fi
     fi
 
     #  Utilities needed, on error show usage + quit
@@ -128,17 +126,6 @@ check_values() {
         log_line 'E' "Valid values for --${YELLOW}${BOLD}node${NORMAL}: ${BOLD}${NODES[*]}${NORMAL}\n"
         usage
     fi
-
-    #  Find Node IP
-    for NODE_X in "${PROXMOX_NODES[@]}"; do
-        #  Split out instance fields
-        # shellcheck disable=SC2206
-        NODE_ARRAY=(${NODE_X//|/ })
-        if [[ "${NODE_ARRAY[0]}" == "${NODE}" ]]; then
-            NODE_IP="${NODE_ARRAY[1]}"
-            break
-        fi
-    done
 
     #  Check for valid <TEMPLATE>
     # shellcheck disable=SC2076
@@ -227,7 +214,7 @@ build() {
     log_line '' "- Packer Vars       : ${YELLOW}${FILE_PACKER_VARS}${NORMAL}"
     log_line '' ""
 
-    read -s -p "- Proxmox password for ${YELLOW}${NODE}${NORMAL}: " NODE_PWD
+    # read -s -p "- Proxmox password for ${YELLOW}${NODE}${NORMAL}: " NODE_PWD
 
     log_line '' ""
     log_line '' ""
@@ -240,14 +227,13 @@ build() {
     #  Execute packer build
     PACKER_LOG=1                                    \
     PACKER_LOG_PATH=${FILE_PACKER_LOG}              \
-    PKR_VAR_proxmox_ip=${NODE_IP}                   \
     PKR_VAR_proxmox_node=${NODE}                    \
-    PKR_VAR_proxmox_password=${NODE_PWD}            \
     packer build                                    \
         -force                                      \
         -timestamp-ui                               \
         -var-file=vars/${TEMPLATE}.pkrvars.hcl      \
         -only="${FILTER}.*"                         \
+        -compact-warnings                           \
         .
     RESULT=$?
 
