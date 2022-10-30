@@ -1,0 +1,10 @@
+#
+# 1. Fill in appropriate values below
+# 2. Rename file to proxmox.tfvars
+# 3. Symlink to it from individual terraform template folder
+#
+
+# Proxmox
+proxmox_api_url  = "XXXXXXXXX"
+proxmox_user     = "XXXXXXXXX"
+proxmox_password = "XXXXXXXXX"

@@ -13,10 +13,11 @@ tfenv list
 ## Usage
 For virtually all **Terraform** plans, from `terraform` root folder:
 
-1. Create `template` folder + default files
+1. Create `template` folder + symlink appropriate secret values files
    ```shell
    mkdir new-template && cd new-template
-   ln -s ../terraform.tfvars terraform.tfvars
+   ln -s ../proxmox.tfvars    proxmox.tfvars
+   ln -s ../cloudflare.tfvars cloudflare.tfvars
    ```
 2. Copy template contents and edit accordingly:
 
