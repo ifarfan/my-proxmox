@@ -55,3 +55,9 @@ autoinstall:
         ssh_import_id:
           - gh:ifarfan
         sudo: ALL=(ALL) NOPASSWD:ALL
+  write_files:
+  - content: |
+      127.0.0.1          localhost
+    path: /etc/hosts
+    owner: root:root
+    permissions: '0644'
