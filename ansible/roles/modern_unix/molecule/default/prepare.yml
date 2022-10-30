@@ -22,3 +22,8 @@
         state: present
       loop:
         - xz-utils
+        - zip
+
+    - name: Install Goss
+      ansible.builtin.include_role:
+        name: goss

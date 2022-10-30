@@ -1,6 +1,4 @@
 ---
-# yamllint disable rule:line-length
-
 # ? Example file:
 # ? https://github.com/gswallow/molecule_example/blob/master/molecule/default/molecule.yml
 dependency:

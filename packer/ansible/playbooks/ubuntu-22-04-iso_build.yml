@@ -11,3 +11,7 @@
     - name: Setup base Ubuntu
       ansible.builtin.include_role:
         name: base
+
+    - name: Configure modern-linux utilities
+      ansible.builtin.include_role:
+        name: modern_unix

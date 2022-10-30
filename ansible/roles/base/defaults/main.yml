@@ -4,6 +4,7 @@ is_lxc: false
 apt_pkgs_to_remove:
   - apparmor
   - apport
+  - apport-symptoms
   - bcache-tools
   - binutils
   - bolt

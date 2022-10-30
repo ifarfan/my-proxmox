@@ -1,23 +1,17 @@
 ---
 file:
-  /etc/profile.d/00-aliases.sh:
+  /etc/profile.d/10-aliases.sh:
     exists: true
     filetype: file
     owner: root
     group: root
     mode: "0644"
-  /usr/local/bin/dust:
+  /root/.gitconfig:
     exists: true
     filetype: file
     owner: root
     group: root
-    mode: "0755"
-  /usr/local/bin/exa:
-    exists: true
-    filetype: file
-    owner: root
-    group: root
-    mode: "0755"
+    mode: "0644"
   /usr/local/bin/procs:
     exists: true
     filetype: file
@@ -30,9 +24,13 @@ package:
     installed: true
   bottom:
     installed: true
+  curlie:
+    installed: true
+  du-dust:
+    installed: true
   duf:
     installed: true
-  httpie:
+  jq:
     installed: true
   lsd-musl:
     installed: true

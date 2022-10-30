@@ -233,7 +233,6 @@ build() {
         -timestamp-ui                               \
         -var-file=vars/${TEMPLATE}.pkrvars.hcl      \
         -only="${FILTER}.*"                         \
-        -compact-warnings                           \
         .
     RESULT=$?
 

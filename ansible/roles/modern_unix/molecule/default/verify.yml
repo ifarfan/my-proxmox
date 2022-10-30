@@ -23,11 +23,6 @@
       with_items:
         - "{{ goss_files }}"
 
-    - name: List goss files
-      ansible.builtin.debug:
-        msg: "{{ item | basename }}"
-      loop: "{{ goss_files }}"
-
     - name: Run goss tests
       ansible.builtin.command:
         goss --gossfile {{ goss_folder }}/{{ item | basename }} validate --format documentation
@@ -38,7 +33,10 @@
 
     - name: Display goss tests results
       ansible.builtin.debug:
-        msg: "[command]:\n{{ item.cmd | join(' ') }}\n\n[output]:\n{{ item.stdout }}\n\n[return code]:\n{{ item.rc }}"
+        msg:
+          - "[command]: {{ item.cmd | join(' ') }}"
+          - "[return code]: {{ item.rc }}"
+          - "[output]:\n{{ item.stdout }}"
       loop: "{{ test_results.results }}"
       loop_control:
         label: "{{ item.changed }}"
