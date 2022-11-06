@@ -1,0 +1,37 @@
+---
+- name: Install requirements
+  apt:
+    name: gnupg
+    state: present
+
+- name: Add Tailscale apt key
+  apt_key:
+    url: "{{ tailscale_apt_gpg_key }}"
+    state: present
+
+- name: Add Tailscale repo
+  apt_repository:
+    repo: "{{ tailscale_apt_repository }}"
+    state: present
+    update_cache: true
+
+- name: Install Tailscale
+  package:
+    name: tailscale
+    state: present
+
+- name: Ensure Tailscale is running + enabled
+  service:
+    name: tailscaled
+    state: started
+    enabled: true
+
+- name: Assert that tailscale_register_authkey is not empty
+  assert:
+    that:
+      - tailscale_register_authkey | length > 0
+    quiet: true
+
+- name: Register node
+  command: |
+    tailscale up --authkey="{{ tailscale_register_authkey }}" --timeout="60s" --accept-routes

@@ -87,8 +87,8 @@ body .layout-vertical .card {
 .card {
     border-radius: 1rem;
 }
-body .layout-vertical .column div:last-of-type .card { 
-    border-radius: 1rem; 
+body .layout-vertical .column div:last-of-type .card {
+    border-radius: 1rem;
 }
 
 /* Changes Header Opacity */
@@ -103,4 +103,12 @@ body .search-bar input {
 body #bighead .navbar a:focus, body #bighead .navbar a:hover {
    background-color: rgba(0, 0, 0, 0);
    color: var(--link-hover);
+}
+
+/* Heading */
+body #bighead .first-line .container {
+  min-height: 80px;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
 }
