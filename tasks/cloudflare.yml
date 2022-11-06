@@ -5,11 +5,11 @@ vars:
   CLOUDFLARE_TF_DIR: "{{.TERRAFORM_DIR}}/cloudflare"
 
 tasks:
-  terraform-fmt:
+  terraform-fmt-validate:
     internal: true
     dir: "{{.CLOUDFLARE_TF_DIR}}"
     cmds:
-      - terraform plan -compact-warnings
+      - terraform fmt && terraform validate
 
   terraform-plan:
     internal: true
@@ -27,12 +27,12 @@ tasks:
     dir: "{{.CLOUDFLARE_TF_DIR}}"
     desc: Check Cloudflare code
     cmds:
-      - task: terraform-fmt
+      - task: terraform-fmt-validate
       - task: terraform-plan
 
   update:
     dir: "{{.CLOUDFLARE_TF_DIR}}"
     desc: Update Cloudflare DNS entries
     cmds:
-      - task: terraform-fmt
+      - task: terraform-fmt-validate
       - task: terraform-apply

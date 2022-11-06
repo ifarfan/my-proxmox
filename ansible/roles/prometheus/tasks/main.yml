@@ -32,7 +32,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "http://prometheus.{{ global_domain }}:{{ prometheus_port }}/"
+        url: "http://{{ prometheus_uri }}:{{ prometheus_port }}/"
         validate_certs: true
         status_code:
           - 200

@@ -63,11 +63,6 @@ locals {
       value = "portainer.${local.domain}"
     },
     {
-      desc  = "Heimdall dashboard",
-      name  = "heimdall",
-      value = "portainer.${local.domain}"
-    },
-    {
       desc  = "Uptime-kuma monitoring",
       name  = "kuma",
       value = "portainer.${local.domain}"
@@ -83,13 +78,23 @@ locals {
       value = "portainer.${local.domain}"
     },
     {
-      desc  = "Dashy home dashboard",
-      name  = "dashy",
+      desc  = "Loki log aggregation",
+      name  = "loki",
       value = "portainer.${local.domain}"
     },
     {
-      desc  = "Loki log aggregation",
-      name  = "loki",
+      desc  = "Homer dashboard",
+      name  = "homer",
+      value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "Speedtest Tracker",
+      name  = "speedtest-tracker",
+      value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "Dozzle Docker Logs",
+      name  = "dozzle",
       value = "portainer.${local.domain}"
     }
   ]

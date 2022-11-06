@@ -23,11 +23,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.kuma.entrypoints=http"
-      - "traefik.http.routers.kuma.rule=Host(`kuma.{{ global_domain }}`)"
+      - "traefik.http.routers.kuma.rule=Host(`{{ uptime_kuma_uri }}`)"
       - "traefik.http.middlewares.kuma-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.kuma.middlewares=kuma-https-redirect"
       - "traefik.http.routers.kuma-secure.entrypoints=https"
-      - "traefik.http.routers.kuma-secure.rule=Host(`kuma.{{ global_domain }}`)"
+      - "traefik.http.routers.kuma-secure.rule=Host(`{{ uptime_kuma_uri }}`)"
       - "traefik.http.routers.kuma-secure.tls=true"
       - "traefik.http.routers.kuma-secure.service=kuma"
       - "traefik.http.services.kuma.loadbalancer.server.port={{ uptime_kuma_port }}"

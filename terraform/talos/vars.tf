@@ -118,7 +118,7 @@ locals {
 
   # ? VM "server" overrides
   server = {
-    cores  = 1,
+    cores  = 2,
     memory = 3072,
 
     disk = {

@@ -1,0 +1,3 @@
+---
+dozzle_directory: /opt/dozzle
+dozzle_uri: dozzle.{{ global_domain }}

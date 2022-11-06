@@ -41,7 +41,7 @@
 
     - name: Wait until certificate is registered
       ansible.builtin.uri:
-        url: "https://traefik.{{ global_domain }}/"
+        url: "https://{{ traefik_uri }}/"
         validate_certs: true
         status_code:
           - 200

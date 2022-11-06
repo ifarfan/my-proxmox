@@ -1,4 +1,5 @@
 ---
 prometheus_directory: /opt/prometheus
 prometheus_volume: prometheus_data
+prometheus_uri: prometheus.{{ global_domain }}
 prometheus_port: 9090

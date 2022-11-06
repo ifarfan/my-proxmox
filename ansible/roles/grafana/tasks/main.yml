@@ -23,7 +23,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "https://grafana.{{ global_domain }}/"
+        url: "https://{{ grafana_uri }}/"
         validate_certs: true
         status_code:
           - 200

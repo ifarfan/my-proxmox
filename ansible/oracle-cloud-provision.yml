@@ -6,7 +6,7 @@
   tasks:
     - name: Server default configuration
       ansible.builtin.include_role:
-        name: base/vm
+        name: base
 
     - name: Install modern Unix utilities
       ansible.builtin.include_role:

@@ -1,4 +1,5 @@
 ---
 grafana_directory: /opt/grafana
 grafana_volume: grafana_data
+grafana_uri: grafana.{{ global_domain }}
 grafana_port: 3000

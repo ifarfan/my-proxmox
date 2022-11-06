@@ -28,11 +28,6 @@
         name: portainer
       tags: portainer
 
-    - name: Install heimdall
-      ansible.builtin.include_role:
-        name: heimdall
-      tags: heimdall
-
     - name: Install uptime-kuma
       ansible.builtin.include_role:
         name: uptime_kuma
@@ -48,7 +43,17 @@
         name: grafana
       tags: grafana
 
-    - name: Install dashy
+    - name: Install homer
       ansible.builtin.include_role:
-        name: dashy
-      tags: dashy
+        name: homer
+      tags: homer
+
+    - name: Install speedtest-tracker
+      ansible.builtin.include_role:
+        name: speedtest_tracker
+      tags: speedtest_tracker
+
+    - name: Install dozzle
+      ansible.builtin.include_role:
+        name: dozzle
+      tags: dozzle

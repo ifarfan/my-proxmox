@@ -1,4 +1,5 @@
 ---
 heimdall_directory: /opt/heimdall
 heimdall_volume: heimdall_data
-heimdall_port: 80
+heimdall_uri: heimdall.{{ global_domain }}
+heimdall_port: 8080

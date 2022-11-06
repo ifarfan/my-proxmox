@@ -32,7 +32,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "http://loki.{{ global_domain }}:{{ loki_port }}/"
+        url: "http://{{ loki_uri }}:{{ loki_port }}/"
         status_code:
           - 200
       until: uri_output.status == 200

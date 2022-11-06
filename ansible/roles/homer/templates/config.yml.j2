@@ -1,0 +1,235 @@
+---
+title: "Homelab"
+subtitle: "Dashboard"
+icon: "fas fa-laptop-house"
+
+header: true
+footer: '<p>Created with <span class="has-text-danger">❤️</span> with <a href="https://bulma.io/">bulma</a>, <a href="https://vuejs.org/">vuejs</a> & <a href="https://fontawesome.com/">font awesome</a> // Fork me on <a href="https://github.com/bastienwirtz/homer"><i class="fab fa-github-alt"></i></a></p>'
+
+theme: default
+colors:
+  light:
+    highlight-primary: "#fff5f2"
+    highlight-secondary: "#fff5f2"
+    highlight-hover: "#bebebe"
+    background: "#12152B"
+    card-background: "rgba(255, 245, 242, 0.8)"
+    text: "#ffffff"
+    text-header: "rgba(24, 28, 58, 0.8)"
+    text-title: "#000000"
+    text-subtitle: "#111111"
+    card-shadow: rgba(0, 0, 0, 0.5)
+    link: "#3273dc"
+    link-hover: "#2e4053"
+    background-image: "../assets/wallpaper-light.jpeg"
+  dark:
+    highlight-primary: "#181C3A"
+    highlight-secondary: "#181C3A"
+    highlight-hover: "#1F2347"
+    background: "#12152B"
+    card-background: "rgba(24, 28, 58, 0.8)"
+    text: "#eaeaea"
+    text-header: "#7C71DD"
+    text-title: "#fafafa"
+    text-subtitle: "#8B8D9C"
+    card-shadow: rgba(0, 0, 0, 0.5)
+    link: "#c1c1c1"
+    link-hover: "#fafafa"
+    background-image: "../assets/wallpaper.jpeg"
+
+links:
+  -
+    name: "Github"
+    icon: "fab fa-github-alt"
+    url: "https://github.com/ifarfan"
+    target: "_blank"
+  -
+    name: "Dockerhub"
+    icon: "fab fa-docker"
+    url: "https://hub.docker.com/"
+    target: "_blank"
+  -
+    name: "Cloudflare"
+    icon: "fas fa-cloud"
+    url: "https://dash.cloudflare.com/"
+    target: "_blank"
+  -
+    name: "CircleCI"
+    icon: "fas fa-circle"
+    url: "https://app.circleci.com/projects/project-dashboard/github/ifarfan/"
+    target: "_blank"
+  -
+    name: "Home Router FIOS"
+    icon: "fas fa-wifi"
+    url: "http://192.168.1.1/#/setup"
+    target: "_blank"
+
+services:
+  -
+    name: "Hardware"
+    icon: "fas fa-server"
+    items:
+      -
+        name: "M1"
+        logo: "assets/tools/proxmox.png"
+        subtitle: "Proxmox Server: M1"
+        tag: "proxmox"
+        keywords: "proxmox m1"
+        url: "https://m1.{{ global_domain }}:8006/"
+        tagstyle: "is-primary"
+        target: "_blank"
+      -
+        name: "M2"
+        logo: "assets/tools/proxmox.png"
+        subtitle: "Proxmox Server: M2"
+        tag: "proxmox"
+        keywords: "proxmox m2"
+        url: "https://m2.{{ global_domain }}:8006/"
+        tagstyle: "is-primary"
+        target: "_blank"
+      -
+        name: "M3"
+        logo: "assets/tools/proxmox.png"
+        subtitle: "Proxmox Server: M2"
+        tag: "proxmox"
+        keywords: "proxmox m3"
+        url: "https://m3.{{ global_domain }}:8006/"
+        tagstyle: "is-primary"
+        target: "_blank"
+      -
+        name: "DS1"
+        logo: "assets/tools/synology.png"
+        subtitle: "NAS Server"
+        tag: "nas"
+        keywords: "ds1 nas"
+        url: "http://ds1.{{ global_domain }}:5000/"
+        tagstyle: "is-info"
+        target: "_blank"
+      -
+        name: "Oracle"
+        logo: "assets/tools/oracle.png"
+        subtitle: "Oracle Cloud"
+        keywords: "oracle cloud"
+        url: "https://cloud.oracle.com/compute/instances?region=us-ashburn-1"
+        target: "_blank"
+  -
+    name: "Network Apps"
+    icon: "fas fa-network-wired"
+    items:
+      -
+        name: "Traefik"
+        logo: "assets/tools/traefik.png"
+        subtitle: "Proxy Server"
+        keywords: "traefik"
+        url: "https://traefik.{{ global_domain }}/"
+        target: "_blank"
+      -
+        name: "Portainer"
+        logo: "assets/tools/portainer.png"
+        subtitle: "Docker Manager"
+        keywords: "portainer"
+        url: "https://portainer.{{ global_domain }}/"
+        target: "_blank"
+      -
+        name: "Grafana"
+        logo: "assets/tools/grafana.png"
+        subtitle: "Dashboard Server"
+        keywords: "grafana"
+        url: "https://grafana.{{ global_domain }}/?orgId=1"
+        target: "_blank"
+      -
+        name: "Prometheus"
+        logo: "assets/tools/prometheus.png"
+        subtitle: "Metrics Server"
+        keywords: "prometheus"
+        url: "http://prometheus.{{ global_domain }}:9090/"
+        target: "_blank"
+  -
+    name: "Monitoring"
+    icon: "fas fa-broadcast-tower"
+    items:
+      -
+        name: "Uptime Kuma"
+        logo: "assets/tools/uptime-kuma.png"
+        subtitle: "Monitoring Server"
+        tag: "monitoring"
+        keywords: "uptime kuma"
+        url: "https://kuma.{{ global_domain }}/dashboard"
+        tagstyle: "is-danger"
+        target: "_blank"
+      -
+        name: "Speedtest Tracker"
+        logo: "assets/tools/speedtest-tracker.png"
+        subtitle: "Monitor internet speed over time"
+        tag: "monitoring"
+        keywords: "speedtest tracker"
+        url: "https://speedtest-tracker.{{ global_domain }}/"
+        tagstyle: "is-danger"
+        target: "_blank"
+      -
+        name: "Dozzle"
+        logo: "assets/tools/dozzle.png"
+        subtitle: "Monitor Docker Logs"
+        tag: "monitoring"
+        keywords: "dozzle"
+        url: "https://dozzle.{{ global_domain }}/"
+        tagstyle: "is-danger"
+        target: "_blank"
+  -
+    name: "Tools"
+    icon: "fas fa-tools"
+    items:
+      -
+        name: "Tailscale"
+        logo: "assets/tools/tailscale.png"
+        subtitle: "ZeroTrust VPN"
+        keywords: "tailscale"
+        url: https://login.tailscale.com/admin/machines
+        target: "_blank"
+      -
+        name: "Todoist"
+        logo: "assets/tools/todoist.png"
+        subtitle: "To-Do lists"
+        keywords: "todo lists"
+        url: https://todoist.com/app/today
+        target: "_blank"
+  -
+    name: "Career"
+    icon: "fas fa-briefcase"
+    items:
+      -
+        name: "LinkedIn"
+        logo: "assets/tools/linkedin.png"
+        subtitle: "My LinkedIn Profile"
+        tag: "me"
+        keywords: "linkedin profile"
+        url: "https://www.linkedin.com/in/israelfarfan/"
+        tagstyle: "is-info"
+        target: "_blank"
+      -
+        name: "Github Resume"
+        logo: "assets/tools/github-light.png"
+        subtitle: "My Resume on Github Pages"
+        tag: "me"
+        keywords: "github resume"
+        url: "https://ifarfan.github.io/"
+        tagstyle: "is-info"
+        target: "_blank"
+  -
+    name: "Media"
+    icon: "fas fa-photo-video"
+    items:
+      -
+        name: "Plex"
+        logo: "assets/tools/plex-new.png"
+        subtitle: "Plex Media Server"
+        keywords: "plex"
+        url: "https://plex.{{ global_domain }}/web/index.html"
+        target: "_blank"
+      -
+        name: "yts.pm"
+        logo: "assets/tools/assetgrid.png"
+        subtitle: "Free Movies!"
+        keywords: "yts pm"
+        url: "https://yts.pm/"
+        target: "_blank"

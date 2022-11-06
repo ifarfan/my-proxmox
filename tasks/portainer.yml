@@ -8,12 +8,6 @@ tasks:
     cmds:
       - ansible-playbook -i inventories/proxmox portainer-provision.yml
 
-  provision-heimdall:
-    dir: "{{.ANSIBLE_DIR}}"
-    desc: Provision "Heimdall" on Portainer LXC
-    cmds:
-      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag heimdall
-
   provision-uptime-kuma:
     dir: "{{.ANSIBLE_DIR}}"
     desc: Provision "Uptime-Kuma" on Portainer LXC
@@ -37,3 +31,21 @@ tasks:
     desc: Provision "Prometheus" on Portainer LXC
     cmds:
       - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag prometheus
+
+  provision-homer:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Homer" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag homer
+
+  provision-speedtest-tracker:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Homer" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag speedtest_tracker
+
+  provision-dozzle:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Dozzle" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag dozzle

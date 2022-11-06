@@ -23,7 +23,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "https://portainer.{{ global_domain }}/"
+        url: "https://{{ portainer_uri }}/"
         validate_certs: true
         status_code:
           - 200

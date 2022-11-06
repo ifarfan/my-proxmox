@@ -23,7 +23,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "https://kuma.{{ global_domain }}/"
+        url: "https://{{ uptime_kuma_uri }}/"
         validate_certs: true
         status_code:
           - 200
