@@ -85,3 +85,9 @@ tasks:
     desc: Provision "Loki" on Portainer LXC
     cmds:
       - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag loki
+
+  provision-wikijs:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "WikiJS" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag wikijs

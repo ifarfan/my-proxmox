@@ -1,8 +1,7 @@
-# Homer
+# Outline
 
 **Links**:
 
-- [Repo](https://github.com/bastienwirtz/homer)
-- [Cooler Theme](https://github.com/WalkxCode/Homer-Theme)
-- [Icons](https://fontawesome.com/v5/search)
-- [Icons Galore!](https://github.com/WalkxCode/dashboard-icons)
+- [Repo](https://github.com/outline/outline)
+- [Docker](https://app.getoutline.com/s/770a97da-13e5-401e-9f8a-37949c19f97e/doc/docker-7pfeLP5a8t)
+- [Installation](https://www.blackvoid.club/outline-wiki-for-growing-teams/)

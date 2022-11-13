@@ -1,0 +1,63 @@
+---
+version: "3"
+
+volumes:
+  {{ wikijs_volume }}_db:
+    driver: local
+
+services:
+  db:
+    image: postgres:11-alpine
+    container_name: wikijs-postgres
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    environment:
+      POSTGRES_USER: wikijs
+      POSTGRES_PASSWORD: wikijsrocks
+      POSTGRES_DB: wiki
+    logging:
+      driver: "none"
+    volumes:
+      - {{ wikijs_volume }}_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U wikijs -d wiki"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    container_name: wikijs
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wikijs.entrypoints=http"
+      - "traefik.http.routers.wikijs.rule=Host(`{{ wikijs_uri }}`)"
+      - "traefik.http.middlewares.wikijs-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.wikijs.middlewares=wikijs-https-redirect"
+      - "traefik.http.routers.wikijs-secure.entrypoints=https"
+      - "traefik.http.routers.wikijs-secure.rule=Host(`{{ wikijs_uri }}`)"
+      - "traefik.http.routers.wikijs-secure.tls=true"
+      - "traefik.http.routers.wikijs-secure.service=wikijs"
+      - "traefik.http.services.wikijs.loadbalancer.server.port={{ wikijs_port }}"
+      - "traefik.docker.network=traefik_default"
+    depends_on:
+      - db
+
+networks:
+  traefik_default:
+    external: true

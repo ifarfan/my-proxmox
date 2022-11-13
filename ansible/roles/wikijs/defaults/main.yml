@@ -1,0 +1,5 @@
+---
+wikijs_directory: /opt/wikijs
+wikijs_volume: wikijs_data
+wikijs_uri: wikijs.{{ global_domain }}
+wikijs_port: 3000

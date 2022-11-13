@@ -87,3 +87,8 @@
       ansible.builtin.include_role:
         name: loki
       tags: loki
+
+    - name: Install wikijs
+      ansible.builtin.include_role:
+        name: wikijs
+      tags: wikijs

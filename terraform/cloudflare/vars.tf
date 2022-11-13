@@ -121,6 +121,11 @@ locals {
       desc  = "Cronicle Scheduler",
       name  = "cronicle",
       value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "WikiJS",
+      name  = "wikijs",
+      value = "portainer.${local.domain}"
     }
   ]
 }

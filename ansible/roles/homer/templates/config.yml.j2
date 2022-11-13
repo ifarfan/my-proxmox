@@ -106,7 +106,7 @@ services:
         url: "https://cloud.oracle.com/compute/instances?region=us-ashburn-1"
         target: "_blank"
   -
-    name: "Local Apps"
+    name: "System Apps"
     icon: "fas fa-network-wired"
     items:
       -
@@ -131,24 +131,6 @@ services:
         tagstyle: "is-warning"
         keywords: "rundeck"
         url: https://rundeck.macminis.net/
-        target: "_blank"
-      -
-        name: "Snippet-Box"
-        logo: "assets/tools/snippetbox.png"
-        subtitle: "Store your code snippets"
-        tag: "tools"
-        tagstyle: "is-warning"
-        keywords: "snippet box"
-        url: https://snippet-box.macminis.net/snippets
-        target: "_blank"
-      -
-        name: "n8n"
-        logo: "assets/tools/n8n.png"
-        subtitle: "Automated workflows"
-        tag: "tools"
-        tagstyle: "is-warning"
-        keywords: "n8n"
-        url: https://n8n.macminis.net/
         target: "_blank"
       -
         name: "Cronicle"
@@ -205,7 +187,7 @@ services:
         url: "https://dozzle.{{ global_domain }}/"
         target: "_blank"
   -
-    name: "Tools"
+    name: "External Tools"
     icon: "fas fa-tools"
     items:
       -
@@ -251,6 +233,53 @@ services:
         url: https://todoist.com/app/today
         target: "_blank"
   -
+    name: "Internal Tools"
+    icon: "fas fa-tools"
+    items:
+      -
+        name: "Snippet-Box"
+        logo: "assets/tools/snippetbox.png"
+        subtitle: "Store your code snippets"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "snippet box"
+        url: https://snippet-box.macminis.net/snippets
+        target: "_blank"
+      -
+        name: "n8n"
+        logo: "assets/tools/n8n.png"
+        subtitle: "Automated workflows"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "n8n"
+        url: https://n8n.macminis.net/
+        target: "_blank"
+      -
+        name: "Outline"
+        logo: "assets/tools/outline.png"
+        subtitle: "Knowledge base wiki"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "outline wiki"
+        url: https://outline.macminis.net/
+        target: "_blank"
+      -
+        name: "WikiJS"
+        logo: "assets/tools/wikijs.png"
+        subtitle: "Another knowledge base wiki"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "wiki"
+        url: https://wikijs.macminis.net/
+        target: "_blank"
+      -
+        name: "Plex"
+        logo: "assets/tools/plex-new.png"
+        subtitle: "Plex Media Server"
+        keywords: "plex"
+        url: "https://plex.{{ global_domain }}/web/index.html"
+        target: "_blank"
+  -
     name: "Career"
     icon: "fas fa-briefcase"
     items:
@@ -272,21 +301,21 @@ services:
         keywords: "github resume"
         url: "https://ifarfan.github.io/"
         target: "_blank"
-  -
-    name: "Media"
-    icon: "fas fa-photo-video"
-    items:
-      -
-        name: "Plex"
-        logo: "assets/tools/plex-new.png"
-        subtitle: "Plex Media Server"
-        keywords: "plex"
-        url: "https://plex.{{ global_domain }}/web/index.html"
-        target: "_blank"
-      -
-        name: "yts.pm"
-        logo: "assets/tools/assetgrid.png"
-        subtitle: "Free Movies!"
-        keywords: "yts pm"
-        url: "https://yts.pm/"
-        target: "_blank"
+  # -
+  #   name: "Media"
+  #   icon: "fas fa-photo-video"
+  #   items:
+  #     -
+  #       name: "Plex"
+  #       logo: "assets/tools/plex-new.png"
+  #       subtitle: "Plex Media Server"
+  #       keywords: "plex"
+  #       url: "https://plex.{{ global_domain }}/web/index.html"
+  #       target: "_blank"
+  #     -
+  #       name: "yts.pm"
+  #       logo: "assets/tools/assetgrid.png"
+  #       subtitle: "Free Movies!"
+  #       keywords: "yts pm"
+  #       url: "https://yts.pm/"
+  #       target: "_blank"
