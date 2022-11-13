@@ -1,0 +1,64 @@
+---
+version: '3'
+
+volumes:
+  {{ rundeck_volume }}_db:
+    driver: local
+
+services:
+  rundeck:
+    image: rundeck/rundeck:4.8.0
+    container_name: rundeck
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    environment:
+      RUNDECK_DATABASE_DRIVER: org.mariadb.jdbc.Driver
+      RUNDECK_DATABASE_URL: jdbc:mysql://mysql/rundeck?autoReconnect=true&useSSL=false
+      RUNDECK_DATABASE_USERNAME: rundeck
+      RUNDECK_DATABASE_PASSWORD: rundeck
+      RUNDECK_GRAILS_URL: localhost:{{ rundeck_port }}
+    links:
+      - mysql
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rundeck.entrypoints=http"
+      - "traefik.http.routers.rundeck.rule=Host(`{{ rundeck_uri }}`)"
+      - "traefik.http.middlewares.rundeck-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.rundeck.middlewares=rundeck-https-redirect"
+      - "traefik.http.routers.rundeck-secure.entrypoints=https"
+      - "traefik.http.routers.rundeck-secure.rule=Host(`{{ rundeck_uri }}`)"
+      - "traefik.http.routers.rundeck-secure.tls=true"
+      - "traefik.http.routers.rundeck-secure.service=rundeck"
+      - "traefik.http.services.rundeck.loadbalancer.server.port={{ rundeck_port }}"
+      - "traefik.docker.network=traefik_default"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:5.7
+    container_name: rundeck-mysql
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - {{ rundeck_volume }}_db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: rundeck
+      MYSQL_USER: rundeck
+      MYSQL_PASSWORD: rundeck
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping -h localhost -u root -proot' ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+networks:
+  traefik_default:
+    external: true

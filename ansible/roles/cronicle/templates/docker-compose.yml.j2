@@ -1,0 +1,35 @@
+---
+version: '3'
+
+volumes:
+  {{ cronicle_volume }}:
+    driver: local
+
+services:
+  cronicle:
+    image: bluet/cronicle-docker:latest
+    container_name: cronicle
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ cronicle_volume }}:/opt/cronicle/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cronicle.entrypoints=http"
+      - "traefik.http.routers.cronicle.rule=Host(`{{ cronicle_uri }}`)"
+      - "traefik.http.middlewares.cronicle-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.cronicle.middlewares=cronicle-https-redirect"
+      - "traefik.http.routers.cronicle-secure.entrypoints=https"
+      - "traefik.http.routers.cronicle-secure.rule=Host(`{{ cronicle_uri }}`)"
+      - "traefik.http.routers.cronicle-secure.tls=true"
+      - "traefik.http.routers.cronicle-secure.service=cronicle"
+      - "traefik.http.services.cronicle.loadbalancer.server.port={{ cronicle_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

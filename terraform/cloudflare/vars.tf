@@ -96,6 +96,31 @@ locals {
       desc  = "Dozzle Docker Logs",
       name  = "dozzle",
       value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "Outline Wiki/KB",
+      name  = "outline",
+      value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "Snippet-Box clips",
+      name  = "snippet-box",
+      value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "n8n automation",
+      name  = "n8n",
+      value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "Rundeck automation",
+      name  = "rundeck",
+      value = "portainer.${local.domain}"
+    },
+    {
+      desc  = "Cronicle Scheduler",
+      name  = "cronicle",
+      value = "portainer.${local.domain}"
     }
   ]
 }

@@ -2,7 +2,7 @@
 - name: Configure grafana
   block:
 
-    - name: Create grafana directory
+    - name: Create app directory
       ansible.builtin.file:
         path: "{{ grafana_directory }}"
         state: directory
@@ -15,9 +15,8 @@
         owner: root
         group: root
         mode: 0644
-        backup: true
 
-    - name: Create and start grafana
+    - name: Create and start app
       community.docker.docker_compose:
         project_src: "{{ grafana_directory }}"
 
@@ -27,9 +26,9 @@
         validate_certs: true
         status_code:
           - 200
-      until: uri_output.status == 200
-      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
-      delay: 10
       register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
 
   tags: grafana

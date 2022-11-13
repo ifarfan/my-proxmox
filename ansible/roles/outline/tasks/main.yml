@@ -1,0 +1,46 @@
+---
+- name: Configure outline
+  block:
+
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ outline_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ outline_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Copy docker.env file
+      ansible.builtin.template:
+        src: docker.env.j2
+        dest: "{{ outline_directory }}/docker.env"
+        owner: root
+        group: root
+        mode: 0644
+
+    # - name: Create and start app
+    #   community.docker.docker_compose:
+    #     project_src: "{{ outline_directory }}"
+    #     recreate: always
+    #     remove_orphans: true
+    #     remove_volumes: true
+    #     restarted: true
+
+    # - name: Wait until site is up
+    #   ansible.builtin.uri:
+    #     url: "https://{{ outline_uri }}/"
+    #     validate_certs: true
+    #     status_code:
+    #       - 200
+    #   register: uri_output
+    #   until: uri_output.status == 200
+    #   delay: 10
+    #   retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
+
+  tags: outline

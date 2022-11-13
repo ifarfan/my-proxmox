@@ -57,3 +57,33 @@
       ansible.builtin.include_role:
         name: dozzle
       tags: dozzle
+
+    - name: Install outline
+      ansible.builtin.include_role:
+        name: outline
+      tags: outline
+
+    - name: Install snippet-box
+      ansible.builtin.include_role:
+        name: snippet_box
+      tags: snippet_box
+
+    - name: Install n8n
+      ansible.builtin.include_role:
+        name: n8n
+      tags: n8n
+
+    - name: Install rundeck
+      ansible.builtin.include_role:
+        name: rundeck
+      tags: rundeck
+
+    - name: Install cronicle
+      ansible.builtin.include_role:
+        name: cronicle
+      tags: cronicle
+
+    - name: Install loki
+      ansible.builtin.include_role:
+        name: loki
+      tags: loki

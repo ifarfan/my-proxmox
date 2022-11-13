@@ -16,7 +16,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['localhost:9090']
-
+  # Node exporter jobs
   - job_name: 'node_exporter'
     static_configs:
       - targets: [
@@ -24,9 +24,26 @@ scrape_configs:
         'm1.macminis.net:9100',
         'm2.macminis.net:9100',
         'm3.macminis.net:9100',
-        'cloudy-box.macminis.net:9100'
+        'cloudy-box.macminis.net:9100',
+        'ds1.macminis.net:9100'
       ]
-
-  - job_name: 'cadvisor'
+  # DS1 / NAS snmp metrics
+  - job_name: 'snmp-exporter'
     static_configs:
-      - targets: ['cadvisor:8080']
+    - targets: ['ds1.macminis.net']
+    metrics_path: /snmp
+    params:
+      module: [synology]
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - source_labels: [__param_target]
+      regex: (.*)
+      replacement: ${1}:9116
+      target_label: __address__
+
+  # - job_name: 'cadvisor'
+  #   static_configs:
+  #     - targets: ['cadvisor:8080']

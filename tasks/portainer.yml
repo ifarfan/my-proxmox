@@ -49,3 +49,39 @@ tasks:
     desc: Provision "Dozzle" on Portainer LXC
     cmds:
       - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag dozzle
+
+  provision-outline:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Outline" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag outline
+
+  provision-snippet-box:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Snippet-Box" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag snippet_box
+
+  provision-n8n:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "n8n" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag n8n
+
+  provision-rundeck:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Rundeck" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag rundeck
+
+  provision-cronicle:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Cronicle" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag cronicle
+
+  provision-loki:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Loki" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag loki

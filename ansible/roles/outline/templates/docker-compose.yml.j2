@@ -1,0 +1,99 @@
+---
+version: "3"
+
+volumes:
+  {{ outline_volume }}_database:
+    driver: local
+  {{ outline_volume }}_storage:
+    driver: local
+
+services:
+  outline:
+    image: outlinewiki/outline:latest
+    env_file: ./docker.env
+    container_name: outline
+    # ports:
+    #   - "3000:3000"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+      - outline_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.outline.entrypoints=http"
+      - "traefik.http.routers.outline.rule=Host(`{{ outline_uri }}`)"
+      - "traefik.http.middlewares.outline-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.outline.middlewares=outline-https-redirect"
+      - "traefik.http.routers.outline-secure.entrypoints=https"
+      - "traefik.http.routers.outline-secure.rule=Host(`{{ outline_uri }}`)"
+      - "traefik.http.routers.outline-secure.tls=true"
+      - "traefik.http.routers.outline-secure.service=outline"
+      - "traefik.http.services.outline.loadbalancer.server.port={{ outline_port }}"
+      - "traefik.docker.network=traefik_default"
+    depends_on:
+      - postgres
+      - redis
+      - storage
+
+  redis:
+    image: redis:latest
+    env_file: ./docker.env
+    container_name: outline-redis
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - outline_default
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+
+  postgres:
+    image: postgres:latest
+    env_file: ./docker.env
+    container_name: outline-postgres
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - outline_default
+    volumes:
+      - {{ outline_volume }}_database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U user -d postgres"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: outline
+
+  storage:
+    image: minio/minio:latest
+    env_file: ./docker.env
+    container_name: outline-minio
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - outline_default
+    command: "server /data"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - {{ outline_volume }}_storage:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+networks:
+  traefik_default:
+    external: true
+  outline_default:

@@ -1,0 +1,5 @@
+---
+n8n_directory: /opt/n8n
+n8n_volume: n8n_data
+n8n_uri: n8n.{{ global_domain }}
+n8n_port: 5678

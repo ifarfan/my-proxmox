@@ -1,6 +1,10 @@
 ---
 version: '3'
 
+volumes:
+  {{ loki_volume }}:
+    driver: local
+
 services:
   loki:
     image: grafana/loki:2.6.1
@@ -8,17 +12,35 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+    networks:
+      - loki
     ports:
       - "{{ loki_port }}:{{ loki_port }}"
     volumes:
-      - "{{ loki_directory }}/local-config.yaml:/etc/loki/config.yml"
-    command: -config.file=/etc/loki/local-config.yaml
+      - {{ loki_directory }}/loki-config.yml:/etc/loki/config.yml
+      - {{ loki_volume }}:/data
+    command: -config.file=/etc/loki/config.yml
+    healthcheck:
+      test: wget -q --tries=1 -O- http://127.0.0.1:3100/ready|grep -q "ready"
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
-  # promtail:
-  #   image: grafana/promtail:2.6.1
-  #   restart: unless-stopped
-  #   security_opt:
-  #     - no-new-privileges:true
-  #   volumes:
-  #     - /var/log:/var/log
-  #   command: -config.file=/etc/promtail/config.yml
+  promtail:
+    image: grafana/promtail:2.6.1
+    container_name: promtail
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - loki
+    volumes:
+      - /var/log:/var/log
+      - {{ loki_directory }}/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      loki:
+        condition: service_healthy
+
+networks:
+  loki:

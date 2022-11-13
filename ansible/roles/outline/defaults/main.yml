@@ -1,0 +1,7 @@
+---
+outline_directory: /opt/outline
+outline_volume: outline_data
+outline_uri: outline.{{ global_domain }}
+outline_port: 3000
+outline_secret_key: e60488b205d58902e85c7a61b796e99c883e7652964fab0ccf5ba90a56f3b44c
+outline_utils_secret: 253263e627e046411fbf809e5b9c8c338309f592652b2c7ecb75677e95988076

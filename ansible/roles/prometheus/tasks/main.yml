@@ -2,7 +2,7 @@
 - name: Configure prometheus
   block:
 
-    - name: Create prometheus directory
+    - name: Create app directory
       ansible.builtin.file:
         path: "{{ prometheus_directory }}"
         state: directory
@@ -15,7 +15,6 @@
         owner: root
         group: root
         mode: 0644
-        backup: true
 
     - name: Copy config file
       ansible.builtin.copy:
@@ -24,9 +23,8 @@
         owner: root
         group: root
         mode: 0644
-        backup: true
 
-    - name: Create and start prometheus
+    - name: Create and start app
       community.docker.docker_compose:
         project_src: "{{ prometheus_directory }}"
 
@@ -36,9 +34,9 @@
         validate_certs: true
         status_code:
           - 200
-      until: uri_output.status == 200
-      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
-      delay: 10
       register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
 
   tags: prometheus

@@ -2,7 +2,7 @@
 - name: Install traefik
   block:
 
-    - name: Create traefik directory
+    - name: Create app directory
       ansible.builtin.file:
         path: "{{ traefik_directory }}"
         state: directory
@@ -15,27 +15,19 @@
         owner: root
         group: root
         mode: 0644
-        backup: true
 
-    - name: Copy config.yml file
+    - name: Copy config files
       ansible.builtin.template:
-        src: config.yml.j2
-        dest: "{{ traefik_directory }}/config.yml"
+        src: "{{ item }}.j2"
+        dest: "{{ traefik_directory }}/{{ item }}"
         owner: root
         group: root
         mode: 0644
-        backup: true
+      with_items:
+        - config.yml
+        - traefik.yml
 
-    - name: Copy traefik.yml file
-      ansible.builtin.template:
-        src: traefik.yml.j2
-        dest: "{{ traefik_directory }}/traefik.yml"
-        owner: root
-        group: root
-        mode: 0644
-        backup: true
-
-    - name: Create and start traefik
+    - name: Create and start app
       community.docker.docker_compose:
         project_src: "{{ traefik_directory }}"
 
@@ -45,9 +37,9 @@
         validate_certs: true
         status_code:
           - 200
-      until: uri_output.status == 200
-      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
-      delay: 10
       register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
 
   tags: traefik

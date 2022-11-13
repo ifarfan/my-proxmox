@@ -42,37 +42,17 @@ colors:
 
 links:
   -
-    name: "Github"
-    icon: "fab fa-github-alt"
-    url: "https://github.com/ifarfan"
-    target: "_blank"
-  -
-    name: "Cloudflare"
-    icon: "fas fa-cloud"
-    url: "https://dash.cloudflare.com/"
-    target: "_blank"
-  -
-    name: "CircleCI"
-    icon: "fas fa-circle"
-    url: "https://app.circleci.com/projects/project-dashboard/github/ifarfan/"
-    target: "_blank"
-  -
-    name: "Dockerhub"
-    icon: "fab fa-docker"
-    url: "https://hub.docker.com/"
-    target: "_blank"
-  -
     name: "Home Router FIOS"
     icon: "fas fa-wifi"
     url: "http://192.168.1.1/#/setup"
     target: "_blank"
   -
-    name: "/r/minilab/"
+    name: "r/minilab"
     icon: "fab fa-reddit"
     url: "https://www.reddit.com/r/minilab/"
     target: "_blank"
   -
-    name: "/r/homelab/"
+    name: "r/homelab"
     icon: "fab fa-reddit"
     url: "https://www.reddit.com/r/homelab/"
     target: "_blank"
@@ -87,36 +67,36 @@ services:
         logo: "assets/tools/proxmox.png"
         subtitle: "Proxmox Server: M1"
         tag: "proxmox"
+        tagstyle: "is-primary"
         keywords: "proxmox m1"
         url: "https://m1.{{ global_domain }}:8006/"
-        tagstyle: "is-primary"
         target: "_blank"
       -
         name: "M2"
         logo: "assets/tools/proxmox.png"
         subtitle: "Proxmox Server: M2"
         tag: "proxmox"
+        tagstyle: "is-primary"
         keywords: "proxmox m2"
         url: "https://m2.{{ global_domain }}:8006/"
-        tagstyle: "is-primary"
         target: "_blank"
       -
         name: "M3"
         logo: "assets/tools/proxmox.png"
         subtitle: "Proxmox Server: M2"
         tag: "proxmox"
+        tagstyle: "is-primary"
         keywords: "proxmox m3"
         url: "https://m3.{{ global_domain }}:8006/"
-        tagstyle: "is-primary"
         target: "_blank"
       -
         name: "DS1"
         logo: "assets/tools/synology.png"
         subtitle: "NAS Server"
         tag: "nas"
+        tagstyle: "is-info"
         keywords: "ds1 nas"
         url: "http://ds1.{{ global_domain }}:5000/"
-        tagstyle: "is-info"
         target: "_blank"
       -
         name: "Oracle"
@@ -126,7 +106,7 @@ services:
         url: "https://cloud.oracle.com/compute/instances?region=us-ashburn-1"
         target: "_blank"
   -
-    name: "Network Apps"
+    name: "Local Apps"
     icon: "fas fa-network-wired"
     items:
       -
@@ -144,6 +124,55 @@ services:
         url: "https://portainer.{{ global_domain }}/"
         target: "_blank"
       -
+        name: "Rundeck"
+        logo: "assets/tools/rundeck.png"
+        subtitle: "Automation platform"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "rundeck"
+        url: https://rundeck.macminis.net/
+        target: "_blank"
+      -
+        name: "Snippet-Box"
+        logo: "assets/tools/snippetbox.png"
+        subtitle: "Store your code snippets"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "snippet box"
+        url: https://snippet-box.macminis.net/snippets
+        target: "_blank"
+      -
+        name: "n8n"
+        logo: "assets/tools/n8n.png"
+        subtitle: "Automated workflows"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "n8n"
+        url: https://n8n.macminis.net/
+        target: "_blank"
+      -
+        name: "Cronicle"
+        logo: "assets/tools/cronicle.png"
+        subtitle: "Cron-like scheduler"
+        tag: "tools"
+        tagstyle: "is-warning"
+        keywords: "cronicle"
+        url: https://cronicle.macminis.net/
+        target: "_blank"
+  -
+    name: "Monitoring"
+    icon: "fas fa-broadcast-tower"
+    items:
+      -
+        name: "Uptime Kuma"
+        logo: "assets/tools/uptime-kuma.png"
+        subtitle: "Monitoring Server"
+        tag: "monitoring"
+        tagstyle: "is-danger"
+        keywords: "uptime kuma"
+        url: "https://kuma.{{ global_domain }}/dashboard"
+        target: "_blank"
+      -
         name: "Grafana"
         logo: "assets/tools/grafana.png"
         subtitle: "Dashboard Server"
@@ -157,41 +186,56 @@ services:
         keywords: "prometheus"
         url: "http://prometheus.{{ global_domain }}:9090/"
         target: "_blank"
-  -
-    name: "Monitoring"
-    icon: "fas fa-broadcast-tower"
-    items:
-      -
-        name: "Uptime Kuma"
-        logo: "assets/tools/uptime-kuma.png"
-        subtitle: "Monitoring Server"
-        tag: "monitoring"
-        keywords: "uptime kuma"
-        url: "https://kuma.{{ global_domain }}/dashboard"
-        tagstyle: "is-danger"
-        target: "_blank"
       -
         name: "Speedtest Tracker"
         logo: "assets/tools/speedtest-tracker.png"
         subtitle: "Monitor internet speed over time"
         tag: "monitoring"
+        tagstyle: "is-danger"
         keywords: "speedtest tracker"
         url: "https://speedtest-tracker.{{ global_domain }}/"
-        tagstyle: "is-danger"
         target: "_blank"
       -
         name: "Dozzle"
         logo: "assets/tools/dozzle.png"
         subtitle: "Monitor Docker Logs"
         tag: "monitoring"
+        tagstyle: "is-danger"
         keywords: "dozzle"
         url: "https://dozzle.{{ global_domain }}/"
-        tagstyle: "is-danger"
         target: "_blank"
   -
     name: "Tools"
     icon: "fas fa-tools"
     items:
+      -
+        name: "Github"
+        logo: "assets/tools/github-light.png"
+        subtitle: "Github repos"
+        keywords: "github"
+        url: https://github.com/ifarfan
+        target: "_blank"
+      -
+        name: "Cloudflare"
+        logo: "assets/tools/cloudflare.png"
+        subtitle: "DNS Hosting"
+        keywords: "cloudflare"
+        url: https://dash.cloudflare.com/
+        target: "_blank"
+      -
+        name: "CircleCI"
+        logo: "assets/tools/circleci.png"
+        subtitle: "Hosted CI/CD"
+        keywords: "circleci"
+        url: https://app.circleci.com/projects/project-dashboard/github/ifarfan/
+        target: "_blank"
+      -
+        name: "Dockerhub"
+        logo: "assets/tools/docker.png"
+        subtitle: "Hosted Container Registry"
+        keywords: "dockerhub"
+        url: https://hub.docker.com/
+        target: "_blank"
       -
         name: "Tailscale"
         logo: "assets/tools/tailscale.png"
@@ -215,18 +259,18 @@ services:
         logo: "assets/tools/linkedin.png"
         subtitle: "My LinkedIn Profile"
         tag: "me"
+        tagstyle: "is-info"
         keywords: "linkedin profile"
         url: "https://www.linkedin.com/in/israelfarfan/"
-        tagstyle: "is-info"
         target: "_blank"
       -
         name: "Github Resume"
         logo: "assets/tools/github-light.png"
         subtitle: "My Resume on Github Pages"
         tag: "me"
+        tagstyle: "is-info"
         keywords: "github resume"
         url: "https://ifarfan.github.io/"
-        tagstyle: "is-info"
         target: "_blank"
   -
     name: "Media"
