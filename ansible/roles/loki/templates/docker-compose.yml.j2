@@ -1,10 +1,6 @@
 ---
 version: '3'
 
-volumes:
-  {{ loki_volume }}:
-    driver: local
-
 services:
   loki:
     image: grafana/loki:2.6.1
@@ -18,7 +14,6 @@ services:
       - "{{ loki_port }}:{{ loki_port }}"
     volumes:
       - {{ loki_directory }}/loki-config.yml:/etc/loki/config.yml
-      - {{ loki_volume }}:/data
     command: -config.file=/etc/loki/config.yml
     healthcheck:
       test: wget -q --tries=1 -O- http://127.0.0.1:3100/ready|grep -q "ready"
@@ -28,7 +23,7 @@ services:
 
   promtail:
     image: grafana/promtail:2.6.1
-    container_name: promtail
+    container_name: loki-promtail
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true

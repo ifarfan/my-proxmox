@@ -1,0 +1,41 @@
+---
+version: '3'
+
+volumes:
+  {{ homepage_volume }}:
+    driver: local
+
+services:
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - {{ homepage_volume }}:/app/config
+      - {{ homepage_directory }}/bookmarks.yaml:/app/config/bookmarks.yaml
+      - {{ homepage_directory }}/docker.yaml:/app/config/docker.yaml
+      - {{ homepage_directory }}/services.yaml:/app/config/services.yaml
+      - {{ homepage_directory }}/settings.yaml:/app/config/settings.yaml
+      - {{ homepage_directory }}/widgets.yaml:/app/config/widgets.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker:/var/lib/docker
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.entrypoints=http"
+      - "traefik.http.routers.homepage.rule=Host(`{{ homepage_uri }}`)"
+      - "traefik.http.middlewares.homepage-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.homepage.middlewares=homepage-https-redirect"
+      - "traefik.http.routers.homepage-secure.entrypoints=https"
+      - "traefik.http.routers.homepage-secure.rule=Host(`{{ homepage_uri }}`)"
+      - "traefik.http.routers.homepage-secure.tls=true"
+      - "traefik.http.routers.homepage-secure.service=homepage"
+      - "traefik.http.services.homepage.loadbalancer.server.port={{ homepage_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

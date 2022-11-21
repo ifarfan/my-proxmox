@@ -1,0 +1,8 @@
+---
+homer_directory: /opt/homer
+homer_uri: homer.{{ global_domain }}
+homer_port: 8080
+
+
+homer_proxmox_api_token: "{{ lookup('ansible.builtin.ini', 'proxmox_api_token', section='homer', file='credentials.ini') }}"
+homer_portainer_apikey: "{{ lookup('ansible.builtin.ini', 'portainer_apikey', section='homer', file='credentials.ini') }}"

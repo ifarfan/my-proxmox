@@ -5,3 +5,29 @@ vars:
   TALOS_TF_DIR: "{{.TERRAFORM_DIR}}/talos"
 
 tasks:
+  #
+  # VMs
+  #
+  list-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List Talos cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/talos talos-start.yml --list-hosts
+
+  start-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Start Talos cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/talos talos-start.yml
+
+  stop-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Stop Talos cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/talos talos-stop.yml
+
+  reboot-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Reboot Talos cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/talos talos-reboot.yml

@@ -31,3 +31,9 @@ tasks:
     desc: Provision Proxmox nodes
     cmds:
       - ansible-playbook -i inventories/macminis macminis-provision.yml
+
+  update-nodes:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Update Proxmox nodes
+    cmds:
+      - ansible-playbook -i inventories/macminis macminis-update.yml

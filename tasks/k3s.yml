@@ -1,0 +1,124 @@
+---
+version: '3'
+
+vars:
+  K3S_TF_DIR: "{{.TERRAFORM_DIR}}/k3s"
+
+tasks:
+  #
+  # VMs
+  #
+  list-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List k3s cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3s k3s-start.yml --list-hosts
+
+  start-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Start k3s cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3s k3s-start.yml
+
+  stop-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Stop k3s cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3s k3s-stop.yml
+
+  reboot-vms:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Reboot k3s cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/k3s k3s-reboot.yml
+
+  #
+  # Cluster
+  #
+  create-cluster:
+    desc: Create k3s cluster
+    cmds:
+      - task: terraform-create
+      # - task: ansible-initialize
+      # - task: kubernetes-metal-lb
+      # - task: kubernetes-longhorn
+      # - sleep {{ .WAIT_SECS_LONG }}
+      # - task: kubernetes-monitoring
+      # # - task: kubernetes-argo-cd
+
+  destroy-cluster:
+    desc: Destroy k3s cluster
+    cmds:
+      - task: terraform-destroy
+
+  rebuild-cluster:
+    desc: Rebuild k3s cluster
+    cmds:
+      - task: destroy-cluster
+      # Wait until old VM records are flushed off Proxmox
+      - sleep {{ .WAIT_SECS_LONG }}
+      - task: create-cluster
+
+  #
+  # Internal
+  #
+  terraform-create:
+    internal: true
+    dir: "{{.K3S_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -auto-approve
+
+  terraform-destroy:
+    internal: true
+    dir: "{{.K3S_TF_DIR}}"
+    cmds:
+      - terraform destroy -auto-approve -compact-warnings
+
+  # ansible-initialize:
+  #   internal: true
+  #   dir: "{{.ANSIBLE_DIR}}"
+  #   cmds:
+  #     - ansible-playbook -i inventories/k3s k3s-initialize.yml
+
+  # kubernetes-metal-lb:
+  #   internal: true
+  #   dir: "{{.KUBERNETES_DIR}}/metal-lb"
+  #   cmds:
+  #     - kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
+  #     - kubectl rollout status deployment controller --namespace metallb-system --timeout=90s
+  #     - kubectl apply -f metallb-ip-pool.yml
+
+  # kubernetes-monitoring:
+  #   internal: true
+  #   dir: "{{.KUBERNETES_DIR}}/monitoring"
+  #   cmds:
+  #     # Fetch helm repo
+  #     - helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  #     - helm repo update
+  #     # Create secret
+  #     - kubectl create namespace monitoring
+  #     # yamllint disable-line rule:line-length
+  #     - kubectl create secret generic grafana-admin-credentials --from-literal=admin-password='XXXXXXXXXXXX' --from-literal=admin-user='admin' -n monitoring
+  #     # Install helm chart
+  #     - helm upgrade -n monitoring prometheus prometheus-community/kube-prometheus-stack -f values.yaml
+  #     # Wait until deployments are complete
+  #     - kubectl rollout status deployment grafana --namespace monitoring --timeout=300s
+  #     - kubectl rollout status deployment prometheus-operator --namespace monitoring --timeout=300s
+
+  # kubernetes-longhorn:
+  #   internal: true
+  #   dir: "{{.KUBERNETES_DIR}}/longhorn"
+  #   cmds:
+  #     # Install longhorn
+  #     - kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.3.2/deploy/longhorn.yaml
+  #     # Wait until fixed + dynamic deployments are complete
+  #     - kubectl rollout status deployment longhorn-driver-deployer --namespace longhorn-system --timeout=300s
+  #     - while ! kubectl get deployment/csi-resizer --namespace longhorn-system; do sleep 5; done
+  #     - kubectl rollout status deployment csi-resizer --namespace longhorn-system --timeout=300s
+
+  # kubernetes-argo-cd:
+  #   internal: true
+  #   dir: "{{.KUBERNETES_DIR}}/argo-cd"
+  #   cmds:

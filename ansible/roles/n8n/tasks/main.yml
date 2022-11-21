@@ -41,6 +41,7 @@
         validate_certs: true
         status_code:
           - 200
+          - 401
       register: uri_output
       until: uri_output.status in [200, 401]
       delay: 10

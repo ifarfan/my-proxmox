@@ -1,4 +1,0 @@
----
-homer_directory: /opt/homer
-homer_uri: homer.{{ global_domain }}
-homer_port: 8080

@@ -1,4 +1,3 @@
----
 plugin: community.general.proxmox
 url: "{{ lookup('ansible.builtin.ini', 'url', section='proxmox', file='credentials.ini') }}"
 user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
@@ -25,6 +24,7 @@ groups:
   k8s-agents: '"k8s-agent" in proxmox_hostname'
   k8s-data: '"k8s-data" in proxmox_hostname'
   # other
+  homelab: '"homelab" in proxmox_hostname'
   portainer: '"portainer" in proxmox_hostname'
 compose:
   ansible_host: proxmox_net0.ip | replace("/32", "")

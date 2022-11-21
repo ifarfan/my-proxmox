@@ -50,82 +50,12 @@ locals {
     {
       desc  = "Synology NAS",
       name  = "nas",
-      value = "portainer.${local.domain}"
+      value = "ds1.${local.domain}"
     },
     {
-      desc  = "Synology NAS",
+      desc  = "Plex on NAS via traefik",
       name  = "plex",
-      value = "portainer.${local.domain}"
+      value = "homelab.${local.domain}"
     },
-    {
-      desc  = "Traefik reverse proxy",
-      name  = "traefik",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Uptime-kuma monitoring",
-      name  = "kuma",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Grafana monitoring",
-      name  = "grafana",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Prometheus monitoring",
-      name  = "prometheus",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Loki log aggregation",
-      name  = "loki",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Homer dashboard",
-      name  = "homer",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Speedtest Tracker",
-      name  = "speedtest-tracker",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Dozzle Docker Logs",
-      name  = "dozzle",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Outline Wiki/KB",
-      name  = "outline",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Snippet-Box clips",
-      name  = "snippet-box",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "n8n automation",
-      name  = "n8n",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Rundeck automation",
-      name  = "rundeck",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "Cronicle Scheduler",
-      name  = "cronicle",
-      value = "portainer.${local.domain}"
-    },
-    {
-      desc  = "WikiJS",
-      name  = "wikijs",
-      value = "portainer.${local.domain}"
-    }
   ]
 }

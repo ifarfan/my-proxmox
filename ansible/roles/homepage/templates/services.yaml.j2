@@ -1,0 +1,149 @@
+---
+# For configuration options and examples, please see:
+# https://github.com/benphelps/homepage/wiki/Services
+
+-
+  Hardware:
+    -
+      M1:
+        icon: proxmox.png
+        href: https://m1.{{ global_domain }}:8006/
+        description: 'Proxmox Server: M1'
+    -
+      M2:
+        icon: proxmox.png
+        href: https://m2.{{ global_domain }}:8006/
+        description: 'Proxmox Server: M2'
+    -
+      M3:
+        icon: proxmox.png
+        href: https://m3.{{ global_domain }}:8006/
+        description: 'Proxmox Server: M3'
+    -
+      DS1:
+        icon: synology.png
+        href: http://ds1.{{ global_domain }}:5000/
+        description: NAS Server
+    -
+      Oracle:
+        icon: oracle-cloud.png
+        href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
+        description: Oracle Cloud
+    -
+      FIOS:
+        icon: fios.png
+        href: http://192.168.1.1/#/setup
+        description: Home Router FIOS
+-
+  System Apps:
+    -
+      Traefik:
+        icon: traefik.png
+        href: https://traefik.{{ global_domain }}/
+        description: Proxy Server
+        server: my-docker
+        container: traefik
+        widget:
+          type: traefik
+          url: https://traefik.{{ global_domain }}
+    -
+      Portainer:
+        icon: portainer.png
+        href: https://portainer.{{ global_domain }}/
+        description: Container Manager
+        server: my-docker
+        container: portainer
+        widget:
+          type: portainer
+          url: https://portainer.{{ global_domain }}
+          env: 2
+          key: {{ homepage_portainer_token }}
+    -
+      Speedtest Tracker:
+        icon: speedtest-tracker.png
+        href: https://speedtest-tracker.{{ global_domain }}/
+        description: Monitor Internet Speed Over Time
+        server: my-docker
+        container: speedtest-tracker
+        widget:
+          type: speedtest
+          url: https://speedtest-tracker.{{ global_domain }}
+-
+  Monitoring:
+    -
+      Uptime Kuma:
+        icon: uptime-kuma.png
+        href: https://uptime-kuma.{{ global_domain }}/dashboard
+        description: Monitoring Server
+        server: my-docker
+        container: kuma
+    -
+      Grafana:
+        icon: grafana.png
+        href: https://grafana.{{ global_domain }}/?orgId=1
+        description: Dashboard Server
+        server: my-docker
+        container: grafana
+    -
+      Prometheus:
+        icon: prometheus.png
+        href: http://prometheus.{{ global_domain }}:9090/
+        description: Metrics Server
+        server: my-docker
+        container: prometheus
+    -
+      Dozzle:
+        icon: dozzle.png
+        href: https://dozzle.{{ global_domain }}/
+        description: Monitor Docker Logs
+        server: my-docker
+        container: dozzle
+
+-
+  Internal Apps:
+    -
+      Snippet-Box:
+        icon: snippetbox.png
+        href: https://snippet-box.{{ global_domain }}/snippets
+        description: Store Code Snippets
+        server: my-docker
+        container: snippet-box
+    -
+      Outline:
+        icon: outline.png
+        href: https://outline.{{ global_domain }}/
+        description: Knowledge-base Wiki
+    -
+      n8n:
+        icon: n8n.png
+        href: https://n8n.{{ global_domain }}/
+        description: Automated Workflows
+        server: my-docker
+        container: n8n
+-
+  External Apps:
+    -
+      Github:
+        icon: github.png
+        href: https://github.com/ifarfan
+        description: Github Repos
+    -
+      Cloudflare:
+        icon: cloudflare.png
+        href: https://dash.cloudflare.com/
+        description: DNS Hosting
+    -
+      CircleCI:
+        icon: artifactory.png
+        href: https://app.circleci.com/projects/project-dashboard/github/ifarfan/
+        description: Hosted CI/CD
+    -
+      Dockerhub:
+        icon: docker.png
+        href: https://hub.docker.com/
+        description: Hosted Container Registry
+    -
+      Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: ZeroTrust VPN

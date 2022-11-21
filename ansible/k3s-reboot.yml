@@ -1,10 +1,8 @@
 ---
-#
 # ? Reboot all nodes in this order
 # ? - servers
 # ? - agents
 # ? - data
-#
 - name: Reboot k3s server hosts
   hosts: k3s_servers
   become: true

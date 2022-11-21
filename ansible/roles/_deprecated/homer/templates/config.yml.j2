@@ -70,6 +70,8 @@ services:
         tagstyle: "is-primary"
         keywords: "proxmox m1"
         url: "https://m1.{{ global_domain }}:8006/"
+        type: "Proxmox"
+        api_token: "{{ homer_proxmox_api_token }}"
         target: "_blank"
       -
         name: "M2"
@@ -121,25 +123,9 @@ services:
         logo: "assets/tools/portainer.png"
         subtitle: "Docker Manager"
         keywords: "portainer"
-        url: "https://portainer.{{ global_domain }}/"
-        target: "_blank"
-      -
-        name: "Rundeck"
-        logo: "assets/tools/rundeck.png"
-        subtitle: "Automation platform"
-        tag: "tools"
-        tagstyle: "is-warning"
-        keywords: "rundeck"
-        url: https://rundeck.macminis.net/
-        target: "_blank"
-      -
-        name: "Cronicle"
-        logo: "assets/tools/cronicle.png"
-        subtitle: "Cron-like scheduler"
-        tag: "tools"
-        tagstyle: "is-warning"
-        keywords: "cronicle"
-        url: https://cronicle.macminis.net/
+        url: "https://portainer.{{ global_domain }}"
+        type: "Portainer"
+        apikey: "{{ homer_portainer_apikey }}"
         target: "_blank"
   -
     name: "Monitoring"
@@ -152,7 +138,8 @@ services:
         tag: "monitoring"
         tagstyle: "is-danger"
         keywords: "uptime kuma"
-        url: "https://kuma.{{ global_domain }}/dashboard"
+        url: "https://uptime-kuma.{{ global_domain }}"
+        type: "UptimeKuma"
         target: "_blank"
       -
         name: "Grafana"
@@ -167,6 +154,7 @@ services:
         subtitle: "Metrics Server"
         keywords: "prometheus"
         url: "http://prometheus.{{ global_domain }}:9090/"
+        type: "Prometheus"
         target: "_blank"
       -
         name: "Speedtest Tracker"
@@ -176,6 +164,7 @@ services:
         tagstyle: "is-danger"
         keywords: "speedtest tracker"
         url: "https://speedtest-tracker.{{ global_domain }}/"
+        type: "SpeedtestTracker"
         target: "_blank"
       -
         name: "Dozzle"
@@ -262,15 +251,6 @@ services:
         tagstyle: "is-warning"
         keywords: "outline wiki"
         url: https://outline.macminis.net/
-        target: "_blank"
-      -
-        name: "WikiJS"
-        logo: "assets/tools/wikijs.png"
-        subtitle: "Another knowledge base wiki"
-        tag: "tools"
-        tagstyle: "is-warning"
-        keywords: "wiki"
-        url: https://wikijs.macminis.net/
         target: "_blank"
       -
         name: "Plex"

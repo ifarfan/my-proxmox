@@ -6,14 +6,14 @@ volumes:
     driver: local
   {{ outline_volume }}_storage:
     driver: local
+  {{ outline_volume }}_redis:
+    driver: local
 
 services:
   outline:
     image: outlinewiki/outline:latest
     env_file: ./docker.env
     container_name: outline
-    # ports:
-    #   - "3000:3000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -46,6 +46,8 @@ services:
       - no-new-privileges:true
     networks:
       - outline_default
+    volumes:
+      - {{ outline_volume }}_redis:/data
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping"]
       interval: 10s
@@ -80,13 +82,27 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
+      - traefik_default
       - outline_default
-    command: "server /data"
+    entrypoint: sh
+    command: -c 'minio server /data --console-address ":{{ minio_port }}"'
     deploy:
       restart_policy:
         condition: on-failure
     volumes:
       - {{ outline_volume }}_storage:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.entrypoints=http"
+      - "traefik.http.routers.minio.rule=Host(`{{ minio_uri }}`)"
+      - "traefik.http.middlewares.minio-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.minio.middlewares=minio-https-redirect"
+      - "traefik.http.routers.minio-secure.entrypoints=https"
+      - "traefik.http.routers.minio-secure.rule=Host(`{{ minio_uri }}`)"
+      - "traefik.http.routers.minio-secure.tls=true"
+      - "traefik.http.routers.minio-secure.service=minio"
+      - "traefik.http.services.minio.loadbalancer.server.port={{ minio_port }}"
+      - "traefik.docker.network=traefik_default"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live"]
       interval: 30s

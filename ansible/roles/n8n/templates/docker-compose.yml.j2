@@ -76,7 +76,7 @@ services:
     volumes:
       - {{ n8n_volume }}_redis:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli ping"]
       interval: 5s
       timeout: 5s
       retries: 10

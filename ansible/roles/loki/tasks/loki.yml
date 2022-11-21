@@ -1,0 +1,49 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ loki_directory }}"
+    state: directory
+    mode: 0755
+
+- name: Install loki docker plugin
+  community.docker.docker_plugin:
+    plugin_name: grafana/loki-docker-driver:latest
+    state: enable
+    alias: loki
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ loki_directory }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy config files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ loki_directory }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - loki-config.yml
+    - promtail-config.yml
+
+- name: Create and start app
+  community.docker.docker_compose:
+    project_src: "{{ loki_directory }}"
+    recreate: always
+    remove_orphans: true
+    remove_volumes: true
+    restarted: true
+
+- name: Wait until site is up
+  ansible.builtin.uri:
+    url: "http://{{ loki_uri }}:{{ loki_port }}/ready"
+    status_code:
+      - 200
+  register: uri_output
+  until: uri_output.status == 200
+  delay: 10
+  retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins

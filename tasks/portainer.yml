@@ -91,3 +91,9 @@ tasks:
     desc: Provision "WikiJS" on Portainer LXC
     cmds:
       - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag wikijs
+
+  provision-ts-cf-dns-sync:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Tailscale-Cloudflare DNS Sync" on Portainer LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox portainer-provision.yml --tag ts-cf-dns-sync

@@ -1,0 +1,16 @@
+---
+version: "3"
+
+services:
+  cloudflare-dns-sync:
+    image: ghcr.io/marc1307/tailscale-cloudflare-dnssync:latest
+    container_name: cloudflare-dns-sync
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      ts-key: {{ tailscale_api_key }}
+      ts-tailnet: {{ tailnet_name }}
+      cf-domain: {{ cloudflare_domain }}
+      cf-key: {{ cloudflare_api_token }}
+      postfix: -ts     # optional, adds postfix to dns records

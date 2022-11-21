@@ -1,6 +1,6 @@
 ---
 - name: Download latest ISOs to shared NFS mount
-  hosts: proxmox
+  hosts: macminis
   become: true
   gather_facts: false
   vars_files:

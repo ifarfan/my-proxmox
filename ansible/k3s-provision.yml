@@ -1,15 +1,13 @@
 ---
-#
 # ? Default configuration for all nodes
-#
 # - name: All k3s nodes provisioning
 #   hosts: k3s
 #   become: true
 #   gather_facts: true
 #   tasks:
-#     - name: Install Ubuntu 22.04 lxc
+#     - name: Install Ubuntu 22.04
 #       ansible.builtin.include_role:
-#         name: base/lxc
+#         name: base
 
 #     - name: Install modern Unix utilities
 #       ansible.builtin.include_role:
@@ -19,9 +17,7 @@
 #       ansible.builtin.include_role:
 #         name: k3s/pre-steps
 
-#
 # ? Server ONLY configuration
-#
 - name: k3s server provisioning
   hosts: k3s_servers
   become: true
@@ -31,9 +27,7 @@
       ansible.builtin.include_role:
         name: k3s/server
 
-# #
 # # ? Agent + Data ONLY configuration
-# #
 # - name: k3s server provisioning
 #   hosts: k3s_agents, k3s_data
 #   become: true
@@ -43,9 +37,7 @@
 #       ansible.builtin.include_role:
 #         name: k3s/agent
 
-# #
 # # ? Server ONLY configuration
-# #
 # - name: k3s server provisioning
 #   hosts: k3s_servers
 #   become: true

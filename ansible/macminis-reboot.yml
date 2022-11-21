@@ -1,6 +1,6 @@
 ---
 - name: Reboot Proxmox servers
-  hosts: all
+  hosts: macminis
   become: true
   gather_facts: false
   tasks:

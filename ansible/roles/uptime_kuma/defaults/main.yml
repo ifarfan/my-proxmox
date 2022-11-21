@@ -1,5 +1,5 @@
 ---
 uptime_kuma_directory: /opt/uptime_kuma
-uptime_kuma_volume: uptime_kuma_data
-uptime_kuma_uri: kuma.{{ global_domain }}
+uptime_kuma_volume: data
+uptime_kuma_uri: uptime-kuma.{{ global_domain }}
 uptime_kuma_port: 3001

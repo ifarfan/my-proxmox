@@ -1,6 +1,6 @@
 ---
 - name: Proxmox servers provisioning
-  hosts: all
+  hosts: macminis
   become: true
   gather_facts: true
   tasks:

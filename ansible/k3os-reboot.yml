@@ -1,10 +1,17 @@
 ---
-#
 # ? Reboot all nodes in this order
 # ? - servers
 # ? - agents
 # ? - data
-#
+- name: Set Proxmox variables
+  hosts: localhost
+  tasks:
+    - name: Set Proxmox variables
+      ansible.builtin.set_fact:
+        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
+        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
+        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+
 - name: Reboot k3os server hosts
   hosts: k3os_servers
   gather_facts: false
@@ -13,9 +20,9 @@
     - name: Reboot server nodes
       throttle: 1
       community.general.proxmox_kvm:
-        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
-        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
-        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+        api_host: "{{ hostvars['localhost'].api_host }}"
+        api_user: "{{ hostvars['localhost'].api_user }}"
+        api_password: "{{ hostvars['localhost'].api_password }}"
         name: "{{ inventory_hostname }}"
         state: restarted
 
@@ -33,9 +40,9 @@
     - name: Reboot agent nodes
       throttle: 1
       community.general.proxmox_kvm:
-        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
-        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
-        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+        api_host: "{{ hostvars['localhost'].api_host }}"
+        api_user: "{{ hostvars['localhost'].api_user }}"
+        api_password: "{{ hostvars['localhost'].api_password }}"
         name: "{{ inventory_hostname }}"
         state: restarted
 
@@ -53,9 +60,9 @@
     - name: Reboot data nodes
       throttle: 1
       community.general.proxmox_kvm:
-        api_host: "{{ lookup('ansible.builtin.ini', 'host', section='proxmox', file='credentials.ini') }}"
-        api_user: "{{ lookup('ansible.builtin.ini', 'user', section='proxmox', file='credentials.ini') }}"
-        api_password: "{{ lookup('ansible.builtin.ini', 'password', section='proxmox', file='credentials.ini') }}"
+        api_host: "{{ hostvars['localhost'].api_host }}"
+        api_user: "{{ hostvars['localhost'].api_user }}"
+        api_password: "{{ hostvars['localhost'].api_password }}"
         name: "{{ inventory_hostname }}"
         state: restarted
 

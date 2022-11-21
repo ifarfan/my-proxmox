@@ -1,5 +1,4 @@
 ---
 loki_directory: /opt/loki
-loki_volume: loki_data
 loki_uri: loki.{{ global_domain }}
 loki_port: 3100

@@ -4,6 +4,9 @@ outline_volume: outline_data
 outline_uri: outline.{{ global_domain }}
 outline_port: 3000
 
+minio_uri: minio.{{ global_domain }}
+minio_port: 9001
+
 # Secrets
 outline_secret_key: "{{ lookup('ansible.builtin.ini', 'secret_key', section='outline', file='credentials.ini') }}"
 outline_utils_secret: "{{ lookup('ansible.builtin.ini', 'utils_secret', section='outline', file='credentials.ini') }}"

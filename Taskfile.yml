@@ -16,9 +16,11 @@ vars:
 
 includes:
   cloudflare: ./tasks/cloudflare.yml
+  homelab: ./tasks/homelab.yml
   k3os: ./tasks/k3os.yml
+  k3s: ./tasks/k3s.yml
+  nomad: ./tasks/nomad.yml
   oracle: ./tasks/oracle.yml
   packer: ./tasks/packer.yml
-  portainer: ./tasks/portainer.yml
   proxmox: ./tasks/proxmox.yml
   talos: ./tasks/talos.yml

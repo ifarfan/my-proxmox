@@ -1,0 +1,23 @@
+---
+# ? Reboot all nodes in this order
+# ? - servers
+# ? - agents
+- name: Reboot nomad server hosts
+  hosts: nomad_servers
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Reboot 1 node at the time + wait up to 2 mins
+      throttle: 1
+      ansible.builtin.reboot:
+        reboot_timeout: 120
+
+- name: Reboot nomad agent hosts
+  hosts: nomad_agents
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Reboot 1 node at the time + wait up to 2 mins
+      throttle: 1
+      ansible.builtin.reboot:
+        reboot_timeout: 120

@@ -30,20 +30,20 @@ scrape_configs:
   # DS1 / NAS snmp metrics
   - job_name: 'snmp-exporter'
     static_configs:
-    - targets: ['ds1.macminis.net']
+      - targets: ['ds1.macminis.net']
     metrics_path: /snmp
     params:
       module: [synology]
     relabel_configs:
-    - source_labels: [__address__]
-      target_label: __param_target
-    - source_labels: [__param_target]
-      target_label: instance
-    - source_labels: [__param_target]
-      regex: (.*)
-      replacement: ${1}:9116
-      target_label: __address__
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - source_labels: [__param_target]
+        regex: (.*)
+        replacement: ${1}:9116
+        target_label: __address__
 
-  # - job_name: 'cadvisor'
-  #   static_configs:
-  #     - targets: ['cadvisor:8080']
+#  - job_name: 'cadvisor'
+#    static_configs:
+#      - targets: ['cadvisor:8080']

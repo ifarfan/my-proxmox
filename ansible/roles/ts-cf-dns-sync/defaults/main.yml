@@ -1,0 +1,8 @@
+---
+app_directory: /opt/ts-cf-dns-sync
+
+# Secrets
+tailnet_name: "{{ lookup('ansible.builtin.ini', 'tailnet_name', section='tailscale', file='credentials.ini') }}"
+tailscale_api_key: "{{ lookup('ansible.builtin.ini', 'tailscale_api_key', section='tailscale', file='credentials.ini') }}"
+cloudflare_api_token: "{{ lookup('ansible.builtin.ini', 'cloudflare_api_token', section='tailscale', file='credentials.ini') }}"
+cloudflare_domain: "{{ lookup('ansible.builtin.ini', 'domain', section='cloudflare', file='credentials.ini') }}"

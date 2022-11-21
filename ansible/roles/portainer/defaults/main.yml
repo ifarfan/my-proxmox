@@ -1,5 +1,5 @@
 ---
 portainer_directory: /opt/portainer
-portainer_volume: portainer_data
+portainer_volume: data
 portainer_uri: portainer.{{ global_domain }}
 portainer_port: 9000

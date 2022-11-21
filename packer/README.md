@@ -12,7 +12,7 @@ packer version
 Symlink secret values from `terraform` folder into `magic`/`autoloading` variables file
 ```shell
 cd packer
-ln -s ../terraform/proxmox.tfvars proxmox.auto.pkrvars.hcl
+ln -s ../terraform/proxmox.auto.tfvars proxmox.auto.pkrvars.hcl
 ```
 
 ### Usage

@@ -29,7 +29,7 @@
     #     project_src: "{{ outline_directory }}"
     #     recreate: always
     #     remove_orphans: true
-    #     remove_volumes: true
+    #     remove_volumes: false
     #     restarted: true
 
     # - name: Wait until site is up

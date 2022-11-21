@@ -7,7 +7,7 @@ all:
     m2.macminis.net:
     m3.macminis.net:
   children:
-    proxmox:
+    macminis:
       hosts:
         m1.macminis.net:
         m2.macminis.net:

@@ -1,0 +1,118 @@
+---
+version: '3'
+
+vars:
+  HOMELAB_TF_DIR: "{{.TERRAFORM_DIR}}/homelab"
+
+tasks:
+  # ? Ansible Provisioning
+  provision:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml
+
+  provision-traefik:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Traefik" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag traefik
+
+  provision-portainer:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Portainer" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag portainer
+
+  provision-uptime-kuma:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Uptime-Kuma" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag uptime_kuma
+
+  provision-prometheus:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Prometheus" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag prometheus
+
+  provision-grafana:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Grafana" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag grafana
+
+  provision-homer:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Homer" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag homer
+
+  provision-speedtest-tracker:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Speedtest Tracker" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag speedtest_tracker
+
+  provision-dozzle:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Dozzle" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag dozzle
+
+  provision-outline:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Outline" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag outline
+
+  provision-snippet-box:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Snippet-Box" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag snippet_box
+
+  provision-n8n:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "n8n" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag n8n
+
+  provision-loki:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Loki" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag loki
+
+  provision-homepage:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Homepage" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag homepage
+
+  provision-ts-cf-dns-sync:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Tailscale-Cloudflare DNS Sync" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag ts-cf-dns-sync
+
+  # ? LXC
+  update-dns:
+    desc: Update DNS records for LXC
+    dir: "{{.HOMELAB_TF_DIR}}"
+    cmds:
+      - task: create-lxc
+
+  create-lxc:
+    desc: Create Homelab LXC
+    dir: "{{.HOMELAB_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -auto-approve
+
+  destroy-lxc:
+    desc: Destroy Homelab LXC
+    dir: "{{.HOMELAB_TF_DIR}}"
+    cmds:
+      - terraform destroy -auto-approve -compact-warnings

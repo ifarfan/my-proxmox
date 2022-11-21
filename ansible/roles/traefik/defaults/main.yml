@@ -1,6 +1,6 @@
 ---
 traefik_directory: /opt/traefik
-traefik_volume: traefik_data
+traefik_volume: data
 traefik_uri: traefik.{{ global_domain }}
 
 cloudflare_email: "{{ lookup('ansible.builtin.ini', 'email', section='cloudflare', file='credentials.ini') }}"

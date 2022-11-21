@@ -92,3 +92,8 @@
       ansible.builtin.include_role:
         name: wikijs
       tags: wikijs
+
+    - name: Install ts-cf-dns-sync
+      ansible.builtin.include_role:
+        name: ts-cf-dns-sync
+      tags: ts-cf-dns-sync
