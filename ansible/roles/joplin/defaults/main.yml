@@ -1,0 +1,8 @@
+---
+joplin_directory: /opt/joplin
+joplin_volume: data
+joplin_uri: joplin.{{ global_domain }}
+joplin_port: 22300
+
+# idempotent values
+joplin_db_pwd: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=16', seed=inventory_hostname) }}"

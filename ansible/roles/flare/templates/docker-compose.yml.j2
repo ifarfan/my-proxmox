@@ -1,0 +1,32 @@
+---
+version: '3'
+
+services:
+  flare:
+    image: soulteary/flare:latest
+    container_name: flare
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - {{ flare_directory }}/apps.yml:/app/apps.yml
+      - {{ flare_directory }}/bookmarks.yml:/app/bookmarks.yml
+      - {{ flare_directory }}/config.yml:/app/config.yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flare.entrypoints=http"
+      - "traefik.http.routers.flare.rule=Host(`{{ flare_uri }}`)"
+      - "traefik.http.middlewares.flare-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.flare.middlewares=flare-https-redirect"
+      - "traefik.http.routers.flare-secure.entrypoints=https"
+      - "traefik.http.routers.flare-secure.rule=Host(`{{ flare_uri }}`)"
+      - "traefik.http.routers.flare-secure.tls=true"
+      - "traefik.http.routers.flare-secure.service=flare"
+      - "traefik.http.services.flare.loadbalancer.server.port={{ flare_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

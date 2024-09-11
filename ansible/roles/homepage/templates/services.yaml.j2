@@ -1,7 +1,6 @@
 ---
 # For configuration options and examples, please see:
 # https://github.com/benphelps/homepage/wiki/Services
-
 -
   Hardware:
     -
@@ -9,31 +8,69 @@
         icon: proxmox.png
         href: https://m1.{{ global_domain }}:8006/
         description: 'Proxmox Server: M1'
+        ping: https://m1.{{ global_domain }}:8006/
+        widget:
+          type: proxmox
+          url: https://m1.{{ global_domain }}:8006
+          username: {{ homepage_proxmox_user }}
+          password: {{ homepage_proxmox_secret }}
     -
       M2:
         icon: proxmox.png
         href: https://m2.{{ global_domain }}:8006/
         description: 'Proxmox Server: M2'
+        ping: https://m2.{{ global_domain }}:8006/
+        widget:
+          type: proxmox
+          url: https://m2.{{ global_domain }}:8006
+          username: {{ homepage_proxmox_user }}
+          password: {{ homepage_proxmox_secret }}
     -
       M3:
         icon: proxmox.png
         href: https://m3.{{ global_domain }}:8006/
         description: 'Proxmox Server: M3'
+        ping: https://m3.{{ global_domain }}:8006/
+        widget:
+          type: proxmox
+          url: https://m3.{{ global_domain }}:8006
+          username: {{ homepage_proxmox_user }}
+          password: {{ homepage_proxmox_secret }}
     -
       DS1:
         icon: synology.png
         href: http://ds1.{{ global_domain }}:5000/
         description: NAS Server
+        ping: http://ds1.{{ global_domain }}:5000/
+        widget:
+          type: diskstation
+          url: http://ds1.{{ global_domain }}:5000
+          username: {{ homepage_synology_username }}
+          password: {{ homepage_synology_password }}
     -
       Oracle:
         icon: oracle-cloud.png
         href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
         description: Oracle Cloud
+        ping: https://cloud.oracle.com/
     -
       FIOS:
         icon: fios.png
         href: http://192.168.1.1/#/setup
         description: Home Router FIOS
+        ping: http://192.168.1.1/#/setup
+    -
+      Cloudflare:
+        icon: cloudflare.png
+        href: https://dash.cloudflare.com/
+        description: DNS Hosting
+        ping: https://dash.cloudflare.com/login
+    -
+      Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: ZeroTrust VPN
+        ping: https://login.tailscale.com/
 -
   System Apps:
     -
@@ -77,6 +114,10 @@
         description: Monitoring Server
         server: my-docker
         container: kuma
+        widget:
+          type: uptimekuma
+          url: https://uptime-kuma.{{ global_domain }}
+          slug: web
     -
       Grafana:
         icon: grafana.png
@@ -84,6 +125,11 @@
         description: Dashboard Server
         server: my-docker
         container: grafana
+        widget:
+          type: grafana
+          url: https://grafana.{{ global_domain }}
+          username: {{ homepage_grafana_username }}
+          password: {{ homepage_grafana_password }}
     -
       Prometheus:
         icon: prometheus.png
@@ -91,6 +137,9 @@
         description: Metrics Server
         server: my-docker
         container: prometheus
+        widget:
+          type: prometheus
+          url: http://prometheus.{{ global_domain }}:9090
     -
       Dozzle:
         icon: dozzle.png
@@ -102,17 +151,19 @@
 -
   Internal Apps:
     -
-      Snippet-Box:
-        icon: snippetbox.png
-        href: https://snippet-box.{{ global_domain }}/snippets
-        description: Store Code Snippets
+      Linkding:
+        icon: linkding.png
+        href: https://linkding.{{ global_domain }}/
+        description: Bookmarks manager
         server: my-docker
-        container: snippet-box
+        container: linkding
     -
       Outline:
         icon: outline.png
         href: https://outline.{{ global_domain }}/
         description: Knowledge-base Wiki
+        server: my-docker
+        container: outline
     -
       n8n:
         icon: n8n.png
@@ -120,6 +171,37 @@
         description: Automated Workflows
         server: my-docker
         container: n8n
+    -
+      Plex:
+        icon: plex.png
+        href: https://plex.{{ global_domain }}/web/index.html
+        description: Media Server
+        ping: https://plex.{{ global_domain }}/web/index.html
+        widget:
+          type: plex
+          url: https://plex.{{ global_domain }}
+          key: {{ homepage_plex_token }}
+    -
+      Snippet-Box:
+        icon: snippetbox.png
+        href: https://snippet-box.{{ global_domain }}/snippets
+        description: Store Code Snippets
+        server: my-docker
+        container: snippet-box
+    -
+      WUD:
+        icon: docker-compose.png
+        href: https://wud.{{ global_domain }}/
+        description: What's Up Docker
+        server: my-docker
+        container: wud
+    # -
+    #   Bookstack:
+    #     icon: bookstack.png
+    #     href: https://bookstack.{{ global_domain }}/
+    #     description: Content + Wiki
+    #     server: my-docker
+    #     container: bookstack
 -
   External Apps:
     -
@@ -127,23 +209,16 @@
         icon: github.png
         href: https://github.com/ifarfan
         description: Github Repos
-    -
-      Cloudflare:
-        icon: cloudflare.png
-        href: https://dash.cloudflare.com/
-        description: DNS Hosting
+        ping: https://github.com/login
     -
       CircleCI:
         icon: artifactory.png
         href: https://app.circleci.com/projects/project-dashboard/github/ifarfan/
         description: Hosted CI/CD
+        ping: https://github.com/login
     -
       Dockerhub:
         icon: docker.png
         href: https://hub.docker.com/
         description: Hosted Container Registry
-    -
-      Tailscale:
-        icon: tailscale.png
-        href: https://login.tailscale.com/admin/machines
-        description: ZeroTrust VPN
+        ping: https://hub.docker.com/login

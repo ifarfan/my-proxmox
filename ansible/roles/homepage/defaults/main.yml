@@ -3,8 +3,14 @@ homepage_directory: /opt/homepage
 homepage_volume: data
 homepage_uri: homepage.{{ global_domain }}
 homepage_port: 3000
+homepage_image_version: v0.6.10
 
 homepage_proxmox_user: "{{ lookup('ansible.builtin.ini', 'proxmox_user', section='homepage', file='credentials.ini') }}"
 homepage_proxmox_secret: "{{ lookup('ansible.builtin.ini', 'proxmox_secret', section='homepage', file='credentials.ini') }}"
 homepage_portainer_token: "{{ lookup('ansible.builtin.ini', 'portainer_token', section='homepage', file='credentials.ini') }}"
-homepage_weather_api: "{{ lookup('ansible.builtin.ini', 'weather_api', section='homepage', file='credentials.ini') }}"
+homepage_openweathermap_api: "{{ lookup('ansible.builtin.ini', 'openweathermap_api', section='homepage', file='credentials.ini') }}"
+homepage_synology_username: "{{ lookup('ansible.builtin.ini', 'synology_username', section='homepage', file='credentials.ini') }}"
+homepage_synology_password: "{{ lookup('ansible.builtin.ini', 'synology_password', section='homepage', file='credentials.ini') }}"
+homepage_plex_token: "{{ lookup('ansible.builtin.ini', 'plex_token', section='homepage', file='credentials.ini') }}"
+homepage_grafana_username: "{{ lookup('ansible.builtin.ini', 'grafana_username', section='homepage', file='credentials.ini') }}"
+homepage_grafana_password: "{{ lookup('ansible.builtin.ini', 'grafana_password', section='homepage', file='credentials.ini') }}"

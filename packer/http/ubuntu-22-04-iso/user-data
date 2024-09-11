@@ -13,6 +13,7 @@ autoinstall:
     layout: en
   locale: en_US
   packages:
+    - cloud-init
     - qemu-guest-agent
   ssh:
     allow-pw: true

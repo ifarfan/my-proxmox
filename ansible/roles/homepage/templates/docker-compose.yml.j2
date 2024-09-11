@@ -7,7 +7,7 @@ volumes:
 
 services:
   homepage:
-    image: ghcr.io/benphelps/homepage:latest
+    image: ghcr.io/benphelps/homepage:{{ homepage_image_version }}
     container_name: homepage
     restart: unless-stopped
     security_opt:

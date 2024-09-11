@@ -65,6 +65,7 @@ apt_pkgs_to_install:
   - nano
   - ncdu
   - net-tools
+  - nfs-common
   - nmap
   - nscd
   - peco

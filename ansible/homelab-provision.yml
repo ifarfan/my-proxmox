@@ -45,11 +45,6 @@
         name: grafana
       tags: grafana
 
-    - name: Install homer
-      ansible.builtin.include_role:
-        name: homer
-      tags: homer
-
     - name: Install speedtest-tracker
       ansible.builtin.include_role:
         name: speedtest_tracker
@@ -70,10 +65,10 @@
         name: snippet_box
       tags: snippet_box
 
-    - name: Install n8n
-      ansible.builtin.include_role:
-        name: n8n
-      tags: n8n
+    # - name: Install n8n
+    #   ansible.builtin.include_role:
+    #     name: n8n
+    #   tags: n8n
 
     - name: Install loki
       ansible.builtin.include_role:
@@ -84,3 +79,28 @@
       ansible.builtin.include_role:
         name: homepage
       tags: homepage
+
+    - name: Install 'what's up docker'
+      ansible.builtin.include_role:
+        name: wud
+      tags: wud
+
+    - name: Install linkding
+      ansible.builtin.include_role:
+        name: linkding
+      tags: linkding
+
+    - name: Install rustdesk
+      ansible.builtin.include_role:
+        name: rustdesk
+      tags: rustdesk
+
+    - name: Install navidrome
+      ansible.builtin.include_role:
+        name: navidrome
+      tags: navidrome
+
+    - name: Install guacamole
+      ansible.builtin.include_role:
+        name: guacamole
+      tags: guacamole

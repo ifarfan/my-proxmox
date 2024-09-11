@@ -33,8 +33,18 @@ services:
       - "traefik.http.routers.speedtest-secure.rule=Host(`{{ speedtest_tracker_uri }}`)"
       - "traefik.http.routers.speedtest-secure.tls=true"
       - "traefik.http.routers.speedtest-secure.service=speedtest"
-      - "traefik.http.services.speedtest.loadbalancer.server.port=80"
+      - "traefik.http.services.speedtest.loadbalancer.server.port={{ speedtest_tracker_port }}"
       - "traefik.docker.network=traefik_default"
+
+  # Daily restarts
+  # See: https://gist.github.com/kizzx2/782b500a81ce46b889903b1f80353f21
+  restarter:
+    image: docker:cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - {{ speedtest_tracker_directory }}/docker-compose.yml:/docker-compose.yml:ro
+    command: ["/bin/sh", "-c", "while true; do sleep 86400; docker compose -p speedtest_tracker restart speedtest; done"]
+    restart: unless-stopped
 
 networks:
   traefik_default:

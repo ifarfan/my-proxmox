@@ -1,0 +1,4 @@
+---
+wud_directory: /opt/wud
+wud_uri: wud.{{ global_domain }}
+wud_port: 3000

@@ -1,20 +1,21 @@
 ---
 # For configuration options and examples, please see:
 # https://github.com/benphelps/homepage/wiki/Information-Widgets
-
 - resources:
+    expanded: true
     cpu: true
     memory: true
     disk: /var/lib/docker
 
 - search:
-    provider: google
+    provider: [google, bing, duckduckgo]
     target: _blank
 
-- weatherapi:
+- openweathermap:
     label: Philadelphia
-    latitude: 39.982800208564605
-    longitude: -75.13586041238744
+    latitude: 39.98
+    longitude: -75.13
     units: imperial
-    apiKey: {{ homepage_weather_api }}
+    provider: openweathermap
+    apiKey: {{ homepage_openweathermap_api }}
     cache: 5

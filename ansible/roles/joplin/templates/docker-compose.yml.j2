@@ -1,0 +1,60 @@
+---
+version: '3'
+
+volumes:
+  {{ joplin_volume }}_postgres:
+    driver: local
+
+services:
+  app:
+    image: joplin/server:latest
+    container_name: joplin
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+      - joplin_default
+    environment:
+      APP_PORT: {{ joplin_port }}
+      APP_BASE_URL: https://{{ joplin_uri }}
+      DB_CLIENT: pg
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: joplin_db
+      POSTGRES_USER: joplin
+      POSTGRES_PASSWORD: {{ joplin_db_pwd }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.joplin.entrypoints=http"
+      - "traefik.http.routers.joplin.rule=Host(`{{ joplin_uri }}`)"
+      - "traefik.http.middlewares.joplin-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.joplin.middlewares=joplin-https-redirect"
+      - "traefik.http.routers.joplin-secure.entrypoints=https"
+      - "traefik.http.routers.joplin-secure.rule=Host(`{{ joplin_uri }}`)"
+      - "traefik.http.routers.joplin-secure.tls=true"
+      - "traefik.http.routers.joplin-secure.service=joplin"
+      - "traefik.http.services.joplin.loadbalancer.server.port={{ joplin_port }}"
+      - "traefik.docker.network=traefik_default"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: joplin_postgres
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - joplin_default
+    volumes:
+      - {{ joplin_volume }}_postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: joplin_db
+      POSTGRES_USER: joplin
+      POSTGRES_PASSWORD: {{ joplin_db_pwd }}
+
+networks:
+  traefik_default:
+    external: true
+  joplin_default:

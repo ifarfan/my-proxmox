@@ -34,6 +34,11 @@ locals {
       value = "192.168.136.11"
     },
     {
+      desc  = "DS0 NAS",
+      name  = "ds0",
+      value = "192.168.136.20"
+    },
+    {
       desc  = "DS1 NAS port 1",
       name  = "ds1",
       value = "192.168.136.21"

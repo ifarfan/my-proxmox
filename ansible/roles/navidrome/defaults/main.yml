@@ -1,0 +1,5 @@
+---
+navidrome_directory: /opt/navidrome
+navidrome_volume: data
+navidrome_uri: navidrome.{{ global_domain }}
+navidrome_port: 4533

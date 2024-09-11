@@ -1,0 +1,46 @@
+---
+#
+# - To force encryption, add "-k _" to both daemons
+# - Key located under ./data/id_ed25519.pub
+# - Add said key to both "connect requestor" and "connect node"
+#
+version: '3'
+
+volumes:
+  {{ rustdesk_volume }}:
+    driver: local
+
+services:
+  hbbs:
+    image: rustdesk/rustdesk-server:latest
+    container_name: hbbs
+    ports:
+      - 21115:21115
+      - 21116:21116
+      - 21116:21116/udp
+      - 21118:21118
+    command: hbbs -r rustdesk.macminis.net:21117 -k _
+    volumes:
+      - {{ rustdesk_volume }}:/root
+    networks:
+      - rustdesk_default
+    depends_on:
+      - hbbr
+    restart: unless-stopped
+
+  hbbr:
+    image: rustdesk/rustdesk-server:latest
+    container_name: hbbr
+    ports:
+      - 21117:21117
+      - 21119:21119
+    command: hbbr -k _
+    volumes:
+      - {{ rustdesk_volume }}:/root
+    networks:
+      - rustdesk_default
+    restart: unless-stopped
+
+networks:
+  rustdesk_default:
+    external: false

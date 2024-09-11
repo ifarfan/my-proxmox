@@ -1,6 +1,6 @@
 ---
 outline_directory: /opt/outline
-outline_volume: outline_data
+outline_volume: data
 outline_uri: outline.{{ global_domain }}
 outline_port: 3000
 

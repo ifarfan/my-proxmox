@@ -1,6 +1,7 @@
 ---
 apt_pkgs_modern:
   - bat
+  - bpytop
   - fd-find
   - jq
 

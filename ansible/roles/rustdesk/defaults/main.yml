@@ -1,0 +1,5 @@
+---
+rustdesk_directory: /opt/rustdesk
+rustdesk_volume: data
+rustdesk_uri: rustdesk.{{ global_domain }}
+rustdesk_port: 21115

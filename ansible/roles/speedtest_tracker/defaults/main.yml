@@ -2,3 +2,4 @@
 speedtest_tracker_directory: /opt/speedtest_tracker
 speedtest_tracker_volume: data
 speedtest_tracker_uri: speedtest-tracker.{{ global_domain }}
+speedtest_tracker_port: 80

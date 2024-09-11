@@ -8,10 +8,10 @@ locals {
   ip           = "192.168.136.25"
 
   # Disks
-  rootfs_size = "4G"
+  rootfs_size = "20G"
   mountpoint = {
     mp   = "/var/lib/docker"
-    size = "20G"
+    size = "30G"
   }
 
   # Launch in this Proxmox node
@@ -33,6 +33,15 @@ locals {
     "uptime-kuma",
     "portainer",
     "homepage",
+    "wud",
+    "bookstack",
+    "linkace",
+    "joplin",
+    "wallabag",
+    "home-assistant",
+    "linkding",
+    "rustdesk",
+    "navidrome",
   ]
 }
 

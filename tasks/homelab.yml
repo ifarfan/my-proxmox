@@ -5,6 +5,30 @@ vars:
   HOMELAB_TF_DIR: "{{.TERRAFORM_DIR}}/homelab"
 
 tasks:
+  # ? LXC
+  update-dns:
+    desc: Update DNS records for LXC
+    dir: "{{.HOMELAB_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform plan
+      # - terraform apply -auto-approve -target=module.my_lxc.cloudflare_record.cname_records
+
+  create-lxc:
+    desc: Create Homelab LXC
+    dir: "{{.HOMELAB_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -auto-approve
+
+  destroy-lxc:
+    desc: Destroy Homelab LXC
+    dir: "{{.HOMELAB_TF_DIR}}"
+    cmds:
+      - terraform destroy -auto-approve -compact-warnings
+
   # ? Ansible Provisioning
   provision:
     dir: "{{.ANSIBLE_DIR}}"
@@ -41,12 +65,6 @@ tasks:
     desc: Provision "Grafana" on Homelab LXC
     cmds:
       - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag grafana
-
-  provision-homer:
-    dir: "{{.ANSIBLE_DIR}}"
-    desc: Provision "Homer" on Homelab LXC
-    cmds:
-      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag homer
 
   provision-speedtest-tracker:
     dir: "{{.ANSIBLE_DIR}}"
@@ -90,29 +108,50 @@ tasks:
     cmds:
       - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag homepage
 
+  provision-wud:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "What's Up Docker" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag wud
+
+  provision-linkding:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Linkding" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag linkding
+
+  provision-flare:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Flare" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag flare
+
+  provision-bookstack:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Bookstack" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag bookstack
+
   provision-ts-cf-dns-sync:
     dir: "{{.ANSIBLE_DIR}}"
     desc: Provision "Tailscale-Cloudflare DNS Sync" on Homelab LXC
     cmds:
       - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag ts-cf-dns-sync
 
-  # ? LXC
-  update-dns:
-    desc: Update DNS records for LXC
-    dir: "{{.HOMELAB_TF_DIR}}"
+  provision-home-assistant:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Home Assistant" on Homelab LXC
     cmds:
-      - task: create-lxc
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag home_assistant
 
-  create-lxc:
-    desc: Create Homelab LXC
-    dir: "{{.HOMELAB_TF_DIR}}"
+  provision-rustdesk:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Rust Desk" on Homelab LXC
     cmds:
-      - terraform init
-      - terraform fmt && terraform validate
-      - terraform apply -auto-approve
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag rustdesk
 
-  destroy-lxc:
-    desc: Destroy Homelab LXC
-    dir: "{{.HOMELAB_TF_DIR}}"
+  provision-navidrome:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Navidrome" on Homelab LXC
     cmds:
-      - terraform destroy -auto-approve -compact-warnings
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag navidrome

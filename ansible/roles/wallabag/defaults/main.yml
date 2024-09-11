@@ -1,0 +1,8 @@
+---
+wallabag_directory: /opt/wallabag
+wallabag_volume: data
+wallabag_uri: wallabag.{{ global_domain }}
+wallabag_port: 80
+
+# idempotent values
+wallabag_db_pwd: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=16', seed=inventory_hostname) }}"
