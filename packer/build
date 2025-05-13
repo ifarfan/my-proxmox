@@ -205,17 +205,31 @@ build() {
     log_line '' "- Packer Manifest   : ${YELLOW}${FILE_MANIFEST}${NORMAL}"
     log_line '' "- Packer Vars       : ${YELLOW}${FILE_PACKER_VARS}${NORMAL}"
     log_line '' ""
-    log_line '' "Executing ${GREEN}${BOLD}packer${NORMAL} now..."
+
+
+    # Disabling Mac firewall
+    log_line 'W' "Disabling Firewall for Packer's HTTP Server"
+    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off
+    /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
+    log_line '' ""
+
+
+    # Start Packer "Build"
+    log_line 'O' "Executing ${GREEN}${BOLD}packer${NORMAL} now..."
     log_line '' ""
 
     #  Filter build by type
     [[ "${BUILD_FROM}" == 'iso' ]] && FILTER='from_iso_build' || FILTER='from_clone_build'
 
     #  Execute packer build
-    PACKER_LOG=1                                    \
-    PACKER_LOG_PATH=${FILE_PACKER_LOG}              \
-    PKR_VAR_proxmox_node=${NODE}                    \
+    export PACKER_LOG=1
+    export PACKER_LOG_PATH=${FILE_PACKER_LOG}
+    export PKR_VAR_proxmox_node=${NODE}
+    packer init .
+
+    #  Execute packer build
     packer build                                    \
+        -on-error ask                               \
         -force                                      \
         -timestamp-ui                               \
         -var-file=vars/${TEMPLATE}.pkrvars.hcl      \
@@ -245,6 +259,13 @@ build() {
     fi
     log_line '' ""
     log_line '' "${CYAN}${BOLD}Time elapsed${NORMAL}: $(time_elapsed)"
+    log_line '' ""
+
+    # Enabling Mac firewall
+    log_line 'W' "Enabling Firewall"
+    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+    /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
+    log_line '' ""
 
     exit "${RESULT}"
 }

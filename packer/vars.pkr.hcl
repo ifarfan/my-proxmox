@@ -30,7 +30,7 @@ variable "vm_description" {
 
 variable "vm_cores" {
   type    = string
-  default = 1
+  default = 2
 }
 
 variable "vm_disksize" {
@@ -40,7 +40,7 @@ variable "vm_disksize" {
 
 variable "vm_memory" {
   type    = string
-  default = 2048
+  default = 4096
 }
 
 variable "iso_file" {
@@ -76,23 +76,16 @@ locals {
     "<del><del><del><del><del><del><del><del>",
     "<del><del><del><del><del><del><del><del>",
     "set gfxpayload=keep<enter><wait3s>",
-    "linux /casper/vmlinuz --- autoinstall ds='nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}/'<enter><wait3s>",
+    "linux /casper/vmlinuz --- autoinstall ip=dhcp cloud-config-url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}/user-data<enter><wait3s>",
     "initrd /casper/initrd<enter><wait3s>",
     "boot<enter><wait3s>",
     "<f10><wait3s>"
-
-    # "<esc><wait>",
-    # "install",
-    # " initrd=initrd.gz",
-    # " auto=true",
-    # " priority=critical",
-    # " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}.preseed.cfg",
-    # " --- <wait>",
-    # "<enter><wait>"
   ]
   boot_wait      = "10s"
   http_directory = "http"
+  http_port      = 8802
   iso_file       = "remote-nfs:iso/${var.iso_file}"
+  iso_type       = "scsi"
 
   # VM
   os            = "l26"
@@ -100,7 +93,7 @@ locals {
 
   # Hardware
   cpu_type = "host"
-  sockets  = 1
+  sockets  = 2
 
   # Store Template locally on each node
   disks = {
@@ -140,16 +133,22 @@ locals {
   # ?  - ANSIBLE_SSH_PRIVATE_KEY_FILE
   map_ansible_vars = [
     "ANSIBLE_CONTROL_PATH=/tmp/ansible-ssh-%%h-%%p-%%r",
-    "ANSIBLE_GATHERING=explicit",
     "ANSIBLE_GATHER_TIMEOUT=20",
+    "ANSIBLE_GATHERING=explicit",
     "ANSIBLE_HOST_KEY_CHECKING=False",
     "ANSIBLE_NOCOWS=1",
     "ANSIBLE_PIPELINING=True",
     "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3",
     "ANSIBLE_RETRY_FILES_ENABLED=False",
-    "ANSIBLE_SSH_ARGS='-o ControlMaster=auto -o ControlPersist=60s'",
     "ANSIBLE_STDOUT_CALLBACK=yaml",
     "ANSIBLE_TIMEOUT=20"
+  ]
+  map_ansible_ssh_args = [
+    "-o IdentitiesOnly=yes",
+    "-o ControlMaster=auto",
+    "-o ControlPersist=60s",
+    "-o HostKeyAlgorithms=+ssh-rsa",
+    "-o PubkeyAcceptedKeyTypes=ssh-rsa"
   ]
   inventory_folder = "./ansible/inventory"
   build_playbook   = "./ansible/playbooks/${var.vm_name}_build.yml"

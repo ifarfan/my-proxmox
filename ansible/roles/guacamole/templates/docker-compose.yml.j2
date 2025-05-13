@@ -2,18 +2,19 @@
 version: '3'
 
 volumes:
-  {{ guacamole_volume }}:
+  {{ guacamole_volume }}_database:
     driver: local
 
 services:
   guacamole:
-    image: ghcr.io/benphelps/guacamole:{{ guacamole_image_version }}
+    image: guacamole/guacamole
     container_name: guacamole
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
+    {# security_opt:
+      - no-new-privileges:true #}
     networks:
-      - traefik_default
+      - traefik_defaultwerwerwerwerwerwerwerwerwerwerwer
+      - guacamole_default
     volumes:
       - {{ guacamole_volume }}:/app/config
       - {{ guacamole_directory }}/bookmarks.yaml:/app/config/bookmarks.yaml
@@ -36,6 +37,28 @@ services:
       - "traefik.http.services.guacamole.loadbalancer.server.port={{ guacamole_port }}"
       - "traefik.docker.network=traefik_default"
 
+  postgres:
+    image: postgres:latest
+    container_name: guacamole-postgres
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - guacamole_default
+    volumes:
+      - {{ guacamole_volume }}_database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U user -d postgres"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: guacamole
+
 networks:
   traefik_default:
     external: true
+  guacamole_default:
+    driver: bridge

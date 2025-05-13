@@ -104,3 +104,8 @@
       ansible.builtin.include_role:
         name: guacamole
       tags: guacamole
+
+    - name: Install swingmusic
+      ansible.builtin.include_role:
+        name: swingmusic
+      tags: swingmusic

@@ -1,4 +1,4 @@
-source "proxmox-clone" "clone_install" {
+source "proxmox-clone" "ubuntu-clone" {
   # Proxmox
   node        = var.proxmox_node
   password    = var.proxmox_password
@@ -41,7 +41,7 @@ build {
   description = "Build Proxmox template from VM clone/template"
 
   # ! 1. PRE_SEED: Create VM from template
-  sources = ["source.proxmox-clone.clone_install"]
+  sources = ["source.proxmox-clone.ubuntu-clone"]
 
   # ! 2. PROVISION: Apply Ansible role(s)
   provisioner "ansible" {

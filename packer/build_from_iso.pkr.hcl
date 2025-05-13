@@ -1,4 +1,8 @@
-source "proxmox" "iso_install" {
+#
+# NOTES:
+# - https://developer.hashicorp.com/packer/integrations/hashicorp/ansible/latest/components/provisioner/ansible
+#
+source "proxmox-iso" "ubuntu-kickstart" {
   # Proxmox
   node        = var.proxmox_node
   password    = var.proxmox_password
@@ -14,11 +18,17 @@ source "proxmox" "iso_install" {
   vm_name                  = var.vm_name
 
   # ISO
+  boot_iso {
+    iso_checksum   = "none"
+    iso_file       = local.iso_file
+    type           = local.iso_type
+    unmount        = true
+  }
   boot_command   = local.boot_command
   boot_wait      = local.boot_wait
   http_directory = local.http_directory
-  iso_file       = local.iso_file
-  unmount_iso    = true
+  http_port_max  = local.http_port
+  http_port_min  = local.http_port
 
   # SSH
   ssh_password = local.ssh_password
@@ -32,10 +42,8 @@ source "proxmox" "iso_install" {
   sockets  = local.sockets
 
   disks {
-    disk_size = var.vm_disksize
-    # format            = local.disk_format
+    disk_size         = var.vm_disksize
     storage_pool      = local.disks.storage_pool
-    storage_pool_type = local.disks.storage_pool_type
     type              = local.disks.type
   }
 
@@ -55,15 +63,16 @@ build {
   description = "Build Proxmox template from ISO"
 
   #  ! 1. PRE_SEED: Create VM from ISO
-  sources = ["source.proxmox.iso_install"]
+  sources = ["source.proxmox-iso.ubuntu-kickstart"]
 
   # ! 2. PROVISION: Apply Ansible role(s)
   provisioner "ansible" {
-    pause_before        = "15s"
-    ansible_env_vars    = local.map_ansible_vars
-    inventory_directory = local.inventory_folder
-    playbook_file       = local.build_playbook
-    use_proxy           = false
+    pause_before           = "15s"
+    ansible_env_vars       = local.map_ansible_vars
+    ansible_ssh_extra_args = local.map_ansible_ssh_args
+    inventory_directory    = local.inventory_folder
+    playbook_file          = local.build_playbook
+    use_proxy              = false
     extra_arguments = [
       "--extra-vars", "ansible_ssh_pass=${local.ssh_password}"
     ]

@@ -1,0 +1,35 @@
+---
+version: '3'
+
+volumes:
+  {{ swingmusic_volume }}:
+    driver: local
+
+services:
+  swingmusic:
+    image: ghcr.io/swingmx/swingmusic:latest
+    container_name: swingmusic
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    volumes:
+      - {{ swingmusic_volume }}:/config
+      - /mnt/music:/music:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.swingmusic.entrypoints=http"
+      - "traefik.http.routers.swingmusic.rule=Host(`{{ swingmusic_uri }}`)"
+      - "traefik.http.middlewares.swingmusic-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.swingmusic.middlewares=swingmusic-https-redirect"
+      - "traefik.http.routers.swingmusic-secure.entrypoints=https"
+      - "traefik.http.routers.swingmusic-secure.rule=Host(`{{ swingmusic_uri }}`)"
+      - "traefik.http.routers.swingmusic-secure.tls=true"
+      - "traefik.http.routers.swingmusic-secure.service=swingmusic"
+      - "traefik.http.services.swingmusic.loadbalancer.server.port={{ swingmusic_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

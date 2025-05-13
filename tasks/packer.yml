@@ -4,14 +4,14 @@ version: '3'
 tasks:
   build:
     dir: "{{.PACKER_DIR}}"
-    desc: Build Ubuntu 22.04 template from ISO
+    desc: Build Ubuntu 24.04 template from ISO
     cmds:
       # Always store initial template on "macmini1"
-      - ./build --node macmini1 --template ubuntu-22-04-iso
+      - ./build --node macmini1 --template ubuntu-24-04-iso
   build-all:
     dir: "{{.PACKER_DIR}}"
     desc: Build Ubuntu 22.04 template from ISO on all nodes
     cmds:
-      - ./build --node macmini1 --template ubuntu-22-04-iso
-      - ./build --node macmini2 --template ubuntu-22-04-iso
-      - ./build --node macmini3 --template ubuntu-22-04-iso
+      - ./build --node macmini1 --template ubuntu-24-04-iso
+      - ./build --node macmini2 --template ubuntu-24-04-iso
+      - ./build --node macmini3 --template ubuntu-24-04-iso

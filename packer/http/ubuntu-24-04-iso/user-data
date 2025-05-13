@@ -1,0 +1,68 @@
+#cloud-config
+#
+# See:
+# - https://ubuntu.com/server/docs/install/autoinstall-quickstart
+# - https://ubuntu.com/server/docs/install/autoinstall-reference
+# - https://github.com/canonical/subiquity/tree/main/examples
+# - https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+# !(LATEST) - https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html#user-data
+# !(LATEST) - https://cloudinit.readthedocs.io/en/latest/reference/modules.html#ubuntu-autoinstall
+#
+autoinstall:
+  version: 1
+  id: ubuntu-server
+  keyboard:
+    layout: us
+  locale: en_US.UTF-8
+  packages:
+    - cloud-init
+    - qemu-guest-agent
+  ssh:
+    allow-pw: true
+    install-server: true
+  storage:
+    layout:
+      name: direct
+    config:
+      - type: disk
+        id: disk0
+        match:
+          size: largest
+      - type: partition
+        id: boot-partition
+        device: disk0
+        size: 500M
+      - type: partition
+        id: root-partition
+        device: disk0
+        size: -1
+  updates: security
+  timezone: UTC
+  user-data:
+    disable_root: false
+    users:
+      #  Account setup + encrypted passwords
+      #  - Use "mkpasswd -s -m md5" or "mkpasswd -m sha-512" to hash password
+      #  - Command "mkpasswd" is part of "whois" package
+      - name: ubuntu
+        gecos: Ubuntu
+        lock_passwd: false
+        passwd: "$6$RF8y3rMqB$8XfcjMSI0wvWnOAvCItqbXdJ4Z1Mdj2l6cKwKq/lOo7NNgjfpMRubLtwKZtxxpvbGz1HzoOS7qbLiZFexQ2D9/"
+        shell: /bin/bash
+        ssh_import_id:
+          - gh:ifarfan
+        sudo: ALL=(ALL) NOPASSWD:ALL
+      - name: packer
+        gecos: Packer
+        lock_passwd: false
+        passwd: "$6$CnVx7VV3ebD$z9mrBzi3QEzJv.22.G4FWba8./W4/qTdh66ZKIqr4NQnqSY7E852xIZHwaTLV1D5NBCIlIk2A13lX4lp1HYcF/"
+        shell: /bin/bash
+        ssh_import_id:
+          - gh:ifarfan
+        sudo: ALL=(ALL) NOPASSWD:ALL
+  write_files:
+  - content: |
+      127.0.0.1          localhost
+    path: /etc/hosts
+    owner: root:root
+    permissions: '0644'

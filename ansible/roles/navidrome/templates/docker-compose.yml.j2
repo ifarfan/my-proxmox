@@ -7,7 +7,7 @@ volumes:
 
 services:
   navidrome:
-    image: deluan/navidrome:latest
+    image: deluan/navidrome:{{ navidrome_image_version }}
     container_name: navidrome
     restart: unless-stopped
     security_opt:

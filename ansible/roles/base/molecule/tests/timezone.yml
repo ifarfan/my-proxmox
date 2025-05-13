@@ -7,7 +7,7 @@ file:
     group: root
     filetype: file
     contains:
-      - Etc/UTC
+      - UTC
 
 package:
   tzdata:

@@ -8,40 +8,43 @@
         icon: proxmox.png
         href: https://m1.{{ global_domain }}:8006/
         description: 'Proxmox Server: M1'
-        ping: https://m1.{{ global_domain }}:8006/
+        siteMonitor: https://m1.{{ global_domain }}:8006/
         widget:
           type: proxmox
           url: https://m1.{{ global_domain }}:8006
           username: {{ homepage_proxmox_user }}
           password: {{ homepage_proxmox_secret }}
+          node: macmini1
     -
       M2:
         icon: proxmox.png
         href: https://m2.{{ global_domain }}:8006/
         description: 'Proxmox Server: M2'
-        ping: https://m2.{{ global_domain }}:8006/
+        siteMonitor: https://m2.{{ global_domain }}:8006/
         widget:
           type: proxmox
           url: https://m2.{{ global_domain }}:8006
           username: {{ homepage_proxmox_user }}
           password: {{ homepage_proxmox_secret }}
+          node: macmini2
     -
       M3:
         icon: proxmox.png
         href: https://m3.{{ global_domain }}:8006/
         description: 'Proxmox Server: M3'
-        ping: https://m3.{{ global_domain }}:8006/
+        siteMonitor: https://m3.{{ global_domain }}:8006/
         widget:
           type: proxmox
           url: https://m3.{{ global_domain }}:8006
           username: {{ homepage_proxmox_user }}
           password: {{ homepage_proxmox_secret }}
+          node: macmini3
     -
       DS1:
         icon: synology.png
         href: http://ds1.{{ global_domain }}:5000/
         description: NAS Server
-        ping: http://ds1.{{ global_domain }}:5000/
+        siteMonitor: http://ds1.{{ global_domain }}:5000/
         widget:
           type: diskstation
           url: http://ds1.{{ global_domain }}:5000
@@ -52,25 +55,25 @@
         icon: oracle-cloud.png
         href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
         description: Oracle Cloud
-        ping: https://cloud.oracle.com/
+        siteMonitor: https://cloud.oracle.com/
     -
       FIOS:
         icon: fios.png
         href: http://192.168.1.1/#/setup
         description: Home Router FIOS
-        ping: http://192.168.1.1/#/setup
+        siteMonitor: http://192.168.1.1/#/setup
     -
       Cloudflare:
         icon: cloudflare.png
         href: https://dash.cloudflare.com/
         description: DNS Hosting
-        ping: https://dash.cloudflare.com/login
+        siteMonitor: https://dash.cloudflare.com/login
     -
       Tailscale:
         icon: tailscale.png
         href: https://login.tailscale.com/admin/machines
         description: ZeroTrust VPN
-        ping: https://login.tailscale.com/
+        siteMonitor: https://login.tailscale.com/
 -
   System Apps:
     -
@@ -105,6 +108,7 @@
         widget:
           type: speedtest
           url: https://speedtest-tracker.{{ global_domain }}
+          bitratePrecision: 3
 -
   Monitoring:
     -
@@ -147,9 +151,39 @@
         description: Monitor Docker Logs
         server: my-docker
         container: dozzle
-
+    -
+      WUD:
+        icon: docker-compose.png
+        href: https://wud.{{ global_domain }}/
+        description: What's Up Docker
+        server: my-docker
+        container: wud
+    -
+      Guacamole:
+        icon: guacamole.png
+        href: https://guacamole.{{ global_domain }}/
+        description: Shell connection server
+        server: my-docker
+        container: guacamole
 -
   Internal Apps:
+    -
+      Navidrome:
+        icon: navidrome.png
+        href: https://navidrome.{{ global_domain }}/
+        description: Music player
+        server: my-docker
+        container: navidrome
+    -
+      Plex:
+        icon: plex.png
+        href: https://plex.{{ global_domain }}/web/index.html
+        description: Media Server
+        siteMonitor: https://plex.{{ global_domain }}/web/index.html
+        widget:
+          type: plex
+          url: https://plex.{{ global_domain }}
+          key: {{ homepage_plex_token }}
     -
       Linkding:
         icon: linkding.png
@@ -158,12 +192,12 @@
         server: my-docker
         container: linkding
     -
-      Outline:
-        icon: outline.png
-        href: https://outline.{{ global_domain }}/
-        description: Knowledge-base Wiki
+      Snippet-Box:
+        icon: snippetbox.png
+        href: https://snippet-box.{{ global_domain }}/snippets
+        description: Store Code Snippets
         server: my-docker
-        container: outline
+        container: snippet-box
     -
       n8n:
         icon: n8n.png
@@ -172,36 +206,12 @@
         server: my-docker
         container: n8n
     -
-      Plex:
-        icon: plex.png
-        href: https://plex.{{ global_domain }}/web/index.html
-        description: Media Server
-        ping: https://plex.{{ global_domain }}/web/index.html
-        widget:
-          type: plex
-          url: https://plex.{{ global_domain }}
-          key: {{ homepage_plex_token }}
-    -
-      Snippet-Box:
-        icon: snippetbox.png
-        href: https://snippet-box.{{ global_domain }}/snippets
-        description: Store Code Snippets
+      Outline:
+        icon: outline.png
+        href: https://outline.{{ global_domain }}/
+        description: Knowledge-base Wiki
         server: my-docker
-        container: snippet-box
-    -
-      WUD:
-        icon: docker-compose.png
-        href: https://wud.{{ global_domain }}/
-        description: What's Up Docker
-        server: my-docker
-        container: wud
-    # -
-    #   Bookstack:
-    #     icon: bookstack.png
-    #     href: https://bookstack.{{ global_domain }}/
-    #     description: Content + Wiki
-    #     server: my-docker
-    #     container: bookstack
+        container: outline
 -
   External Apps:
     -
@@ -209,16 +219,79 @@
         icon: github.png
         href: https://github.com/ifarfan
         description: Github Repos
-        ping: https://github.com/login
+        siteMonitor: https://github.com/login
     -
       CircleCI:
         icon: artifactory.png
         href: https://app.circleci.com/projects/project-dashboard/github/ifarfan/
         description: Hosted CI/CD
-        ping: https://github.com/login
+        siteMonitor: https://github.com/login
     -
       Dockerhub:
         icon: docker.png
         href: https://hub.docker.com/
         description: Hosted Container Registry
-        ping: https://hub.docker.com/login
+        siteMonitor: https://login.docker.com/u/login/identifier
+-
+  Financial:
+    -
+      Stocks:
+        icon: mdi-cash-multiple
+        description: Market data via Finnhub
+        widget:
+          type: stocks
+          provider: finnhub
+          showUSMarketStatus: true
+          watchlist:
+            - AAPL
+            - AMZN
+            - GOOGL
+            - MSFT
+            - NVDA
+            - TSLA
+    -
+      Stocks:
+        icon: mdi-cash-multiple
+        description: Crypto data via Finnhub
+        widget:
+          type: stocks
+          provider: finnhub
+          showUSMarketStatus: false
+          watchlist:
+            - AIQ
+            - AMAT
+            - AMD
+            - ANET
+            - ANSS
+            - ARM
+            - ASML
+            - AVGO
+    -
+      Stocks:
+        icon: mdi-cash-multiple
+        description: Crypto data via Finnhub
+        widget:
+          type: stocks
+          provider: finnhub
+          showUSMarketStatus: false
+          watchlist:
+            - CCJ
+            - ISRG
+            - LRCX
+            - PANW
+            - QCOM
+            - SMCI
+            - SMH
+            - SOUN
+    -
+      Stocks:
+        icon: mdi-cash-multiple
+        description: Currency data via Finnhub
+        widget:
+          type: stocks
+          provider: finnhub
+          showUSMarketStatus: false
+          watchlist:
+            - MSTR
+            - PLTR
+            - SCHD

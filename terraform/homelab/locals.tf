@@ -42,6 +42,8 @@ locals {
     "linkding",
     "rustdesk",
     "navidrome",
+    "guacamole",
+    "swingmusic",
   ]
 }
 

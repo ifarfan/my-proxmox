@@ -101,4 +101,4 @@ cron_job_to_remove:
   - cron.weekly/update-notifier-common
 
 locale: en_US.UTF-8
-time_zone: Etc/UTC
+time_zone: UTC

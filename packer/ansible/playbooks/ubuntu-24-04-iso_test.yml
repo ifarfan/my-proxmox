@@ -1,0 +1,21 @@
+---
+#
+# ? Ubuntu post-provisioning testing
+#
+- name: Test Ubuntu 24.04
+  hosts: default
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Run Goss tests for Ubuntu 24.04
+      ansible.builtin.include_role:
+        name: run_tests
+      vars:
+        role_to_test: base
+
+    - name: Run Goss tests for modern unix utilities
+      ansible.builtin.include_role:
+        name: run_tests
+      vars:
+        role_to_test: modern_unix

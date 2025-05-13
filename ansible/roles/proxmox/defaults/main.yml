@@ -138,18 +138,30 @@ os_image_list:
   -
     codename: ubuntu_jammy
     version: 22.04
-    iso: ubuntu-22.04.1-live-server-amd64.iso
-    url: https://releases.ubuntu.com/22.04/ubuntu-22.04.1-live-server-amd64.iso
-    checksum: sha256:10f19c5b2b8d6db711582e0e27f5116296c34fe4b313ba45f9b201a5007056cb
+    iso: ubuntu-22.04.5-live-server-amd64.iso
+    url: https://releases.ubuntu.com/jammy/ubuntu-22.04.5-live-server-amd64.iso
+    checksum: sha256:9bc6028870aef3f74f4e16b900008179e78b130e6b0b9a140635434a46aa98b0
   -
-    codename: k3os
-    version: 0.22.2
-    iso: k3os-amd64.iso
-    url: https://github.com/rancher/k3os/releases/download/v0.22.2-k3s2r0/k3os-amd64.iso
-    checksum: sha256:eae289cf81bdd68f23154b42c751ca571604625a1cfdbc239141c78287dd587c
+    codename: ubuntu_noble_numbat
+    version: 24.04
+    iso: ubuntu-24.04.2-live-server-amd64.iso
+    url: https://mirror.us.leaseweb.net/ubuntu-releases/24.04.2/ubuntu-24.04.2-live-server-amd64.iso
+    checksum: sha256:d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d
   -
     codename: talos
-    version: 1.2.6
+    version: 1.9.5
     iso: talos-amd64.iso
-    url: https://github.com/siderolabs/talos/releases/download/v1.2.6/talos-amd64.iso
-    checksum: sha256:8bcfab6c28df52549e7c787d97757466f7ff601e058ffd54e3cc3f957c57a89f
+    url: https://github.com/siderolabs/talos/releases/download/v1.9.5/metal-amd64.iso
+    checksum: sha256:b85af09aeef9b510648f14280fdb4e1ecd676e462e39f1c0f56388a0cf34fc5a
+  -
+    codename: nixos-gnome
+    version: 24.11
+    iso: nixos-gnome-x86_64-linux.iso
+    url: https://channels.nixos.org/nixos-24.11/latest-nixos-gnome-x86_64-linux.iso
+    checksum: sha256:f2935c3d24372eec5d94dfc9577693cce754b391d0265194cd71864261139dc5.
+  -
+    codename: nixos-minimal
+    version: 24.11
+    iso: nixos-minimal-x86_64-linux.iso
+    url: https://channels.nixos.org/nixos-24.11/latest-nixos-minimal-x86_64-linux.iso
+    checksum: sha256:659a056261404810703188b986b818a723fd0bcf650e58c1ea9857086612822a

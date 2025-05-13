@@ -13,6 +13,7 @@ tasks:
       - terraform init
       - terraform fmt && terraform validate
       - terraform plan
+      - terraform apply -target=module.my_lxc.cloudflare_record.cname_records
       # - terraform apply -auto-approve -target=module.my_lxc.cloudflare_record.cname_records
 
   create-lxc:
@@ -155,3 +156,15 @@ tasks:
     desc: Provision "Navidrome" on Homelab LXC
     cmds:
       - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag navidrome
+
+  provision-guacamole:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "Guacamole" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag guacamole
+
+  provision-swingmusic:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision "SwingMusic" on Homelab LXC
+    cmds:
+      - ansible-playbook -i inventories/proxmox homelab-provision.yml --tag swingmusic
