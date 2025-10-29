@@ -76,7 +76,7 @@ locals {
     "<del><del><del><del><del><del><del><del>",
     "<del><del><del><del><del><del><del><del>",
     "set gfxpayload=keep<enter><wait3s>",
-    "linux /casper/vmlinuz --- autoinstall ip=dhcp cloud-config-url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}/user-data<enter><wait3s>",
+    "linux /casper/vmlinuz autoinstall ip=dhcp cloud-config-url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/${var.vm_name}/user-data --- <enter><wait3s>",
     "initrd /casper/initrd<enter><wait3s>",
     "boot<enter><wait3s>",
     "<f10><wait3s>"

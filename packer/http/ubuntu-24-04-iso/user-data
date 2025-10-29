@@ -9,6 +9,11 @@
 # !(LATEST) - https://cloudinit.readthedocs.io/en/latest/reference/modules.html#ubuntu-autoinstall
 #
 autoinstall:
+  apt:
+    mirror-selection:
+      primary:
+        - uri: https://mirror.us.leaseweb.net/ubuntu/
+        - uri: https://mirrors.bloomu.edu/ubuntu/
   version: 1
   id: ubuntu-server
   keyboard:

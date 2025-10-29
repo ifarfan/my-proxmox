@@ -10,7 +10,7 @@ tasks:
       - ./build --node macmini1 --template ubuntu-24-04-iso
   build-all:
     dir: "{{.PACKER_DIR}}"
-    desc: Build Ubuntu 22.04 template from ISO on all nodes
+    desc: Build Ubuntu 24.04 template from ISO on all nodes
     cmds:
       - ./build --node macmini1 --template ubuntu-24-04-iso
       - ./build --node macmini2 --template ubuntu-24-04-iso

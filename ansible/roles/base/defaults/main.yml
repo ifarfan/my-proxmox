@@ -42,7 +42,7 @@ apt_pkgs_to_remove:
   - usbmuxd
   - wireless-regdb
   - xfsprogs
-  - xkb-data
+  # - xkb-data  # !!! breaks the uninstall step if added
   - zstd
 
 apt_pkgs_to_install:
