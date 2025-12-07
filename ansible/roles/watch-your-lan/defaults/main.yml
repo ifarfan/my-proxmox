@@ -1,4 +1,0 @@
----
-wyl_directory: /opt/watch-your-lan
-wyl_uri: wyl.{{ global_domain }}
-wyl_port: 8840

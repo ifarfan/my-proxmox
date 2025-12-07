@@ -74,8 +74,3 @@
       ansible.builtin.include_role:
         name: speedtest_tracker
       tags: speedtest_tracker
-
-    - name: Install WatchYourLan
-      ansible.builtin.include_role:
-        name: watch-your-lan
-      tags: watch-your-lan
