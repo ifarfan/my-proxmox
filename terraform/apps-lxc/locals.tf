@@ -36,7 +36,6 @@ locals {
     "plex",
     "rustdesk",
     "speedtest-tracker",
-    "wyl",
     # "grafana",
     # "loki",
     # "prometheus",

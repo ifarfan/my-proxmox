@@ -107,9 +107,3 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag speedtest_tracker"
-
-  provision-watch-your-lan:
-    desc: Provision "Watch Your Lan" on '{{.APPS_LXC_HOST}}'"
-    dir: "{{.ANSIBLE_DIR}}"
-    cmds:
-      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag watch-your-lan"

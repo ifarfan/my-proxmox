@@ -10,7 +10,7 @@
     masked: true
   loop: "{{ services_2_disable }}"
   ignore_errors: true                     # noqa ignore-errors
-  when: is_lxc == false
+  when: not is_lxc
 
 - name: Uninstall Packages
   ansible.builtin.apt:
