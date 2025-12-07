@@ -7,5 +7,5 @@ tailscale_authkey: "{{ lookup('ansible.builtin.ini', 'auth_key', section='tailsc
 tailscale_routes: 192.168.136.0/24
 
 # yamllint disable rule:line-length
-tailscale_apt_gpg_key: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}/{{ ansible_distribution_release|lower }}.gpg"
-tailscale_apt_repository: "deb https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }} {{ ansible_distribution_release|lower }} main"
+tailscale_apt_gpg_key: "https://pkgs.tailscale.com/stable/{{ ansible_distribution | lower }}/{{ ansible_distribution_release | lower }}.gpg"
+tailscale_apt_repository: "deb https://pkgs.tailscale.com/stable/{{ ansible_distribution | lower }} {{ ansible_distribution_release | lower }} main"

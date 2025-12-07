@@ -8,7 +8,7 @@
     owner: root
     group: root
     mode: 0644
-    register: tailscale_file
+  register: tailscale_file
 
 - name: run sysctl cmd
   ansible.builtin.command: sysctl --system

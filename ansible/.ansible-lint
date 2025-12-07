@@ -5,8 +5,10 @@ skip_list:
   - meta-no-info
 
 warn_list:
-  - yaml[line-length]
+  - key-order[task]
   - no-handler
+  - name[casing]
+  - yaml[line-length]
 
 exclude_paths:
   - roles/base/molecule/tests
