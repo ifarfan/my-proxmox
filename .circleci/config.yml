@@ -66,7 +66,7 @@ jobs:
       - checkout
       - run:
           name: Scan commits in PR for credentials/tokens/secrets
-          command: trufflehog filesystem --directory .
+          command: trufflehog filesystem .
 
 workflows:
   version: 2
