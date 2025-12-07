@@ -1,6 +1,13 @@
 ---
 use_default_rules: true
 
+skip_list:
+  - meta-no-info
+
+warn_list:
+  - yaml[line-length]
+  - no-handler
+
 exclude_paths:
   - roles/base/molecule/tests
   - roles/cloud_init/molecule/tests

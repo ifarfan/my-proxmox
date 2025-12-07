@@ -35,4 +35,4 @@
     -
       path: '/home/ubuntu/.bashrc'
       user: 'ubuntu'
-  when: is_lxc == false
+  when: not is_lxc

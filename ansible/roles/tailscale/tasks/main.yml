@@ -7,10 +7,10 @@
 
     - name: Configure Tailscale (Docker)
       ansible.builtin.import_tasks: tailscale-docker.yml
-      when: is_dockerized == true
+      when: is_dockerized
 
     - name: Configure Tailscale (Stand-alone)
       ansible.builtin.import_tasks: tailscale-standalone.yml
-      when: is_dockerized == false
+      when: not is_dockerized
 
   tags: tailscale

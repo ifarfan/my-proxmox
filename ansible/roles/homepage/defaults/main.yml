@@ -1,3 +1,4 @@
+# yamllint disable-file rule:line-length
 ---
 homepage_directory: /opt/homepage
 homepage_directory_config: "{{ homepage_directory }}/config"

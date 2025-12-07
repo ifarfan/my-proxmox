@@ -30,7 +30,7 @@
 
     - name: Install chrony
       ansible.builtin.import_tasks: chrony.yml
-  when: is_lxc == false
+  when: not is_lxc
 
 - name: Configure cron
   ansible.builtin.import_tasks: cron.yml

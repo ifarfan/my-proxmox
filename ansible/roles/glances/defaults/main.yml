@@ -1,3 +1,4 @@
+# yamllint disable-file rule:line-length
 ---
 glances_directory: /opt/glances
 glances_uri: "glances.{{ global_domain }}"

@@ -1,37 +1,38 @@
 ---
 - name: Install requirements
-  apt:
+  ansible.builtin.apt:
     name: gnupg
     state: present
 
 - name: Add Tailscale apt key
-  apt_key:
+  ansible.builtin.apt_key:
     url: "{{ tailscale_apt_gpg_key }}"
     state: present
 
 - name: Add Tailscale repo
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ tailscale_apt_repository }}"
     state: present
     update_cache: true
 
 - name: Install Tailscale
-  package:
+  ansible.builtin.package:
     name: tailscale
     state: present
 
 - name: Ensure Tailscale is running + enabled
-  service:
+  ansible.builtin.service:
     name: tailscaled
     state: started
     enabled: true
 
 - name: Assert that tailscale_authkey is not empty
-  assert:
+  ansible.builtin.assert:
     that:
       - tailscale_authkey | length > 0
     quiet: true
 
 - name: Register node
-  command: |
+  ansible.builtin.command: |
     tailscale up --authkey="{{ tailscale_authkey }}" --timeout="60s" --accept-routes
+  changed_when: true
