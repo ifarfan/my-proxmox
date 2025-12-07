@@ -1,4 +1,3 @@
-# yamllint disable-file rule:line-length
 ---
 app_directory: /opt/ts-cf-dns-sync
 

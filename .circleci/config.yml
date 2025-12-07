@@ -47,7 +47,7 @@ jobs:
           command: tflint --init
       - run:
           name: Lint Terraform files
-          command: tflint .
+          command: tflint --chdir=.
           environment:
             TFLINT_LOG: "error"
   checkov:

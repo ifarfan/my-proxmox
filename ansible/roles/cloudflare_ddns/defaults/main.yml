@@ -1,4 +1,3 @@
-# yamllint disable-file rule:line-length
 ---
 cloudflare_ddns_directory: /opt/cloudflare_ddns
 
