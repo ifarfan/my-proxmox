@@ -1,0 +1,25 @@
+/*
+See https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.71.0/oci_cli_docs/cmdref/network/nsg/rules/update.html
+
+NSG_ID=$(oci network nsg list --query data[0].id --raw-output)
+oci network nsg rules update --nsg-id ${NSG_ID} --generate-full-command-json-input
+*/
+{
+  "nsgId": "__NSG_ID__",
+  "securityRules": [
+    {
+      "description": "My home address: __TODAY__",
+      "destination": null,
+      "destinationType": null,
+      "direction": "INGRESS",
+      "icmpOptions": null,
+      "id": "26F1BD",
+      "isStateless": false,
+      "protocol": "all",
+      "source": "__HOME_IP__/32",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": null,
+      "udpOptions": null
+    }
+  ]
+}

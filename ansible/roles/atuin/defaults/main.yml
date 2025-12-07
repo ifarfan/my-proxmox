@@ -1,0 +1,9 @@
+---
+atuin_directory: /opt/atuin
+atuin_version: v18.10.0
+atuin_uri: "atuin.{{ global_domain }}"
+atuin_port: 8888
+
+atuin_db_username: "{{ lookup('ansible.builtin.ini', 'atuin_db_username', section='atuin', file='credentials.ini') }}"
+atuin_db_password: "{{ lookup('ansible.builtin.ini', 'atuin_db_password', section='atuin', file='credentials.ini') }}"
+atuin_db_name: "{{ lookup('ansible.builtin.ini', 'atuin_db_name', section='atuin', file='credentials.ini') }}"

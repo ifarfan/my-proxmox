@@ -1,0 +1,6 @@
+---
+cloudflare_ddns_directory: /opt/cloudflare_ddns
+
+cloudflare_ddns_api_token: "{{ lookup('ansible.builtin.ini', 'api_token', section='cloudflare-ddns', file='credentials.ini') }}"
+cloudflare_ddns_zone: "{{ lookup('ansible.builtin.ini', 'zone', section='cloudflare-ddns', file='credentials.ini') }}"
+cloudflare_ddns_subdomain: "{{ lookup('ansible.builtin.ini', 'subdomain', section='cloudflare-ddns', file='credentials.ini') }}"

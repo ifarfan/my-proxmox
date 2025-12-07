@@ -1,12 +1,6 @@
 ---
 # For configuration options and examples, please see:
 # https://github.com/benphelps/homepage/wiki/Information-Widgets
-- resources:
-    expanded: true
-    cpu: true
-    memory: true
-    disk: /var/lib/docker
-
 - search:
     provider: [google, bing, duckduckgo]
     target: _blank
@@ -20,4 +14,20 @@
     apiKey: {{ homepage_openweathermap_api }}
     cache: 5
     format:
-      maximumFractionDigits: 1
+      maximumFractionDigits: 0
+
+- glances:
+    url: https://{{ glances_uri }}
+    username: {{ glances_username }}
+    password: {{ glances_password }}
+    version: 4
+    cpu: true
+    mem: true
+    cputemp: true
+    uptime: true
+    disk:
+      - /
+      - /mnt/docker
+      - /mnt/opt
+    diskUnits: bytes
+    expanded: true

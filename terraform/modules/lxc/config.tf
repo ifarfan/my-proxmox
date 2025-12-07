@@ -6,7 +6,7 @@ provider "proxmox" {
 
   #  Enable logging
   pm_log_enable = true
-  pm_log_file   = "../logs/homelab.log"
+  pm_log_file   = "../logs/lxc.log"
   pm_log_levels = {
     _default    = "debug"
     _capturelog = ""

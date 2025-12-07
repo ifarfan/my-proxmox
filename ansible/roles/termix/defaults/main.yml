@@ -1,0 +1,5 @@
+---
+termix_directory: /opt/termix
+termix_version: release-1.9.0
+termix_uri: "termix.{{ global_domain }}"
+termix_port: 8081

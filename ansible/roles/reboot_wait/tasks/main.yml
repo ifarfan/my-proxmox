@@ -1,0 +1,10 @@
+---
+- name: Reboot host + wait up to 2 mins
+  throttle: 1
+  ansible.builtin.reboot:
+    reboot_timeout: 120
+
+- name: Wait until host is accesible (timeout 5 mins)
+  ansible.builtin.wait_for:
+    port: 22
+    delay: 5

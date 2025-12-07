@@ -51,8 +51,3 @@
   ansible.builtin.apt:
     pkg: "{{ apt_pkgs_to_install }}"
     state: present
-
-- name: Enable HTTPS transport for apt
-  ansible.builtin.apt:
-    pkg: apt-transport-https
-    state: present

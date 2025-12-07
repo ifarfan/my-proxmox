@@ -1,0 +1,138 @@
+/*
+See https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.71.0/oci_cli_docs/cmdref/network/security-list/update.html
+
+SEC_LIST_ID=$(oci network vcn get \
+    --vcn-id "${VCN_ID}" \
+    --query 'data."default-security-list-id"' --raw-output)
+
+    oci network security-list update \
+    --security-list-id "${SEC_LIST_ID}" \
+    --generate-full-command-json-input
+*/
+{
+  "definedTags": null,
+  "displayName": "Default Security List for __VCN_NAME__",
+  "egressSecurityRules": [
+    {
+      "description": null,
+      "destination": "0.0.0.0/0",
+      "destinationType": "CIDR_BLOCK",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "all",
+      "tcpOptions": null,
+      "udpOptions": null
+    }
+  ],
+  "force": true,
+  "freeformTags": {},
+  "ifMatch": null,
+  "ingressSecurityRules": [
+    {
+      "description": "Home IP: SSH",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": "__HOME_IP__/32",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 22,
+          "min": 22
+        },
+        "sourcePortRange": null
+      },
+      "udpOptions": null
+    },
+    {
+      "description": "Home IP: Node Exporter",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": "__HOME_IP__/32",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 9100,
+          "min": 9100
+        },
+        "sourcePortRange": null
+      },
+      "udpOptions": null
+    },
+    {
+      "description": "Home IP: SSH alternative",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": "__HOME_IP__/32",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 1022,
+          "min": 1022
+        },
+        "sourcePortRange": null
+      },
+      "udpOptions": null
+    },
+    {
+      "description": "Everywhere: Ping",
+      "icmpOptions": {
+        "code": 4,
+        "type": 3
+      },
+      "isStateless": false,
+      "protocol": "1",
+      "source": "0.0.0.0/0",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": null,
+      "udpOptions": null
+    },
+    {
+      "description": "local VCN: Ping",
+      "icmpOptions": {
+        "code": null,
+        "type": 3
+      },
+      "isStateless": false,
+      "protocol": "1",
+      "source": "10.0.0.0/16",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": null,
+      "udpOptions": null
+    },
+    {
+      "description": "Home IP: Ping",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "1",
+      "source": "__HOME_IP__/32",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": null,
+      "udpOptions": null
+    },
+    {
+      "description": "Home IP: Dozzle Agent, docker logs",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": "string",
+      "source": "__HOME_IP__/32",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 7007,
+          "min": 7007
+        },
+        "sourcePortRange": null
+      },
+      "udpOptions": null
+    }
+  ],
+  "maxWaitSeconds": 500,
+  "securityListId": "__SEC_LIST_ID__",
+  "waitForState": [
+    "AVAILABLE"
+  ],
+  "waitIntervalSeconds": 60
+}

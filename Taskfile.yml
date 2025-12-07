@@ -5,22 +5,26 @@
 #
 version: '3'
 
-vars:
-  ANSIBLE_DIR: ./ansible
-  TERRAFORM_DIR: ./terraform
-  KUBERNETES_DIR: ./kubernetes
-  PACKER_DIR: ./packer
-  WAIT_SECS_LONG: 120
-  WAIT_SECS_MEDIUM: 30
-  WAIT_SECS_SHORT: 5
-
 includes:
+  apps-lxc: ./tasks/apps-lxc.yml
+  arr-lxc: ./tasks/arr-lxc.yml
   cloudflare: ./tasks/cloudflare.yml
-  homelab: ./tasks/homelab.yml
-  k3os: ./tasks/k3os.yml
-  k3s: ./tasks/k3s.yml
-  nomad: ./tasks/nomad.yml
+  debug-lxc: ./tasks/debug-lxc.yml
+  devbox-lxc: ./tasks/devbox-lxc.yml
+  # k3os: ./tasks/k3os.yml
+  # k3s: ./tasks/k3s.yml
   oracle: ./tasks/oracle.yml
   packer: ./tasks/packer.yml
   proxmox: ./tasks/proxmox.yml
-  talos: ./tasks/talos.yml
+  tailscale-lxc: ./tasks/tailscale-lxc.yml
+  # talos: ./tasks/talos.yml
+
+vars:
+  ANSIBLE_DIR: ./ansible
+  DOMAIN: macminis.net
+  KUBERNETES_DIR: ./kubernetes
+  PACKER_DIR: ./packer
+  TERRAFORM_DIR: ./terraform
+  WAIT_SECS_LONG: 120
+  WAIT_SECS_MEDIUM: 30
+  WAIT_SECS_SHORT: 5

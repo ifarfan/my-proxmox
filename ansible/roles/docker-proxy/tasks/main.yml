@@ -1,0 +1,23 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ proxy_directory }}"
+    state: directory
+    mode: 0755
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ proxy_directory }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create and start app
+  community.docker.docker_compose_v2:
+    project_src: "{{ proxy_directory }}"
+    recreate: always
+    pull: missing
+    remove_orphans: true
+    remove_volumes: true
+    state: restarted

@@ -1,28 +1,22 @@
 ---
-version: '3'
-
-volumes:
-  {{ speedtest_tracker_volume }}:
-    driver: local
-
 services:
   speedtest:
-    image: henrywhitaker3/speedtest-tracker:latest
+    image: lscr.io/linuxserver/speedtest-tracker:latest
     container_name: speedtest-tracker
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     networks:
       - traefik_default
     environment:
-      - OOKLA_EULA_GDPR=true
+      PUID: "1000"
+      PGID: "1000"
+      APP_KEY: "{{ speedtest_app_key }}"
+      DB_CONNECTION: "sqlite"
+      PUBLIC_DASHBOARD: "true"
+      DEFAULT_CHART_RANGE: "week"
+      SPEEDTEST_SERVERS: "29624,30410,38024,53682,29589"
+      SPEEDTEST_SCHEDULE: "7,37 * * * *"
     volumes:
-      - {{ speedtest_tracker_volume }}:/config
-    logging:
-      driver: "json-file"
-      options:
-        max-file: "10"
-        max-size: "200k"
+      - {{ speedtest_tracker_directory }}/config:/config
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.speedtest.entrypoints=http"
@@ -36,15 +30,15 @@ services:
       - "traefik.http.services.speedtest.loadbalancer.server.port={{ speedtest_tracker_port }}"
       - "traefik.docker.network=traefik_default"
 
-  # Daily restarts
-  # See: https://gist.github.com/kizzx2/782b500a81ce46b889903b1f80353f21
-  restarter:
-    image: docker:cli
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - {{ speedtest_tracker_directory }}/docker-compose.yml:/docker-compose.yml:ro
-    command: ["/bin/sh", "-c", "while true; do sleep 86400; docker compose -p speedtest_tracker restart speedtest; done"]
-    restart: unless-stopped
+  # # Daily restarts
+  # # See: https://gist.github.com/kizzx2/782b500a81ce46b889903b1f80353f21
+  # restarter:
+  #   image: docker:cli
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - {{ speedtest_tracker_directory }}/docker-compose.yml:/docker-compose.yml:ro
+  #   command: ["/bin/sh", "-c", "while true; do sleep 86400; docker compose -p speedtest_tracker restart speedtest; done"]
+  #   restart: unless-stopped
 
 networks:
   traefik_default:

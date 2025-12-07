@@ -1,0 +1,40 @@
+---
+services:
+  glances:
+    image: nicolargo/glances:{{ glances_image_version }}
+    container_name: glances
+    restart: unless-stopped
+    pid: host
+    privileged: true
+    networks:
+      - traefik_default
+    volumes:
+      - /etc/os-release:/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/:/mnt/docker/:ro
+      - /opt/:/mnt/opt/:ro
+    environment:
+      - "GLANCES_OPT=-w --password"
+    secrets:
+      - source: glances_password
+        target: /root/.config/glances/glances.pwd
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.glances.entrypoints=http"
+      - "traefik.http.routers.glances.rule=Host(`{{ glances_uri }}`)"
+      - "traefik.http.middlewares.glances-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.glances.middlewares=glances-https-redirect"
+      - "traefik.http.routers.glances-secure.entrypoints=https"
+      - "traefik.http.routers.glances-secure.rule=Host(`{{ glances_uri }}`)"
+      - "traefik.http.routers.glances-secure.tls=true"
+      - "traefik.http.routers.glances-secure.service=glances"
+      - "traefik.http.services.glances.loadbalancer.server.port={{ glances_port }}"
+      - "traefik.docker.network=traefik_default"
+
+secrets:
+  glances_password:
+    file: ./glances_password
+
+networks:
+  traefik_default:
+    external: true

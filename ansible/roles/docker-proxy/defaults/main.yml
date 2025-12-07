@@ -1,0 +1,3 @@
+---
+proxy_directory: /opt/docker-proxy
+proxy_port: 2375

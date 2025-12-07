@@ -1,5 +1,0 @@
----
-home_assistant_directory: /opt/home_assistant
-home_assistant_volume: data
-home_assistant_uri: home-assistant.{{ global_domain }}
-home_assistant_port: 8123

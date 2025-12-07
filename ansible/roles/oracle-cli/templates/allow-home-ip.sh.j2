@@ -1,0 +1,48 @@
+#/bin/env bash
+#
+# Script to allow home IP in Oracle Cloud Infrastructure
+# Update both "Security List" rules and "Network Security Group" rules
+# using OCI CLI + cron
+
+# Get Home IP -- refreshed automatically, in home network, via Cloudflare DDNS
+HOME_IP=$(dig +short philly.macminis.net)
+
+# Timestamp
+TODAY=$(date +%F)
+
+# Virtual Cloud Network values
+VCN_ID=$(oci network vcn list --query data[0].id --raw-output)
+VCN_NAME=$(oci network vcn list --query 'data[0]."display-name"' --raw-output)
+
+# ? Security Lists
+# See https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.71.0/oci_cli_docs/cmdref/network/security-list/update.html
+SEC_LIST_ID=$(oci network vcn get \
+    --vcn-id "${VCN_ID}" \
+    --query 'data."default-security-list-id"' --raw-output)
+# oci network security-list list --vcn-id "${VCN_ID}"
+# oci network security-list get --security-list-id "${SEC_LIST_ID}"
+oci network security-list update \
+    --security-list-id "${SEC_LIST_ID}" \
+    --security-rules file://security-list–rules.json \
+    --force
+
+oci network vcn get --vcn-id "ocid1.vcn.oc1.iad.amaaaaaauzlseliagrkywedrh73zhgowcchyc2az3vs6755ciu47c7ng3yhq" --query 'data."default-security-list-id"' --raw-output
+oci network security-list list --vcn-id "ocid1.vcn.oc1.iad.amaaaaaauzlseliagrkywedrh73zhgowcchyc2az3vs6755ciu47c7ng3yhq"
+oci network security-list get --security-list-id ocid1.securitylist.oc1.iad.aaaaaaaarei4tfq4rlo2asva3b4tjp2qxtqycxjbyek5xrvs7tyoj3qojitq
+oci network security-list update --security-list-id ocid1.securitylist.oc1.iad.aaaaaaaarei4tfq4rlo2asva3b4tjp2qxtqycxjbyek5xrvs7tyoj3qojitq --generate-full-command-json-input
+
+# ? Network Security Group
+# See https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.71.0/oci_cli_docs/cmdref/network/nsg/rules/update.html
+NSG_ID=$(oci network nsg list \
+    --query data[0].id \
+    --raw-output)
+# oci network nsg rules list --nsg-id ${NSG_ID}
+oci network nsg rules update \
+    --nsg-id ${NSG_ID} \
+    --security-rules file://nsg-rules.json
+
+oci network nsg get --nsg-id ocid1.networksecuritygroup.oc1.iad.aaaaaaaacjynssa6zre5ghgqbvdxbzunyualamqzpl6aikmkjkbjpv5whg7q
+oci network nsg rules list --nsg-id ocid1.networksecuritygroup.oc1.iad.aaaaaaaacjynssa6zre5ghgqbvdxbzunyualamqzpl6aikmkjkbjpv5whg7q
+oci network nsg rules update --nsg-id ocid1.networksecuritygroup.oc1.iad.aaaaaaaacjynssa6zre5ghgqbvdxbzunyualamqzpl6aikmkjkbjpv5whg7q --security-rules file://update_rules.json
+oci network nsg rules update --nsg-id ocid1.networksecuritygroup.oc1.iad.aaaaaaaacjynssa6zre5ghgqbvdxbzunyualamqzpl6aikmkjkbjpv5whg7q --generate-full-command-json-input
+

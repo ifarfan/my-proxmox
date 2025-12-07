@@ -15,3 +15,18 @@
     - name: Install Prometheus Node Exporter
       ansible.builtin.include_role:
         name: node_exporter
+
+    # ? Docker daemon + docker compose apps
+    - name: Install docker
+      ansible.builtin.include_role:
+        name: docker
+
+    - name: Install docker-proxy
+      ansible.builtin.include_role:
+        name: docker-proxy
+
+    - name: Install dozzle
+      ansible.builtin.include_role:
+        name: dozzle
+      vars:
+        is_agent: true

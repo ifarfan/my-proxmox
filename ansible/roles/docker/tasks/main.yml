@@ -41,12 +41,6 @@
     mode: 0644
   notify: restart docker
 
-- name: Install docker pip dependencies
-  ansible.builtin.pip:
-    name:
-      - docker
-      - docker-compose
-
 - name: Uninstall conflicting packages
   ansible.builtin.apt:
     pkg:

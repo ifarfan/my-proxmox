@@ -1,6 +1,0 @@
----
-navidrome_directory: /opt/navidrome
-navidrome_volume: data
-navidrome_uri: navidrome.{{ global_domain }}
-navidrome_port: 4533
-navidrome_image_version: 0.53.2

@@ -1,15 +1,16 @@
 ---
 #
 # - To force encryption, add "-k _" to both daemons
-# - Key located under ./data/id_ed25519.pub
+# - Key located under /opt/rustdesk/data/id_ed25519.pub
 # - Add said key to both "connect requestor" and "connect node"
+# - On client,
+# -   click on 3-dot
+# -   navigate to "Settings" > "Network":
+# -   under "ID/Relay Server", update
+# -    "ID Server" (i.e., rustdesk host IP address) &
+# -    "Key" (i.e., public key)
+# -   Click "Apply"
 #
-version: '3'
-
-volumes:
-  {{ rustdesk_volume }}:
-    driver: local
-
 services:
   hbbs:
     image: rustdesk/rustdesk-server:latest
@@ -21,7 +22,7 @@ services:
       - 21118:21118
     command: hbbs -r rustdesk.macminis.net:21117 -k _
     volumes:
-      - {{ rustdesk_volume }}:/root
+      - {{ rustdesk_directory }}/data:/root
     networks:
       - rustdesk_default
     depends_on:
@@ -36,7 +37,7 @@ services:
       - 21119:21119
     command: hbbr -k _
     volumes:
-      - {{ rustdesk_volume }}:/root
+      - {{ rustdesk_directory }}/data:/root
     networks:
       - rustdesk_default
     restart: unless-stopped

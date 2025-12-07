@@ -1,4 +1,0 @@
----
-snippet_box_directory: /opt/snippet-box
-snippet_box_uri: snippet-box.{{ global_domain }}
-snippet_box_port: 5000

@@ -1,0 +1,10 @@
+---
+- name: Ubuntu 22.04 to 24.04 Upgrade
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    # ? Upgrade to 24.04, if applicable
+    - name: Upgrade to 24.04
+      ansible.builtin.include_role:
+        name: upgrade22_to_24

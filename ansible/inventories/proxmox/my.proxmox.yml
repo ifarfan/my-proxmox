@@ -24,7 +24,10 @@ groups:
   k8s-agents: '"k8s-agent" in proxmox_hostname'
   k8s-data: '"k8s-data" in proxmox_hostname'
   # other
+  devbox-lxc: '"devbox-lxc" in proxmox_hostname'
   homelab: '"homelab" in proxmox_hostname'
+  homelab-lxc: '"homelab-lxc" in proxmox_hostname'
+  homelab-vm: '"homelab-vm" in proxmox_hostname'
   portainer: '"portainer" in proxmox_hostname'
 compose:
   ansible_host: proxmox_net0.ip | replace("/32", "")

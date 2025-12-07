@@ -1,5 +1,0 @@
----
-linkding_directory: /opt/linkding
-linkding_volume: data
-linkding_uri: linkding.{{ global_domain }}
-linkding_port: 9090

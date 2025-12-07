@@ -1,14 +1,8 @@
 ---
-version: '3'
-
-volumes:
-  {{ portainer_volume }}:
-    driver: local
-
 services:
   portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
+    image: "portainer/portainer-ce:{{ portainer_version }}"
+    container_name: "portainer"
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -16,7 +10,7 @@ services:
       - traefik_default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - {{ portainer_volume }}:/data
+      - {{ portainer_directory }}/data:/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=http"

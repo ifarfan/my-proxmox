@@ -1,6 +1,14 @@
 ---
 # For configuration options and examples, please see:
-# https://github.com/benphelps/homepage/wiki/Docker-Integration
-
-my-docker:
+# - https://gethomepage.dev/configs/services/#docker-integration
+# - https://gethomepage.dev/configs/docker/
+apps-local-docker:
   socket: /var/run/docker.sock
+
+tailscale-docker:
+  host: tailscale-lxc.macminis.net
+  port: 2375
+
+devbox-docker:
+  host: devbox-lxc.macminis.net
+  port: 2375

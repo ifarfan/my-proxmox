@@ -17,12 +17,13 @@
         mode: 0644
 
     - name: Create and start app
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: "{{ speedtest_tracker_directory }}"
         recreate: always
+        pull: missing
         remove_orphans: true
         remove_volumes: true
-        restarted: true
+        state: restarted
 
     - name: Wait until site is up
       ansible.builtin.uri:

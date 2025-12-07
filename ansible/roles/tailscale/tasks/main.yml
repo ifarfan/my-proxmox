@@ -1,37 +1,16 @@
 ---
-- name: Install requirements
-  apt:
-    name: gnupg
-    state: present
+- name: Configure Tailscale
+  block:
 
-- name: Add Tailscale apt key
-  apt_key:
-    url: "{{ tailscale_apt_gpg_key }}"
-    state: present
+    - name: Configure SysCtl
+      ansible.builtin.import_tasks: sysctl.yml
 
-- name: Add Tailscale repo
-  apt_repository:
-    repo: "{{ tailscale_apt_repository }}"
-    state: present
-    update_cache: true
+    - name: Configure Tailscale (Docker)
+      ansible.builtin.import_tasks: tailscale-docker.yml
+      when: is_dockerized == true
 
-- name: Install Tailscale
-  package:
-    name: tailscale
-    state: present
+    - name: Configure Tailscale (Stand-alone)
+      ansible.builtin.import_tasks: tailscale-standalone.yml
+      when: is_dockerized == false
 
-- name: Ensure Tailscale is running + enabled
-  service:
-    name: tailscaled
-    state: started
-    enabled: true
-
-- name: Assert that tailscale_register_authkey is not empty
-  assert:
-    that:
-      - tailscale_register_authkey | length > 0
-    quiet: true
-
-- name: Register node
-  command: |
-    tailscale up --authkey="{{ tailscale_register_authkey }}" --timeout="60s" --accept-routes
+  tags: tailscale

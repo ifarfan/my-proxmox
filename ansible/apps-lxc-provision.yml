@@ -1,0 +1,81 @@
+---
+- name: Apps provisioning
+  hosts: apps-lxc.macminis.net
+  become: true
+  gather_facts: true
+  tasks:
+    # ? Base OS install + fixings
+    - name: Install Ubuntu LXC base
+      ansible.builtin.include_role:
+        name: base
+      vars:
+        is_lxc: true
+
+    - name: Install Modern Unix utilities
+      ansible.builtin.include_role:
+        name: modern_unix
+
+    # ? Docker daemon + docker compose apps
+    - name: Install Docker
+      ansible.builtin.include_role:
+        name: docker
+
+    # ? Docker apps
+    - name: Install Traefik
+      ansible.builtin.include_role:
+        name: traefik
+      vars:
+        hostname_in_uri: true
+      tags: traefik
+
+    - name: Install Portainer
+      ansible.builtin.include_role:
+        name: portainer
+      vars:
+        hostname_in_uri: true
+      tags: portainer
+
+    - name: Install Termix
+      ansible.builtin.include_role:
+        name: termix
+      tags: termix
+
+    - name: Install Cloudflare DDNS
+      ansible.builtin.include_role:
+        name: cloudflare_ddns
+      tags: cloudflare_ddns
+
+    - name: Install Homepage
+      ansible.builtin.include_role:
+        name: homepage
+      tags: homepage
+
+    - name: Install Glances
+      ansible.builtin.include_role:
+        name: glances
+      tags: glances
+
+    - name: Install Dozzle
+      ansible.builtin.include_role:
+        name: dozzle
+      tags: dozzle
+
+    - name: Install Atuin
+      ansible.builtin.include_role:
+        name: atuin
+      tags: atuin
+
+    - name: Install RustDesk
+      ansible.builtin.include_role:
+        name: rustdesk
+      tags: rustdesk
+
+    - name: Install Speedtest-Tracker
+      ansible.builtin.include_role:
+        name: speedtest_tracker
+      tags: speedtest_tracker
+
+    - name: Install WatchYourLan
+      ansible.builtin.include_role:
+        name: watch-your-lan
+      tags: watch-your-lan

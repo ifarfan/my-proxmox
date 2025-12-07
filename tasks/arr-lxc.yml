@@ -1,0 +1,61 @@
+---
+version: '3'
+
+vars:
+  ARR_LXC_HOST: arr-lxc
+  ARR_LXC_HOST_FQDN: "{{.ARR_LXC_HOST}}.{{.DOMAIN}}"
+  ARR_LXC_TF_DIR: "{{.TERRAFORM_DIR}}/{{.ARR_LXC_HOST}}"
+  ARR_LXC_ANSIBLE_PLAYBOOK: "{{.ARR_LXC_HOST}}-provision.yml"
+
+tasks:
+  check:
+    desc: "Check '{{.ARR_LXC_HOST}}' host vars"
+    dir: "{{.ARR_LXC_TF_DIR}}"
+    cmds:
+      - "echo ARR_LXC_HOST={{.ARR_LXC_HOST}}"
+      - "echo ARR_LXC_HOST_FQDN={{.ARR_LXC_HOST_FQDN}}"
+      - "echo ARR_LXC_TF_DIR={{.ARR_LXC_TF_DIR}}"
+      - "echo ARR_LXC_ANSIBLE_PLAYBOOK={{.ARR_LXC_ANSIBLE_PLAYBOOK}}"
+
+  # ? Terraform
+  create:
+    desc: "Create '{{.ARR_LXC_HOST}}' host"
+    dir: "{{.ARR_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply
+
+  destroy:
+    desc: "Destroy '{{.ARR_LXC_HOST}}' host"
+    dir: "{{.ARR_LXC_TF_DIR}}"
+    cmds:
+      - terraform destroy -compact-warnings
+
+  update-dns:
+    desc: "Update DNS records for '{{.ARR_LXC_HOST}}' host"
+    dir: "{{.ARR_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -compact-warnings -target=module.my_lxc.cloudflare_record.cname_records
+
+  # ? Ansible
+  provision:
+    desc: "Provision '{{.ARR_LXC_HOST}}' via Ansible"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox -l {{.ARR_LXC_HOST_FQDN}} upgrade22_to_24.yml"
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}}"
+
+  provision-traefik:
+    desc: "Provision 'Traefik' on '{{.ARR_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag traefik"
+
+  provision-portainer:
+    desc: "Provision 'Portainer' on '{{.ARR_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag portainer"

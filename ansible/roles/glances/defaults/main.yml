@@ -1,0 +1,10 @@
+---
+glances_directory: /opt/glances
+glances_uri: "glances.{{ global_domain }}"
+glances_port: 61208
+glances_image_version: 4.4.1
+
+# See https://glances.readthedocs.io/en/latest/docker.html#how-to-protect-your-dockerized-server-or-web-server-with-a-login-password
+glances_username: glances
+glances_password: "{{ lookup('ansible.builtin.ini', 'password', section='glances', file='credentials.ini') }}"
+glances_password_file_hash: "{{ lookup('ansible.builtin.ini', 'password_file_hash', section='glances', file='credentials.ini') }}"

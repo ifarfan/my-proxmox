@@ -1,7 +1,0 @@
----
-whoishomeui_directory: /opt/whoishomeui
-whoishomeui_volume: whoishomeui
-whoishomeui_uri: whoishomeui.{{ global_domain }}
-whoishomeui_port: 8000
-whoishomeui_tz: America/New_York
-whoishomeui_repo: https://github.com/DartLazer/WhoIsHomeUI.git

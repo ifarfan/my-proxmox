@@ -1,5 +1,0 @@
----
-swingmusic_directory: /opt/swingmusic
-swingmusic_volume: config
-swingmusic_uri: swingmusic.{{ global_domain }}
-swingmusic_port: 1970

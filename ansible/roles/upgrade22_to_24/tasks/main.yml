@@ -1,0 +1,34 @@
+---
+# ? Note:
+# ? - Upgrade OS from 22.04 to 24.04 by swapping the APT sources file
+# ? - Only if it's changed, proceed to do a global APT upgrade
+# ? - Reboot and wait for SSH to be available before moving on
+#
+# ? Ref: https://github.com/tteck/Proxmox/discussions/2904
+- name: Swap 22.04 for 24.04 references
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list
+    regexp: 'jammy'
+    replace: 'noble'
+  register: sources_file
+
+- name: Proceed with OS Upgrade
+  block:
+
+    - name: Update apt caches
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 600
+
+    - name: Upgrade OS Distribution
+      ansible.builtin.apt:
+        upgrade: dist
+        # dpkg_options: "force-confold"
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Reboot
+      ansible.builtin.include_role:
+        name: reboot_wait
+
+  when: sources_file is changed

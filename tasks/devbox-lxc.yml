@@ -1,0 +1,49 @@
+---
+version: '3'
+
+vars:
+  DEVBOX_LXC_HOST: devbox-lxc
+  DEVBOX_LXC_HOST_FQDN: "{{.DEVBOX_LXC_HOST}}.{{.DOMAIN}}"
+  DEVBOX_LXC_TF_DIR: "{{.TERRAFORM_DIR}}/{{.DEVBOX_LXC_HOST}}"
+  DEVBOX_LXC_ANSIBLE_PLAYBOOK: "{{.DEVBOX_LXC_HOST}}-provision.yml"
+
+tasks:
+  check:
+    desc: "Check '{{.DEVBOX_LXC_HOST}}' host vars"
+    dir: "{{.DEVBOX_LXC_TF_DIR}}"
+    cmds:
+      - "echo DEVBOX_LXC_HOST={{.DEVBOX_LXC_HOST}}"
+      - "echo DEVBOX_LXC_HOST_FQDN={{.DEVBOX_LXC_HOST_FQDN}}"
+      - "echo DEVBOX_LXC_TF_DIR={{.DEVBOX_LXC_TF_DIR}}"
+      - "echo DEVBOX_LXC_ANSIBLE_PLAYBOOK={{.DEVBOX_LXC_ANSIBLE_PLAYBOOK}}"
+
+  # ? Terraform
+  create:
+    desc: "Create '{{.DEVBOX_LXC_HOST}}' host"
+    dir: "{{.DEVBOX_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply
+
+  destroy:
+    desc: "Destroy '{{.DEVBOX_LXC_HOST}}' host"
+    dir: "{{.DEVBOX_LXC_TF_DIR}}"
+    cmds:
+      - terraform destroy -compact-warnings
+
+  update-dns:
+    desc: "Update DNS records for '{{.DEVBOX_LXC_HOST}}' host"
+    dir: "{{.DEVBOX_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -compact-warnings -target=module.my_lxc.cloudflare_record.cname_records
+
+  # ? Ansible
+  provision:
+    desc: "Provision '{{.DEVBOX_LXC_HOST}}' via Ansible"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox -l {{.DEVBOX_LXC_HOST_FQDN}} upgrade22_to_24.yml"
+      - "ansible-playbook -i inventories/proxmox {{.DEVBOX_LXC_ANSIBLE_PLAYBOOK}}"

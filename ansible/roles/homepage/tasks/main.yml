@@ -2,11 +2,14 @@
 - name: Configure homepage
   block:
 
-    - name: Create app directory
+    - name: Create app directories
       ansible.builtin.file:
-        path: "{{ homepage_directory }}"
+        path: "{{ item }}"
         state: directory
         mode: 0755
+      with_items:
+        - "{{ homepage_directory }}"
+        - "{{ homepage_directory_config }}"
 
     - name: Copy docker-compose file
       ansible.builtin.template:
@@ -19,7 +22,7 @@
     - name: Copy config files
       ansible.builtin.template:
         src: "{{ item }}.j2"
-        dest: "{{ homepage_directory }}/{{ item }}"
+        dest: "{{ homepage_directory_config }}/{{ item }}"
         owner: root
         group: root
         mode: 0644
@@ -34,6 +37,7 @@
       community.docker.docker_compose_v2:
         project_src: "{{ homepage_directory }}"
         recreate: always
+        pull: missing
         remove_orphans: true
         remove_volumes: true
         state: restarted

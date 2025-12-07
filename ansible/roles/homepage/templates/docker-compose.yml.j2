@@ -1,28 +1,20 @@
 ---
-version: '3'
-
-volumes:
-  {{ homepage_volume }}:
-    driver: local
-
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:{{ homepage_image_version }}
     container_name: homepage
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     networks:
       - traefik_default
     volumes:
-      - {{ homepage_volume }}:/app/config
-      - {{ homepage_directory }}/bookmarks.yaml:/app/config/bookmarks.yaml
-      - {{ homepage_directory }}/docker.yaml:/app/config/docker.yaml
-      - {{ homepage_directory }}/services.yaml:/app/config/services.yaml
-      - {{ homepage_directory }}/settings.yaml:/app/config/settings.yaml
-      - {{ homepage_directory }}/widgets.yaml:/app/config/widgets.yaml
+      - {{ homepage_directory_config }}:/app/config
+      # needed to monitor/report on other running containers
       - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker:/var/lib/docker
+      # volumes can't be RO, else "resource" widgets can't report them
+      - /opt:/mnt/opt
+      - /var/lib/docker:/mnt/docker
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: "*"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.homepage.entrypoints=http"

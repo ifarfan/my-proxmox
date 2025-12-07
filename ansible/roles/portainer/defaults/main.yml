@@ -1,5 +1,11 @@
 ---
+# ? Using older version
+# ? See: https://github.com/orgs/portainer/discussions/12926
+hostname_in_uri: false
+
 portainer_directory: /opt/portainer
-portainer_volume: data
-portainer_uri: portainer.{{ global_domain }}
+portainer_version: 2.20.2
 portainer_port: 9000
+
+portainer_host: "{{ 'portainer' if hostname_in_uri == false else 'portainer-' + inventory_hostname_short }}"
+portainer_uri: "{{ portainer_host }}.{{ global_domain }}"

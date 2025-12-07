@@ -1,0 +1,68 @@
+---
+services:
+  atuin:
+    image: "ghcr.io/atuinsh/atuin:{{ atuin_version }}"
+    container_name: "atuin"
+    restart: unless-stopped
+    command: server start
+    user: "0:0"
+    networks:
+      - traefik_default
+    volumes:
+      - {{ atuin_directory }}/config:/config
+    ports:
+      - "{{ atuin_port }}:{{ atuin_port }}"
+    environment:
+      ATUIN_HOST: "0.0.0.0"
+      ATUIN_OPEN_REGISTRATION: "true"
+      ATUIN_DB_URI: postgres://{{ atuin_db_username }}:{{ atuin_db_password }}@db/{{ atuin_db_name }}
+      RUST_LOG: info,atuin_server=debug
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.atuin.entrypoints=http"
+      - "traefik.http.routers.atuin.rule=Host(`{{ atuin_uri }}`)"
+      - "traefik.http.middlewares.atuin-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.atuin.middlewares=atuin-https-redirect"
+      - "traefik.http.routers.atuin-secure.entrypoints=https"
+      - "traefik.http.routers.atuin-secure.rule=Host(`{{ atuin_uri }}`)"
+      - "traefik.http.routers.atuin-secure.tls=true"
+      - "traefik.http.routers.atuin-secure.service=atuin"
+      - "traefik.http.services.atuin.loadbalancer.server.port={{ atuin_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  db:
+    image: postgres:14
+    container_name: "atuin-db"
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ atuin_directory }}/database/:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: {{ atuin_db_username }}
+      POSTGRES_PASSWORD: {{ atuin_db_password }}
+      POSTGRES_DB: {{ atuin_db_name }}
+
+  backup:
+    image: prodrigestivill/postgres-backup-local
+    container_name: "atuin-db-backups"
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ atuin_directory }}/db_dumps:/db_dumps
+    environment:
+      POSTGRES_HOST: postgresql
+      POSTGRES_USER: {{ atuin_db_username }}
+      POSTGRES_PASSWORD: {{ atuin_db_password }}
+      POSTGRES_DB: {{ atuin_db_name }}
+      SCHEDULE: "@daily"
+      BACKUP_DIR: /db_dumps
+    depends_on:
+      - db
+
+networks:
+  traefik_default:
+    external: true

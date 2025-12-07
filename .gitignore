@@ -1,8 +1,8 @@
 # Local .terraform directories
 **/.terraform/*
 
-# Only ignore .tfstate backup files
-*.tfstate.backup
+# Local .tfstate files
+*.tfstate*
 
 # Crash log files
 crash.log

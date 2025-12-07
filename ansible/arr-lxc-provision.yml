@@ -1,0 +1,46 @@
+---
+- name: "*Arrs provisioning"
+  hosts: arr-lxc.macminis.net
+  become: true
+  gather_facts: true
+  tasks:
+    # ? Base OS install + fixings
+    - name: Install Ubuntu LXC base
+      ansible.builtin.include_role:
+        name: base
+      vars:
+        is_lxc: true
+
+    - name: Install modern Unix utilities
+      ansible.builtin.include_role:
+        name: modern_unix
+
+    # ? Docker daemon + docker compose apps
+    - name: Install docker
+      ansible.builtin.include_role:
+        name: docker
+
+    - name: Install docker-proxy
+      ansible.builtin.include_role:
+        name: docker-proxy
+
+    - name: Install dozzle
+      ansible.builtin.include_role:
+        name: dozzle
+      vars:
+        is_agent: true
+
+    # ? Docker apps
+    - name: Install Traefik
+      ansible.builtin.include_role:
+        name: traefik
+      vars:
+        hostname_in_uri: true
+      tags: traefik
+
+    - name: Install Portainer
+      ansible.builtin.include_role:
+        name: portainer
+      vars:
+        hostname_in_uri: true
+      tags: portainer

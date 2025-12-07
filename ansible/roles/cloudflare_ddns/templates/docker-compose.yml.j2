@@ -1,0 +1,11 @@
+---
+services:
+  cloudflare-ddns:
+    image: "oznu/cloudflare-ddns:latest"
+    container_name: "cloudflare-ddns"
+    restart: unless-stopped
+    environment:
+      API_KEY: "{{ cloudflare_ddns_api_token }}"
+      ZONE: "{{ cloudflare_ddns_zone }}"
+      SUBDOMAIN: "{{ cloudflare_ddns_subdomain }}"
+      PROXIED: "false"

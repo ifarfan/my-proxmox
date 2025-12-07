@@ -1,0 +1,19 @@
+---
+- name: Install NFS client
+  ansible.builtin.apt:
+    name: "{{ nfs_pkgs }}"
+    state: present
+
+- name: Create NFS mount point
+  ansible.builtin.file:
+    path: "{{ nfs_docker_path }}"
+    state: directory
+    mode: '0701'
+
+- name: Mount NFS to docker volumes + add to /etc/fstab
+  ansible.posix.mount:
+    src: "{{ nfs_server }}"
+    path: "{{ nfs_docker_path }}"
+    fstype: nfs
+    opts: "{{ nfs_options }}"
+    state: mounted

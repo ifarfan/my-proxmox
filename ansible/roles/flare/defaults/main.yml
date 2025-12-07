@@ -1,4 +1,0 @@
----
-flare_directory: /opt/flare
-flare_uri: flare.{{ global_domain }}
-flare_port: 5005

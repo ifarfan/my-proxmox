@@ -1,0 +1,55 @@
+---
+version: '3'
+
+vars:
+  TAILSCALE_LXC_HOST: tailscale-lxc
+  TAILSCALE_LXC_HOST_FQDN: "{{.TAILSCALE_LXC_HOST}}.{{.DOMAIN}}"
+  TAILSCALE_LXC_TF_DIR: "{{.TERRAFORM_DIR}}/{{.TAILSCALE_LXC_HOST}}"
+  TAILSCALE_LXC_ANSIBLE_PLAYBOOK: "{{.TAILSCALE_LXC_HOST}}-provision.yml"
+
+tasks:
+  check:
+    desc: "Check '{{.TAILSCALE_LXC_HOST}}' host vars"
+    dir: "{{.TAILSCALE_LXC_TF_DIR}}"
+    cmds:
+      - "echo TAILSCALE_LXC_HOST={{.TAILSCALE_LXC_HOST}}"
+      - "echo TAILSCALE_LXC_HOST_FQDN={{.TAILSCALE_LXC_HOST_FQDN}}"
+      - "echo TAILSCALE_LXC_TF_DIR={{.TAILSCALE_LXC_TF_DIR}}"
+      - "echo TAILSCALE_LXC_ANSIBLE_PLAYBOOK={{.TAILSCALE_LXC_ANSIBLE_PLAYBOOK}}"
+
+  # ? Terraform
+  create:
+    desc: "Create '{{.TAILSCALE_LXC_HOST}}' host"
+    dir: "{{.TAILSCALE_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply
+
+  destroy:
+    desc: "Destroy '{{.TAILSCALE_LXC_HOST}}' host"
+    dir: "{{.TAILSCALE_LXC_TF_DIR}}"
+    cmds:
+      - terraform destroy -compact-warnings
+
+  update-dns:
+    desc: "Update DNS records for '{{.TAILSCALE_LXC_HOST}}' host"
+    dir: "{{.TAILSCALE_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -compact-warnings -target=module.my_lxc.cloudflare_record.cname_records
+
+  # ? Ansible
+  provision:
+    desc: "Provision '{{.TAILSCALE_LXC_HOST}}' via Ansible"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox -l {{.TAILSCALE_LXC_HOST_FQDN}} upgrade22_to_24.yml"
+      - "ansible-playbook -i inventories/proxmox {{.TAILSCALE_LXC_ANSIBLE_PLAYBOOK}}"
+
+  provision-tailscale:
+    desc: "Provision 'Tailscale' on '{{.TAILSCALE_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.TAILSCALE_LXC_ANSIBLE_PLAYBOOK}} --tag tailscale"

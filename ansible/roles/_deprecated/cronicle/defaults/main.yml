@@ -1,5 +1,0 @@
----
-cronicle_directory: /opt/cronicle
-cronicle_volume: cronicle_data
-cronicle_uri: cronicle.{{ global_domain }}
-cronicle_port: 3012

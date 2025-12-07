@@ -7,33 +7,49 @@ apt_pkgs_modern:
 
 # amd64 packages
 apt_debs_modern_x86_64:
-  - https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-  - https://github.com/ClementTsang/bottom/releases/download/0.6.8/bottom_0.6.8_amd64.deb
-  - https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd-musl_0.23.1_amd64.deb
-  - https://github.com/bootandy/dust/releases/download/v0.8.3/du-dust_0.8.3_amd64.deb
-  - https://github.com/dandavison/delta/releases/download/0.14.0/git-delta-musl_0.14.0_amd64.deb
-  - https://github.com/muesli/duf/releases/download/v0.8.1/duf_0.8.1_linux_amd64.deb
-  - https://github.com/rs/curlie/releases/download/v1.6.9/curlie_1.6.9_linux_amd64.deb
+  - https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep_15.1.0-1_amd64.deb
+  - https://github.com/ClementTsang/bottom/releases/download/0.11.3/bottom_0.11.3-1_amd64.deb
+  - https://github.com/lsd-rs/lsd/releases/download/v1.2.0/lsd-musl_1.2.0_amd64.deb
+  - https://github.com/bootandy/dust/releases/download/v1.2.3/du-dust_1.2.3-1_amd64.deb
+  - https://github.com/dandavison/delta/releases/download/0.18.2/git-delta-musl_0.18.2_amd64.deb
+  - https://github.com/muesli/duf/releases/download/v0.9.1/duf_0.9.1_linux_amd64.deb
+  - https://github.com/rs/curlie/releases/download/v1.8.2/curlie_1.8.2_linux_amd64.deb
 
 zip_flat_modern_x86_64:
-  - https://github.com/dalance/procs/releases/download/v0.13.1/procs-v0.13.1-x86_64-linux.zip
+  - https://github.com/dalance/procs/releases/download/v0.14.10/procs-v0.14.10-x86_64-linux.zip
+  - https://github.com/jesseduffield/lazydocker/releases/download/v0.24.2/lazydocker_0.24.2_Linux_x86_64.tar.gz
+  - https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_amd64.tar.gz
 
-zip_fat_modern_x86_64: []
+zip_fat_modern_x86_64:
+  -
+    url: https://github.com/atuinsh/atuin/releases/download/v18.10.0/atuin-x86_64-unknown-linux-musl.tar.gz
+    file: atuin-x86_64-unknown-linux-musl/atuin
 
 # arm64 packages
 apt_debs_modern_aarch64:
-  - https://github.com/ClementTsang/bottom/releases/download/0.6.8/bottom_aarch64-unknown-linux-gnu.deb
-  - https://github.com/Peltoche/lsd/releases/download/0.23.1/lsd-musl_0.23.1_arm64.deb
-  - https://github.com/dandavison/delta/releases/download/0.14.0/git-delta_0.14.0_arm64.deb
-  - https://github.com/muesli/duf/releases/download/v0.8.1/duf_0.8.1_linux_arm64.deb
-  - https://github.com/rs/curlie/releases/download/v1.6.9/curlie_1.6.9_linux_arm64.deb
+  - https://github.com/ClementTsang/bottom/releases/download/0.11.3/bottom_0.11.3-1_arm64.deb
+  - https://github.com/lsd-rs/lsd/releases/download/v1.2.0/lsd-musl_1.2.0_amd64.deb
+  - https://github.com/dandavison/delta/releases/download/0.18.2/git-delta_0.18.2_arm64.deb
+  - https://github.com/muesli/duf/releases/download/v0.9.1/duf_0.9.1_linux_arm64.deb
+  - https://github.com/rs/curlie/releases/download/v1.8.2/curlie_1.8.2_linux_arm64.deb
 
-zip_flat_modern_aarch64: []
+zip_flat_modern_aarch64:
+  - https://github.com/dalance/procs/releases/download/v0.14.10/procs-v0.14.10-aarch64-linux.zip
+  - https://github.com/jesseduffield/lazydocker/releases/download/v0.24.2/lazydocker_0.24.2_Linux_arm64.tar.gz
+  - https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_arm64.tar.gz
 
 zip_fat_modern_aarch64:
   -
-    url: https://github.com/bootandy/dust/releases/download/v0.8.3/dust-v0.8.3-aarch64-unknown-linux-musl.tar.gz
-    file: dust-v0.8.3-aarch64-unknown-linux-musl/dust
+    url: https://github.com/bootandy/dust/releases/download/v1.2.3/dust-v1.2.3-aarch64-unknown-linux-musl.tar.gz
+    file: dust-v1.2.3-aarch64-unknown-linux-musl/dust
+  -
+    url: https://github.com/atuinsh/atuin/releases/download/v18.10.0/atuin-aarch64-unknown-linux-musl.tar.gz
+    file: atuin-aarch64-unknown-linux-musl/atuin
+
+url_downloads:
+  -
+    url: https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh
+    file: ~/.bash-preexec.sh
 
 # File contents
 aliases: |
@@ -126,3 +142,9 @@ git_config: |
 
   [diff]
     colorMoved = default
+
+shell_integrations:
+  - '# Custom shell integrations from "modern-linux" role'
+  - 'eval "$(fzf --bash)"'                                        # Set up fzf key bindings and fuzzy completion
+  - '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh'    # bash-exec, pre-requisite for atuin
+  - 'eval "$(atuin init bash)"'                                   # Shell history

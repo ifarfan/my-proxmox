@@ -46,6 +46,11 @@ variable "unprivileged" {
   default = true
 }
 
+variable "tags" {
+  type    = string
+  default = ""
+}
+
 variable "ip" {
   type = string
 }
@@ -56,10 +61,10 @@ variable "rootfs_size" {
 }
 
 variable "mountpoint" {
-  type = object({
+  type = list(object({
     mp   = string
     size = string
-  })
+  }))
   default = null
 }
 

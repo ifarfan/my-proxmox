@@ -1,0 +1,23 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ dozzle_directory }}"
+    state: directory
+    mode: 0755
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose-agent.yml.j2
+    dest: "{{ dozzle_directory }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create and start app
+  community.docker.docker_compose_v2:
+    project_src: "{{ dozzle_directory }}"
+    recreate: always
+    pull: missing
+    remove_orphans: true
+    remove_volumes: true
+    state: restarted

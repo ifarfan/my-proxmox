@@ -1,0 +1,31 @@
+---
+services:
+  termix:
+    image: "ghcr.io/lukegus/termix:{{ termix_version }}"
+    container_name: "termix"
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ termix_directory }}/data:/app/data
+    ports:
+      - "{{ termix_port }}:{{ termix_port }}"
+    environment:
+      PORT: "{{ termix_port }}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.termix.entrypoints=http"
+      - "traefik.http.routers.termix.rule=Host(`{{ termix_uri }}`)"
+      - "traefik.http.middlewares.termix-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.termix.middlewares=termix-https-redirect"
+      - "traefik.http.routers.termix-secure.entrypoints=https"
+      - "traefik.http.routers.termix-secure.rule=Host(`{{ termix_uri }}`)"
+      - "traefik.http.routers.termix-secure.tls=true"
+      - "traefik.http.routers.termix-secure.service=termix"
+      - "traefik.http.services.termix.loadbalancer.server.port={{ termix_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

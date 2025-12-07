@@ -1,5 +1,0 @@
----
-rundeck_directory: /opt/rundeck
-rundeck_volume: rundeck_data
-rundeck_uri: rundeck.{{ global_domain }}
-rundeck_port: 4440

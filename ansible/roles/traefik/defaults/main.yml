@@ -1,7 +1,11 @@
 ---
+hostname_in_uri: false
+
 traefik_directory: /opt/traefik
-traefik_volume: data
-traefik_uri: traefik.{{ global_domain }}
+traefik_version: v3.6
+
+traefik_host: "{{ 'traefik' if hostname_in_uri == false else 'traefik-' + inventory_hostname_short }}"
+traefik_uri: "{{ traefik_host }}.{{ global_domain }}"
 
 cloudflare_email: "{{ lookup('ansible.builtin.ini', 'email', section='cloudflare', file='credentials.ini') }}"
 cloudflare_api_token: "{{ lookup('ansible.builtin.ini', 'api_token', section='cloudflare', file='credentials.ini') }}"

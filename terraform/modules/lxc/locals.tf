@@ -7,22 +7,18 @@ locals {
   hostname    = "${var.hostname}.${local.domain}"
   description = var.description
 
-  cores           = var.cores
-  memory          = var.memory
-  onboot          = var.onboot
-  ostemplate      = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+  cores      = var.cores
+  memory     = var.memory
+  onboot     = var.onboot
+  ostemplate = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+  # ostemplate      = "local:vztmpl/ubuntu-24.04-default_amd64.tar.xz"
   ssh_public_keys = join("\n", data.github_user.my_username.ssh_keys)
   start           = true
   unprivileged    = var.unprivileged
+  tags            = var.tags == "" ? "terraform" : "${var.tags};terraform"
 
   rootfs = {
     size    = var.rootfs_size
-    storage = "local-lvm"
-  }
-
-  mountpoint = {
-    key     = "0"
-    slot    = 0
     storage = "local-lvm"
   }
 

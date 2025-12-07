@@ -1,0 +1,34 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ dozzle_directory }}"
+    state: directory
+    mode: 0755
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose-server.yml.j2
+    dest: "{{ dozzle_directory }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create and start app
+  community.docker.docker_compose_v2:
+    project_src: "{{ dozzle_directory }}"
+    recreate: always
+    pull: missing
+    remove_orphans: true
+    remove_volumes: true
+    state: restarted
+
+- name: Wait until site is up
+  ansible.builtin.uri:
+    url: "https://{{ dozzle_uri }}/"
+    validate_certs: true
+    status_code:
+      - 200
+  register: uri_output
+  until: uri_output.status == 200
+  delay: 10
+  retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins

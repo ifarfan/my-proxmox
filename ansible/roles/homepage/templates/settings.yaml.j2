@@ -1,20 +1,20 @@
 ---
-title: Homelab | My Dashboard
-backgroundOpacity: 0.7
-color: slate
-headerStyle: boxed
+title: Homelab | Dashboard
+headerStyle: clean
 layout:
   Hardware:
     style: row
     columns: 4
     icon: mdi-server-network
+    useEqualHeights: true
   System Apps:
     style: row
     columns: 3
     icon: mdi-cog-outline
+    useEqualHeights: true
   Monitoring:
     style: row
-    columns: 3
+    columns: 4
     icon: mdi-eye-outline
     useEqualHeights: true
   Internal Apps:
@@ -22,13 +22,36 @@ layout:
     columns: 3
     icon: mdi-web-check
     useEqualHeights: true
-  External Apps:
+  Internal Services:
     style: row
-    columns: 3
+    columns: 4
+    icon: mdi-filter-cog-outline
+    useEqualHeights: true
+  External Vendors:
+    style: row
+    columns: 4
     icon: mdi-web
   Financial:
     style: row
-    columns: 4
+    columns: 2
     icon: mdi-finance
+    useEqualHeights: true
+
+color: zinc
+background:
+  # image: https://raw.githubusercontent.com/basecamp/omarchy/refs/heads/master/themes/osaka-jade/backgrounds/1-osaka-jade-bg.jpg
+  blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  opacity: 85 # 0-100
+statusStyle: "dot"
+
 providers:
   finnhub: {{ homepage_finnhub_token }}
+
+quicklaunch:
+  searchDescriptions: true
+  hideInternetSearch: true
+  showSearchSuggestions: true
+  hideVisitURL: true
+  provider: google

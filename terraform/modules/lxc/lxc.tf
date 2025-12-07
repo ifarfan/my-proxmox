@@ -10,6 +10,7 @@ resource "proxmox_lxc" "lxc" {
   ssh_public_keys = local.ssh_public_keys
   start           = local.start
   unprivileged    = local.unprivileged
+  tags            = local.tags
 
   rootfs {
     storage = local.rootfs.storage
@@ -17,13 +18,13 @@ resource "proxmox_lxc" "lxc" {
   }
 
   dynamic "mountpoint" {
-    for_each = var.mountpoint == null ? [] : [1]
+    for_each = var.mountpoint == null ? [] : var.mountpoint
     content {
-      key     = local.mountpoint.key
-      slot    = local.mountpoint.slot
-      storage = local.mountpoint.storage
-      mp      = var.mountpoint.mp
-      size    = var.mountpoint.size
+      key     = tostring(mountpoint.key)
+      slot    = mountpoint.key
+      storage = "local-lvm"
+      mp      = mountpoint.value["mp"]
+      size    = mountpoint.value["size"]
     }
   }
 

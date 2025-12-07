@@ -16,3 +16,22 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Download direct from URLs (limited exceptions)
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.file }}"
+    mode: 0644
+  with_items: "{{ url_downloads }}"
+
+- name: Add shell-integration commands
+  ansible.builtin.lineinfile:
+    path: /root/.bashrc
+    line: "{{ item }}"
+  with_items: "{{ shell_integrations }}"
+
+- name: Replace atuin sync server address
+  ansible.builtin.replace:
+    path: ~/.config/atuin/config.toml
+    regexp: '^#\s*sync_address\s*=.*'
+    replace: 'sync_address = "https://atuin.macminis.net"'

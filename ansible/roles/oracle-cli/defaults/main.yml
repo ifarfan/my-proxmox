@@ -1,0 +1,10 @@
+---
+oci_compartment_id: "{{ lookup('ansible.builtin.ini', 'oci_compartment_id', section='oci', file='credentials.ini') }}"
+oci_fingerprint: "{{ lookup('ansible.builtin.ini', 'oci_fingerprint', section='oci', file='credentials.ini') }}"
+oci_namespace: "{{ lookup('ansible.builtin.ini', 'oci_namespace', section='oci', file='credentials.ini') }}"
+oci_region: "{{ lookup('ansible.builtin.ini', 'oci_region', section='oci', file='credentials.ini') }}"
+oci_tenancy: "{{ lookup('ansible.builtin.ini', 'oci_tenancy', section='oci', file='credentials.ini') }}"
+oci_user: "{{ lookup('ansible.builtin.ini', 'oci_user', section='oci', file='credentials.ini') }}"
+
+# multi-line file content
+oci_pem_file: "{{ lookup('ansible.builtin.file', 'oci.pem') }}"

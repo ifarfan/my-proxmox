@@ -1,0 +1,20 @@
+---
+# See:
+# - https://gethomepage.dev/configs/docker/#using-docker-tls
+# - https://github.com/Tecnativa/docker-socket-proxy
+services:
+  docker-proxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:latest
+    container_name: docker-proxy
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - {{ proxy_port }}:{{ proxy_port }}
+    environment:
+      CONTAINERS: 1        # Allow access to view containers
+      NETWORKS: 1          # Allow access to view network stats
+      POST: 0              # Disallow POST operations (effectively, read-only)
+      SERVICES: 1          # Allow access to view services (needed for Docker Swarm)
+      TASKS: 1             # Allow access to view tasks (needed for Docker Swarm)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro      # Mounted as read-onl

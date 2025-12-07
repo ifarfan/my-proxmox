@@ -10,6 +10,7 @@ docker_pkgs:
   - docker-ce
   - docker-ce-cli
   - docker-ce-rootless-extras
+  - docker-compose
   - docker-compose-plugin
   - containerd.io
 

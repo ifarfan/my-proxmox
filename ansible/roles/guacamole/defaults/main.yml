@@ -1,6 +1,0 @@
----
-guacamole_directory: /opt/guacamole
-guacamole_volume: data
-guacamole_uri: guacamole.{{ global_domain }}
-guacamole_port: 3000
-guacamole_image_version: v0.6.10

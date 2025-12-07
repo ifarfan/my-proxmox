@@ -1,9 +1,9 @@
 ---
 homepage_directory: /opt/homepage
-homepage_volume: data
-homepage_uri: homepage.{{ global_domain }}
+homepage_directory_config: "{{ homepage_directory }}/config"
+homepage_uri: "homepage.{{ global_domain }}"
 homepage_port: 3000
-homepage_image_version: v0.10.9
+homepage_image_version: v1.7.0
 
 homepage_proxmox_user: "{{ lookup('ansible.builtin.ini', 'proxmox_user', section='homepage', file='credentials.ini') }}"
 homepage_proxmox_secret: "{{ lookup('ansible.builtin.ini', 'proxmox_secret', section='homepage', file='credentials.ini') }}"
@@ -18,3 +18,7 @@ homepage_finnhub_token: "{{ lookup('ansible.builtin.ini', 'finnhub_token', secti
 homepage_navidrome_user: "{{ lookup('ansible.builtin.ini', 'navidrome_user', section='homepage', file='credentials.ini') }}"
 homepage_navidrome_token: "{{ lookup('ansible.builtin.ini', 'navidrome_token', section='homepage', file='credentials.ini') }}"
 homepage_navidrome_salt: "{{ lookup('ansible.builtin.ini', 'navidrome_salt', section='homepage', file='credentials.ini') }}"
+
+glances_uri: "glances.{{ global_domain }}"
+glances_username: glances
+glances_password: "{{ lookup('ansible.builtin.ini', 'password', section='glances', file='credentials.ini') }}"

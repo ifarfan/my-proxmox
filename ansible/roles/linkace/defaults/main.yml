@@ -1,9 +1,0 @@
----
-linkace_directory: /opt/linkace
-linkace_volume: data
-linkace_uri: linkace.{{ global_domain }}
-linkace_port: 80
-
-# idempotent values
-linkace_app_key: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=32', seed=inventory_hostname) }}"
-linkace_db_pwd: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=16', seed=inventory_hostname) }}"

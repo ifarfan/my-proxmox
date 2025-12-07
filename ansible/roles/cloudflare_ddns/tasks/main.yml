@@ -1,0 +1,23 @@
+---
+- name: Install cloudflare_ddns
+  block:
+
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ cloudflare_ddns_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ cloudflare_ddns_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ cloudflare_ddns_directory }}"
+
+  tags: cloudflare_ddns

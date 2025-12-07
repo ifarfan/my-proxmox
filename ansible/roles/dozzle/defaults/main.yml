@@ -1,5 +1,9 @@
 ---
+is_agent: false
+dozzle_agent_port: 7007
+
 dozzle_directory: /opt/dozzle
 dozzle_uri: dozzle.{{ global_domain }}
-dozzle_port: 8080
-dozzle_image_version: v8.5.1
+dozzle_server_port: 8080
+dozzle_image_version: v8
+dozzle_remote_agents: tailscale-lxc.macminis.net:{{ dozzle_agent_port }},devbox-lxc.macminis.net:{{ dozzle_agent_port }},cloudy-box.macminis.net:{{ dozzle_agent_port }}

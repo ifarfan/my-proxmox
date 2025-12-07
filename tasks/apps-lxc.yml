@@ -1,0 +1,115 @@
+---
+version: '3'
+
+vars:
+  APPS_LXC_HOST: apps-lxc
+  APPS_LXC_HOST_FQDN: "{{.APPS_LXC_HOST}}.{{.DOMAIN}}"
+  APPS_LXC_TF_DIR: "{{.TERRAFORM_DIR}}/{{.APPS_LXC_HOST}}"
+  APPS_LXC_ANSIBLE_PLAYBOOK: "{{.APPS_LXC_HOST}}-provision.yml"
+
+tasks:
+  check:
+    desc: "Check '{{.APPS_LXC_HOST}}' host vars"
+    dir: "{{.APPS_LXC_TF_DIR}}"
+    cmds:
+      - "echo APPS_LXC_HOST={{.APPS_LXC_HOST}}"
+      - "echo APPS_LXC_HOST_FQDN={{.APPS_LXC_HOST_FQDN}}"
+      - "echo APPS_LXC_TF_DIR={{.APPS_LXC_TF_DIR}}"
+      - "echo APPS_LXC_ANSIBLE_PLAYBOOK={{.APPS_LXC_ANSIBLE_PLAYBOOK}}"
+
+  # ? Terraform
+  create:
+    desc: "Create '{{.APPS_LXC_HOST}}' host"
+    dir: "{{.APPS_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply
+
+  destroy:
+    desc: "Destroy '{{.APPS_LXC_HOST}}' host"
+    dir: "{{.APPS_LXC_TF_DIR}}"
+    cmds:
+      - terraform destroy -compact-warnings
+
+  update-dns:
+    desc: "Update DNS records for '{{.APPS_LXC_HOST}}' host"
+    dir: "{{.APPS_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -compact-warnings -target=module.my_lxc.cloudflare_record.cname_records
+
+  # ? Ansible
+  provision:
+    desc: "Provision '{{.APPS_LXC_HOST}}' via Ansible"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox -l {{.APPS_LXC_HOST_FQDN}} upgrade22_to_24.yml"
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}}"
+
+  provision-traefik:
+    desc: "Provision 'Traefik' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag traefik"
+
+  provision-portainer:
+    desc: "Provision 'Portainer' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag portainer"
+
+  provision-termix:
+    desc: "Provision 'Termix' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag termix"
+
+  provision-cloudflare-ddns:
+    desc: "Provision 'Cloudflare DDNS' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag cloudflare_ddns"
+
+  provision-homepage:
+    desc: "Provision 'Homepage' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag homepage"
+
+  provision-glances:
+    desc: "Provision 'Glances' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag glances"
+
+  provision-dozzle:
+    desc: "Provision 'Dozzle' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag dozzle"
+
+  provision-atuin:
+    desc: "Provision 'Atuin' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag atuin"
+
+  provision-rustdesk:
+    desc: "Provision 'RustDesk' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag rustdesk"
+
+  provision-speedtest-tracker:
+    desc: Provision "Speedtest Tracker" on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag speedtest_tracker"
+
+  provision-watch-your-lan:
+    desc: Provision "Watch Your Lan" on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag watch-your-lan"

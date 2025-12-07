@@ -5,6 +5,12 @@ vars:
   ORACLE_TF_DIR: "{{.TERRAFORM_DIR}}/oracle"
 
 tasks:
+  list-nodes:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List Oracle nodes
+    cmds:
+      - ansible-playbook -i inventories/oracle-cloud oracle-cloud-provision.yml --list-hosts
+
   provision:
     dir: "{{.ANSIBLE_DIR}}"
     desc: Provision Oracle nodes

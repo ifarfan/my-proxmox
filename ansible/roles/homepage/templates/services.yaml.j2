@@ -1,6 +1,6 @@
 ---
 # For configuration options and examples, please see:
-# https://github.com/benphelps/homepage/wiki/Services
+# https://gethomepage.dev/widgets/info/resources/
 -
   Hardware:
     -
@@ -50,60 +50,36 @@
           url: http://ds1.{{ global_domain }}:5000
           username: {{ homepage_synology_username }}
           password: {{ homepage_synology_password }}
-    -
-      Oracle:
-        icon: oracle-cloud.png
-        href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
-        description: Oracle Cloud
-        siteMonitor: https://cloud.oracle.com/
-    -
-      FIOS:
-        icon: fios.png
-        href: http://192.168.1.1/#/setup
-        description: Home Router FIOS
-        siteMonitor: http://192.168.1.1/#/setup
-    -
-      Cloudflare:
-        icon: cloudflare.png
-        href: https://dash.cloudflare.com/
-        description: DNS Hosting
-        siteMonitor: https://dash.cloudflare.com/login
-    -
-      Tailscale:
-        icon: tailscale.png
-        href: https://login.tailscale.com/admin/machines
-        description: ZeroTrust VPN
-        siteMonitor: https://login.tailscale.com/
 -
   System Apps:
     -
       Traefik:
         icon: traefik.png
-        href: https://traefik.{{ global_domain }}/
-        description: Proxy Server
-        server: my-docker
+        href: https://traefik-apps-lxc.{{ global_domain }}/
+        description: Proxy Server (apps-lxc)
+        server: apps-local-docker
         container: traefik
         widget:
           type: traefik
-          url: https://traefik.{{ global_domain }}
+          url: https://traefik-apps-lxc.{{ global_domain }}
     -
       Portainer:
         icon: portainer.png
-        href: https://portainer.{{ global_domain }}/
-        description: Container Manager
-        server: my-docker
+        href: https://portainer-apps-lxc.{{ global_domain }}/
+        description: Container Manager (apps-lxc)
+        server: apps-local-docker
         container: portainer
         widget:
           type: portainer
-          url: https://portainer.{{ global_domain }}
-          env: 2
+          url: https://portainer-apps-lxc.{{ global_domain }}
+          env: 3
           key: {{ homepage_portainer_token }}
     -
       Speedtest Tracker:
         icon: speedtest-tracker.png
         href: https://speedtest-tracker.{{ global_domain }}/
-        description: Monitor Internet Speed Over Time
-        server: my-docker
+        description: Monitor Internet Speed Over Time (apps-lxc)
+        server: apps-local-docker
         container: speedtest-tracker
         widget:
           type: speedtest
@@ -112,108 +88,108 @@
 -
   Monitoring:
     -
-      Uptime Kuma:
-        icon: uptime-kuma.png
-        href: https://uptime-kuma.{{ global_domain }}/dashboard
-        description: Monitoring Server
-        server: my-docker
-        container: kuma
-        widget:
-          type: uptimekuma
-          url: https://uptime-kuma.{{ global_domain }}
-          slug: web
-    -
-      Grafana:
-        icon: grafana.png
-        href: https://grafana.{{ global_domain }}/?orgId=1
-        description: Dashboard Server
-        server: my-docker
-        container: grafana
-        widget:
-          type: grafana
-          url: https://grafana.{{ global_domain }}
-          username: {{ homepage_grafana_username }}
-          password: {{ homepage_grafana_password }}
-    -
-      Prometheus:
-        icon: prometheus.png
-        href: http://prometheus.{{ global_domain }}:9090/
-        description: Metrics Server
-        server: my-docker
-        container: prometheus
-        widget:
-          type: prometheus
-          url: http://prometheus.{{ global_domain }}:9090
-    -
-      Dozzle:
+      Dozzle Server:
         icon: dozzle.png
         href: https://dozzle.{{ global_domain }}/
-        description: Monitor Docker Logs
-        server: my-docker
+        description: "Monitor Docker Logs (Server: app-lxc)"
+        server: apps-local-docker
         container: dozzle
     -
-      WUD:
-        icon: docker-compose.png
-        href: https://wud.{{ global_domain }}/
-        description: What's Up Docker
-        server: my-docker
-        container: wud
+      Dozzle Agent:
+        icon: dozzle.png
+        description: Agent (tailscale-lxc)
+        server: tailscale-docker
+        container: dozzle-agent
     -
-      Guacamole:
-        icon: guacamole.png
-        href: https://guacamole.{{ global_domain }}/
-        description: Shell connection server
-        server: my-docker
-        container: guacamole
+      Dozzle Agent:
+        icon: dozzle.png
+        description: Agent (devbox-lxc)
+        server: devbox-docker
+        container: dozzle-agent
+    -
+      Glances:
+        icon: glances.png
+        href: https://{{ glances_username }}:{{ glances_password }}@glances.{{ global_domain }}/
+        description: Monitoring Server (apps-lxc)
+        server: apps-local-docker
+        container: glances
 -
   Internal Apps:
-    -
-      Navidrome:
-        icon: navidrome.png
-        href: https://navidrome.{{ global_domain }}/
-        description: Music player
-        server: my-docker
-        container: navidrome
     -
       Plex:
         icon: plex.png
         href: https://plex.{{ global_domain }}/web/index.html
-        description: Media Server
+        description: Media Server (DS1 - NAS)
         siteMonitor: https://plex.{{ global_domain }}/web/index.html
         widget:
           type: plex
           url: https://plex.{{ global_domain }}
           key: {{ homepage_plex_token }}
     -
-      Linkding:
-        icon: linkding.png
-        href: https://linkding.{{ global_domain }}/
-        description: Bookmarks manager
-        server: my-docker
-        container: linkding
-    -
-      Snippet-Box:
-        icon: snippetbox.png
-        href: https://snippet-box.{{ global_domain }}/snippets
-        description: Store Code Snippets
-        server: my-docker
-        container: snippet-box
-    -
-      n8n:
-        icon: n8n.png
-        href: https://n8n.{{ global_domain }}/
-        description: Automated Workflows
-        server: my-docker
-        container: n8n
-    -
-      Outline:
-        icon: outline.png
-        href: https://outline.{{ global_domain }}/
-        description: Knowledge-base Wiki
-        server: my-docker
-        container: outline
+      Termix:
+        icon: termix.png
+        href: https://termix.{{ global_domain }}/
+        description: SSH terminal server (apps-lxc)
+        server: apps-local-docker
+        container: termix
 -
-  External Apps:
+  Internal Services:
+    -
+      Tailscale:
+        icon: tailscale.png
+        description: Tailscale Sub-router (tailscale-lxc)
+        server: tailscale-docker
+        container: tailscale
+    -
+      Cloudflare DDNS:
+        icon: cloudflare.png
+        description: Local DDNS (apps-lxc)
+        server: apps-local-docker
+        container: cloudflare-ddns
+    -
+      Rustdesk:
+        icon: rustdesk.png
+        description: Remote Server (apps-lxc)
+        server: apps-local-docker
+        container: hbbs
+    -
+      Atuin:
+        icon: atuin.png
+        description: Terminal History (apps-lxc)
+        server: apps-local-docker
+        container: atuin
+-
+  External Vendors:
+    -
+      Oracle:
+        icon: oracle-cloud.png
+        href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
+        description: Oracle Cloud
+        siteMonitor: https://cloud.oracle.com/
+    -
+      Cloudflare:
+        icon: cloudflare.png
+        href: https://dash.cloudflare.com/
+        description: DNS Hosting
+        siteMonitor: https://dash.cloudflare.com/login
+    -
+      Doppler:
+        icon: doppler.png
+        href: https://dashboard.doppler.com/
+        description: Secrets
+        siteMonitor: https://dashboard.doppler.com/login
+    -
+      Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: ZeroTrust VPN
+        siteMonitor: https://login.tailscale.com/
+    -
+      FIOS:
+        icon: fios.png
+        href: http://192.168.1.1/#/setup
+        description: Home Router FIOS
+        siteMonitor: http://192.168.1.1/#/setup
     -
       Github:
         icon: github.png
@@ -235,9 +211,9 @@
 -
   Financial:
     -
-      Stocks:
+      "Stocks (Mag 7)":
         icon: mdi-cash-multiple
-        description: Market data via Finnhub
+        description: Magnificent 7 via Finnhub
         widget:
           type: stocks
           provider: finnhub
@@ -246,13 +222,14 @@
             - AAPL
             - AMZN
             - GOOGL
+            - META
             - MSFT
             - NVDA
             - TSLA
     -
       Stocks:
         icon: mdi-cash-multiple
-        description: Crypto data via Finnhub
+        description: Market data via Finnhub
         widget:
           type: stocks
           provider: finnhub
@@ -261,37 +238,15 @@
             - AIQ
             - AMAT
             - AMD
-            - ANET
-            - ANSS
+            #- ANET
             - ARM
             - ASML
             - AVGO
-    -
-      Stocks:
-        icon: mdi-cash-multiple
-        description: Crypto data via Finnhub
-        widget:
-          type: stocks
-          provider: finnhub
-          showUSMarketStatus: false
-          watchlist:
             - CCJ
-            - ISRG
-            - LRCX
-            - PANW
+            # - ISRG
+            #- LRCX
+            #- PANW
             - QCOM
-            - SMCI
-            - SMH
-            - SOUN
-    -
-      Stocks:
-        icon: mdi-cash-multiple
-        description: Currency data via Finnhub
-        widget:
-          type: stocks
-          provider: finnhub
-          showUSMarketStatus: false
-          watchlist:
-            - MSTR
-            - PLTR
-            - SCHD
+            #- SMCI
+            #- SMH
+            #- SOUN
