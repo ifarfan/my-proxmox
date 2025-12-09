@@ -1,24 +1,24 @@
 ---
-- name: Install wakapi
+- name: Install stash
   block:
 
     - name: Create app directory
       ansible.builtin.file:
-        path: "{{ wakapi_directory }}"
+        path: "{{ stash_directory }}"
         state: directory
         mode: 0755
 
     - name: Copy docker-compose file
       ansible.builtin.template:
         src: docker-compose.yml.j2
-        dest: "{{ wakapi_directory }}/docker-compose.yml"
+        dest: "{{ stash_directory }}/docker-compose.yml"
         owner: root
         group: root
         mode: 0644
 
     - name: Create and start app
       community.docker.docker_compose_v2:
-        project_src: "{{ wakapi_directory }}"
+        project_src: "{{ stash_directory }}"
         recreate: always
         pull: missing
         remove_orphans: true
@@ -27,7 +27,7 @@
 
     - name: Wait until site is up
       ansible.builtin.uri:
-        url: "https://{{ wakapi_uri }}/"
+        url: "https://{{ stash_uri }}/"
         validate_certs: true
         status_code:
           - 200
@@ -36,4 +36,4 @@
       delay: 10
       retries: 12       # Retries for 12 * 10 secs = 120 secs = 2 mins
 
-  tags: wakapi
+  tags: stash

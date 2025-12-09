@@ -1,0 +1,44 @@
+---
+services:
+  stash:
+    image: stashapp/stash:latest
+    container_name: stash
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - {{ stash_port }}:{{ stash_port }}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "2m"
+    environment:
+      STASH_STASH: /data/
+      STASH_GENERATED: /generated/
+      STASH_METADATA: /metadata/
+      STASH_CACHE: /cache/
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ stash_directory }}/config:/root/.stash         # Stash configuration files
+      - {{ stash_directory }}/data:/data                  # Point this at your collection
+      - {{ stash_directory }}/metadata:/metadata          # Stash's metadata lives
+      - {{ stash_directory }}/cache:/cache                # Any other cache content
+      - {{ stash_directory }}/blobs:/blobs                # Where stash stores blob files (thumbnails,preview,transcodes,sprites)
+      - {{ stash_directory }}/generated:/generated        # Generated content (transcodes, thumbnails, previews, sprites)
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.stash.entrypoints=http"
+      - "traefik.http.routers.stash.rule=Host(`{{ stash_uri }}`)"
+      - "traefik.http.middlewares.stash-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.stash.middlewares=stash-https-redirect"
+      - "traefik.http.routers.stash-secure.entrypoints=https"
+      - "traefik.http.routers.stash-secure.rule=Host(`{{ stash_uri }}`)"
+      - "traefik.http.routers.stash-secure.tls=true"
+      - "traefik.http.routers.stash-secure.service=stash"
+      - "traefik.http.services.stash.loadbalancer.server.port={{ stash_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

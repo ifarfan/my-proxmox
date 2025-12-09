@@ -28,5 +28,6 @@ locals {
   dns_aliases = [
     "traefik-arr-lxc",
     "portainer-arr-lxc",
+    "stash",
   ]
 }
