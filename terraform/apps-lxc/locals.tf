@@ -36,6 +36,7 @@ locals {
     "plex",
     "rustdesk",
     "speedtest-tracker",
+    "wakapi",
     # "grafana",
     # "loki",
     # "prometheus",

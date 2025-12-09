@@ -74,3 +74,8 @@
       ansible.builtin.include_role:
         name: speedtest_tracker
       tags: speedtest_tracker
+
+    - name: Install Wakapi
+      ansible.builtin.include_role:
+        name: wakapi
+      tags: wakapi
