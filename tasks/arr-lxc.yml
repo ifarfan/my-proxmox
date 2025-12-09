@@ -59,3 +59,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag portainer"
+
+  provision-stash:
+    desc: "Provision 'Stash' on '{{.ARR_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag stash"

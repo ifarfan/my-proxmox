@@ -44,3 +44,10 @@
       vars:
         hostname_in_uri: true
       tags: portainer
+
+    - name: Install Stash
+      ansible.builtin.include_role:
+        name: stash
+      vars:
+        hostname_in_uri: true
+      tags: stash

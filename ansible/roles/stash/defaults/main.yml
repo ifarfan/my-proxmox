@@ -1,0 +1,4 @@
+---
+stash_directory: /opt/stash
+stash_uri: "stash.{{ global_domain }}"
+stash_port: 9999
