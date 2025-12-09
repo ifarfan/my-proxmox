@@ -1,0 +1,49 @@
+---
+services:
+  wakapi:
+    image: ghcr.io/muety/wakapi:latest
+    container_name: wakapi
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - {{ wakapi_port }}:{{ wakapi_port }}
+    environment:
+      WAKAPI_DB_TYPE: postgres
+      WAKAPI_DB_NAME: {{ wakapi_db_name }}
+      WAKAPI_DB_USER: {{ wakapi_db_user }}
+      WAKAPI_DB_HOST: wakapi-db
+      WAKAPI_DB_PORT: 5432
+      WAKAPI_DB_PASSWORD: {{ wakapi_db_password }}
+      WAKAPI_PASSWORD_SALT: {{ wakapi_password_salt }}
+    depends_on:
+      - wakapi-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wakapi.entrypoints=http"
+      - "traefik.http.routers.wakapi.rule=Host(`{{ wakapi_uri }}`)"
+      - "traefik.http.middlewares.wakapi-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.wakapi.middlewares=wakapi-https-redirect"
+      - "traefik.http.routers.wakapi-secure.entrypoints=https"
+      - "traefik.http.routers.wakapi-secure.rule=Host(`{{ wakapi_uri }}`)"
+      - "traefik.http.routers.wakapi-secure.tls=true"
+      - "traefik.http.routers.wakapi-secure.service=wakapi"
+      - "traefik.http.services.wakapi.loadbalancer.server.port={{ wakapi_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  wakapi-db:
+    image: postgres:17
+    container_name: wakapi-db
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    environment:
+      POSTGRES_USER: {{ wakapi_db_user }}
+      POSTGRES_PASSWORD: {{ wakapi_db_password }}
+      POSTGRES_DB: {{ wakapi_db_name }}
+    volumes:
+      - {{ wakapi_directory }}/database/:/var/lib/postgresql/data
+
+networks:
+  traefik_default:
+    external: true

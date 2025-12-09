@@ -1,0 +1,9 @@
+---
+wakapi_directory: /opt/wakapi
+wakapi_uri: "wakapi.{{ global_domain }}"
+wakapi_port: 3000
+
+wakapi_db_name: "{{ lookup('ansible.builtin.ini', 'wakapi_db_name', section='wakapi', file='credentials.ini') }}"
+wakapi_db_password: "{{ lookup('ansible.builtin.ini', 'wakapi_db_password', section='wakapi', file='credentials.ini') }}"
+wakapi_db_user: "{{ lookup('ansible.builtin.ini', 'wakapi_db_user', section='wakapi', file='credentials.ini') }}"
+wakapi_password_salt: "{{ lookup('ansible.builtin.ini', 'wakapi_password_salt', section='wakapi', file='credentials.ini') }}"
