@@ -121,7 +121,7 @@
         server: apps-local-docker
         container: wakapi
 -
-  Internal Apps:
+  "Arrs 'n Media":
     -
       Plex:
         icon: plex.png
@@ -132,6 +132,58 @@
           type: plex
           url: https://plex.{{ global_domain }}
           key: {{ homepage_plex_token }}
+    -
+      Prowlarr:
+        icon: prowlarr.png
+        href: https://prowlarr.{{ global_domain }}/
+        description: Indexer (arr-lxc)
+        widget:
+          type: prowlarr
+          url: https://prowlarr.{{ global_domain }}
+          key: {{ homepage_prowlarr_api }}
+    -
+      Radarr:
+        icon: radarr.png
+        href: https://radarr.{{ global_domain }}/
+        description: Movies (arr-lxc)
+        widget:
+          type: radarr
+          url: https://radarr.{{ global_domain }}
+          key: {{ homepage_radarr_api }}
+          enableQueue: true
+    -
+      QbitTorrent:
+        icon: qbittorrent.png
+        href: https://qbittorrent.{{ global_domain }}/
+        description: Torrent client (arr-lxc)
+        widget:
+          type: qbittorrent
+          url: https://qbittorrent.{{ global_domain }}/
+          username: {{ homepage_qbittorrent_user }}
+          password: {{ homepage_qbittorrent_password }}
+          enableLeechProgress: true
+          enableLeechSize: true
+    -
+      Sonarr:
+        icon: sonarr.png
+        href: https://sonarr.{{ global_domain }}/
+        description: TV (arr-lxc)
+        widget:
+          type: sonarr
+          url: https://sonarr.{{ global_domain }}
+          key: {{ homepage_sonarr_api }}
+          enableQueue: true
+    -
+      Lidarr:
+        icon: lidarr.png
+        href: https://lidarr.{{ global_domain }}/
+        description: Music (arr-lxc)
+        widget:
+          type: lidarr
+          url: https://lidarr.{{ global_domain }}
+          key: {{ homepage_lidarr_api }}
+-
+  Internal Apps:
     -
       Termix:
         icon: termix.png

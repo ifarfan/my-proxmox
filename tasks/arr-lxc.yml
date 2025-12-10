@@ -65,3 +65,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag stash"
+
+  provision-arr-stack:
+    desc: "Provision 'Arr Stack' on '{{.ARR_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag arr_stack"

@@ -19,6 +19,13 @@ homepage_navidrome_user: "{{ lookup('ansible.builtin.ini', 'navidrome_user', sec
 homepage_navidrome_token: "{{ lookup('ansible.builtin.ini', 'navidrome_token', section='homepage', file='credentials.ini') }}"
 homepage_navidrome_salt: "{{ lookup('ansible.builtin.ini', 'navidrome_salt', section='homepage', file='credentials.ini') }}"
 
+homepage_qbittorrent_user: "{{ lookup('ansible.builtin.ini', 'qbittorrent_user', section='arr_stack', file='credentials.ini') }}"
+homepage_qbittorrent_password: "{{ lookup('ansible.builtin.ini', 'qbittorrent_password', section='arr_stack', file='credentials.ini') }}"
+homepage_prowlarr_api: "{{ lookup('ansible.builtin.ini', 'prowlarr_api', section='arr_stack', file='credentials.ini') }}"
+homepage_lidarr_api: "{{ lookup('ansible.builtin.ini', 'lidarr_api', section='arr_stack', file='credentials.ini') }}"
+homepage_radarr_api: "{{ lookup('ansible.builtin.ini', 'radarr_api', section='arr_stack', file='credentials.ini') }}"
+homepage_sonarr_api: "{{ lookup('ansible.builtin.ini', 'sonarr_api', section='arr_stack', file='credentials.ini') }}"
+
 glances_uri: "glances.{{ global_domain }}"
 glances_username: glances
 glances_password: "{{ lookup('ansible.builtin.ini', 'password', section='glances', file='credentials.ini') }}"

@@ -51,3 +51,10 @@
       vars:
         hostname_in_uri: true
       tags: stash
+
+    - name: Install Arr Stack
+      ansible.builtin.include_role:
+        name: arr_stack
+      vars:
+        hostname_in_uri: true
+      tags: arr_stack

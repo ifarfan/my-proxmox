@@ -29,5 +29,10 @@ locals {
     "traefik-arr-lxc",
     "portainer-arr-lxc",
     "stash",
+    "prowlarr",
+    "sonarr",
+    "radarr",
+    "lidarr",
+    "qbittorrent"
   ]
 }

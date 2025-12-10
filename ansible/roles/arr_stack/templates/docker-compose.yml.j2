@@ -1,0 +1,163 @@
+---
+services:
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    hostname: prowlarr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ prowlarr_port }}:{{ prowlarr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/prowlarr/config:/config
+      - {{ arr_apps_directory }}/prowlarr/backup:/data/Backup
+      - {{ arr_apps_directory }}/downloads:/downloads
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.entrypoints=http"
+      - "traefik.http.routers.prowlarr.rule=Host(`{{ prowlarr_uri }}`)"
+      - "traefik.http.middlewares.prowlarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.prowlarr.middlewares=prowlarr-https-redirect"
+      - "traefik.http.routers.prowlarr-secure.entrypoints=https"
+      - "traefik.http.routers.prowlarr-secure.rule=Host(`{{ prowlarr_uri }}`)"
+      - "traefik.http.routers.prowlarr-secure.tls=true"
+      - "traefik.http.routers.prowlarr-secure.service=prowlarr"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port={{ prowlarr_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    hostname: sonarr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ sonarr_port }}:{{ sonarr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/sonarr/config:/config
+      - {{ arr_apps_directory }}/sonarr/backup:/data/Backup
+      - {{ arr_apps_directory }}/sonarr/tvshows:/data/tvshows
+      - {{ arr_apps_directory }}/downloads:/downloads
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.entrypoints=http"
+      - "traefik.http.routers.sonarr.rule=Host(`{{ sonarr_uri }}`)"
+      - "traefik.http.middlewares.sonarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.sonarr.middlewares=sonarr-https-redirect"
+      - "traefik.http.routers.sonarr-secure.entrypoints=https"
+      - "traefik.http.routers.sonarr-secure.rule=Host(`{{ sonarr_uri }}`)"
+      - "traefik.http.routers.sonarr-secure.tls=true"
+      - "traefik.http.routers.sonarr-secure.service=sonarr"
+      - "traefik.http.services.sonarr.loadbalancer.server.port={{ sonarr_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    hostname: radarr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ radarr_port }}:{{ radarr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/radarr/config:/config
+      - {{ arr_apps_directory }}/radarr/movies:/data/movies
+      - {{ arr_apps_directory }}/radarr/backup:/data/Backup
+      - {{ arr_apps_directory }}/downloads:/downloads
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.entrypoints=http"
+      - "traefik.http.routers.radarr.rule=Host(`{{ radarr_uri }}`)"
+      - "traefik.http.middlewares.radarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.radarr.middlewares=radarr-https-redirect"
+      - "traefik.http.routers.radarr-secure.entrypoints=https"
+      - "traefik.http.routers.radarr-secure.rule=Host(`{{ radarr_uri }}`)"
+      - "traefik.http.routers.radarr-secure.tls=true"
+      - "traefik.http.routers.radarr-secure.service=radarr"
+      - "traefik.http.services.radarr.loadbalancer.server.port={{ radarr_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  lidarr:
+    image: linuxserver/lidarr:latest
+    container_name: lidarr
+    hostname: lidarr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ lidarr_port }}:{{ lidarr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/lidarr/config:/config
+      - {{ arr_apps_directory }}/lidarr/music:/data/musicfolder
+      - {{ arr_apps_directory }}/lidarr/backup:/data/Backup
+      - {{ arr_apps_directory }}/downloads:/downloads
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lidarr.entrypoints=http"
+      - "traefik.http.routers.lidarr.rule=Host(`{{ lidarr_uri }}`)"
+      - "traefik.http.middlewares.lidarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.lidarr.middlewares=lidarr-https-redirect"
+      - "traefik.http.routers.lidarr-secure.entrypoints=https"
+      - "traefik.http.routers.lidarr-secure.rule=Host(`{{ lidarr_uri }}`)"
+      - "traefik.http.routers.lidarr-secure.tls=true"
+      - "traefik.http.routers.lidarr-secure.service=lidarr"
+      - "traefik.http.services.lidarr.loadbalancer.server.port={{ lidarr_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    hostname: qbittorrent
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - {{ qbittorrent_web_port }}:{{ qbittorrent_web_port}}
+      - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port}}
+      - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port}}/udp
+    volumes:
+      - {{ arr_apps_directory }}/qbittorrent/config:/config
+      - {{ arr_apps_directory }}/downloads:/downloads
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+      WEBUI_PORT: {{ qbittorrent_web_port }}
+      TORRENTING_PORT: {{ qbittorrent_torrent_port }}
+    healthcheck:
+      start_period: 15s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.entrypoints=http"
+      - "traefik.http.routers.qbittorrent.rule=Host(`{{ qbittorrent_uri }}`)"
+      - "traefik.http.middlewares.qbittorrent-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.qbittorrent.middlewares=qbittorrent-https-redirect"
+      - "traefik.http.routers.qbittorrent-secure.entrypoints=https"
+      - "traefik.http.routers.qbittorrent-secure.rule=Host(`{{ qbittorrent_uri }}`)"
+      - "traefik.http.routers.qbittorrent-secure.tls=true"
+      - "traefik.http.routers.qbittorrent-secure.service=qbittorrent"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port={{ qbittorrent_web_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

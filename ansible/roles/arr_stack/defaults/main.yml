@@ -1,0 +1,22 @@
+---
+arr_directory: /opt/arr-stack/
+arr_apps_directory: "{{ arr_directory }}/arrs"
+arr_puid: 1000
+arr_pgid: 1000
+arr_tz: America/New_York
+
+prowlarr_port: 9696
+prowlarr_uri: "prowlarr.{{ global_domain }}"
+
+sonarr_port: 8989
+sonarr_uri: "sonarr.{{ global_domain }}"
+
+radarr_port: 7878
+radarr_uri: "radarr.{{ global_domain }}"
+
+lidarr_port: 8686
+lidarr_uri: "lidarr.{{ global_domain }}"
+
+qbittorrent_web_port: 8081
+qbittorrent_torrent_port: 6881
+qbittorrent_uri: "qbittorrent.{{ global_domain }}"
