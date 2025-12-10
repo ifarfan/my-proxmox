@@ -1,0 +1,28 @@
+---
+services:
+  snippet-box:
+    image: pawelmalak/snippet-box:latest
+    container_name: snippet-box
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - {{ snippet_port }}:{{ snippet_port }}
+    volumes:
+      - {{ snippet_directory }}/data/:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.snippet.entrypoints=http"
+      - "traefik.http.routers.snippet.rule=Host(`{{ snippet_uri }}`)"
+      - "traefik.http.middlewares.snippet-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.snippet.middlewares=snippet-https-redirect"
+      - "traefik.http.routers.snippet-secure.entrypoints=https"
+      - "traefik.http.routers.snippet-secure.rule=Host(`{{ snippet_uri }}`)"
+      - "traefik.http.routers.snippet-secure.tls=true"
+      - "traefik.http.routers.snippet-secure.service=snippet"
+      - "traefik.http.services.snippet.loadbalancer.server.port={{ snippet_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true
