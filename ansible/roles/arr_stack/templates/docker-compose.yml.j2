@@ -158,6 +158,38 @@ services:
       - "traefik.http.services.qbittorrent.loadbalancer.server.port={{ qbittorrent_web_port }}"
       - "traefik.docker.network=traefik_default"
 
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    hostname: flaresolverr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ flaresolverr_port }}:{{ flaresolverr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/flaresolverr:/config
+    environment:
+      CAPTCHA_SOLVER: none
+      LOG_FILE: none
+      LOG_HTML: false
+      LOG_LEVEL: info
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flaresolverr.entrypoints=http"
+      - "traefik.http.routers.flaresolverr.rule=Host(`{{ flaresolverr_uri }}`)"
+      - "traefik.http.middlewares.flaresolverr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.flaresolverr.middlewares=flaresolverr-https-redirect"
+      - "traefik.http.routers.flaresolverr-secure.entrypoints=https"
+      - "traefik.http.routers.flaresolverr-secure.rule=Host(`{{ flaresolverr_uri }}`)"
+      - "traefik.http.routers.flaresolverr-secure.tls=true"
+      - "traefik.http.routers.flaresolverr-secure.service=flaresolverr"
+      - "traefik.http.services.flaresolverr.loadbalancer.server.port={{ flaresolverr_port }}"
+      - "traefik.docker.network=traefik_default"
+
 networks:
   traefik_default:
     external: true
