@@ -79,3 +79,8 @@
       ansible.builtin.include_role:
         name: wakapi
       tags: wakapi
+
+    - name: Install Snippet-Box
+      ansible.builtin.include_role:
+        name: snippet_box
+      tags: snippet_box
