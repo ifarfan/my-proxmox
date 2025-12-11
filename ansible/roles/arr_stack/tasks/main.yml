@@ -38,7 +38,7 @@
         name: nfs_client
       vars:
         nfs_client_mounts:
-          - { volume: books, path: /mnt/books, rights: ro }
+          - { volume: books, path: /mnt/books, rights: rw }
           - { volume: stash, path: /mnt/stash, rights: rw }
           - { volume: tv, path: /mnt/tv, rights: rw }
 
