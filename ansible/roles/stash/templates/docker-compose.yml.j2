@@ -21,7 +21,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ stash_directory }}/config:/root/.stash         # Stash configuration files
-      - {{ stash_directory }}/data:/data                  # Point this at your collection
+      - /mnt/stash:/data                                  # Point this at your collection
       - {{ stash_directory }}/metadata:/metadata          # Stash's metadata lives
       - {{ stash_directory }}/cache:/cache                # Any other cache content
       - {{ stash_directory }}/blobs:/blobs                # Where stash stores blob files (thumbnails,preview,transcodes,sprites)

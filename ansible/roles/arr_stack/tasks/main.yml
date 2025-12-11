@@ -33,4 +33,13 @@
         remove_volumes: true
         state: restarted
 
+    - name: Install NFS client and mount volumes
+      ansible.builtin.include_role:
+        name: nfs_client
+      vars:
+        nfs_client_mounts:
+          - { volume: books, path: /mnt/books, rights: ro }
+          - { volume: stash, path: /mnt/stash, rights: rw }
+          - { volume: tv, path: /mnt/tv, rights: rw }
+
   tags: arr_stack

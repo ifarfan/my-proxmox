@@ -4,16 +4,17 @@
     name: "{{ nfs_pkgs }}"
     state: present
 
-- name: Create NFS mount point
+- name: Create NFS folders # noqa: risky-file-permissions
   ansible.builtin.file:
-    path: "{{ nfs_docker_path }}"
+    path: "{{ item.path }}"
     state: directory
-    mode: '0701'
+  loop: "{{ nfs_client_mounts }}"
 
-- name: Mount NFS to docker volumes + add to /etc/fstab
+- name: Mount NFS volumes + add to /etc/fstab
   ansible.posix.mount:
-    src: "{{ nfs_server }}"
-    path: "{{ nfs_docker_path }}"
+    src: "{{ nfs_server }}:{{ nfs_volumes[item.volume] }}"
+    path: "{{ item.path }}"
     fstype: nfs
-    opts: "{{ nfs_options }}"
+    opts: "{{ nfs_options_rw if item.rights == 'rw' else nfs_options_ro }}"
     state: mounted
+  loop: "{{ nfs_client_mounts }}"

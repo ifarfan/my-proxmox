@@ -2,6 +2,13 @@
 - name: Install stash
   block:
 
+    - name: Install NFS client and mount volumes
+      ansible.builtin.include_role:
+        name: nfs_client
+      vars:
+        nfs_client_mounts:
+          - { volume: stash, path: /mnt/stash, rights: rw }
+
     - name: Create app directory
       ansible.builtin.file:
         path: "{{ stash_directory }}"
