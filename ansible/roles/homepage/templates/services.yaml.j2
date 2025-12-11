@@ -96,12 +96,11 @@
         server: devbox-docker
         container: dozzle-agent
     -
-      Glances:
-        icon: glances.png
-        href: https://{{ glances_username }}:{{ glances_password }}@glances.{{ global_domain }}/
-        description: Monitoring Server (apps-lxc)
-        server: apps-local-docker
-        container: glances
+      Dozzle Agent:
+        icon: dozzle.png
+        description: Agent (arr-lxc)
+        server: arr-docker
+        container: dozzle-agent
     -
       Speedtest Tracker:
         icon: speedtest-tracker.png
@@ -114,9 +113,16 @@
           url: https://speedtest-tracker.{{ global_domain }}
           bitratePrecision: 3
     -
+      Glances:
+        icon: glances.png
+        href: https://{{ glances_username }}:{{ glances_password }}@glances.{{ global_domain }}/
+        description: Monitoring Server (apps-lxc)
+        server: apps-local-docker
+        container: glances
+    -
       Wakapi:
         icon: wakapi.png
-        href: https://wakapi.{{ global_domain }}/
+        href: https://wakapi.{{ global_domain }}/summary
         description: Monitor developement work Over Time (apps-lxc)
         server: apps-local-docker
         container: wakapi
@@ -137,6 +143,7 @@
         icon: prowlarr.png
         href: https://prowlarr.{{ global_domain }}/
         description: Indexer (arr-lxc)
+        siteMonitor: https://prowlarr.{{ global_domain }}/login
         widget:
           type: prowlarr
           url: https://prowlarr.{{ global_domain }}
@@ -146,28 +153,18 @@
         icon: radarr.png
         href: https://radarr.{{ global_domain }}/
         description: Movies (arr-lxc)
+        siteMonitor: https://radarr.{{ global_domain }}/login
         widget:
           type: radarr
           url: https://radarr.{{ global_domain }}
           key: {{ homepage_radarr_api }}
           enableQueue: true
     -
-      QbitTorrent:
-        icon: qbittorrent.png
-        href: https://qbittorrent.{{ global_domain }}/
-        description: Torrent client (arr-lxc)
-        widget:
-          type: qbittorrent
-          url: https://qbittorrent.{{ global_domain }}/
-          username: {{ homepage_qbittorrent_user }}
-          password: {{ homepage_qbittorrent_password }}
-          enableLeechProgress: true
-          enableLeechSize: true
-    -
       Sonarr:
         icon: sonarr.png
         href: https://sonarr.{{ global_domain }}/
         description: TV (arr-lxc)
+        siteMonitor: https://sonarr.{{ global_domain }}/login
         widget:
           type: sonarr
           url: https://sonarr.{{ global_domain }}
@@ -178,10 +175,30 @@
         icon: lidarr.png
         href: https://lidarr.{{ global_domain }}/
         description: Music (arr-lxc)
+        siteMonitor: https://lidarr.{{ global_domain }}/login
         widget:
           type: lidarr
           url: https://lidarr.{{ global_domain }}
           key: {{ homepage_lidarr_api }}
+    -
+      LazyLibrarian:
+        icon: lazylibrarian.png
+        href: https://lazylibrarian.{{ global_domain }}/
+        description: Books (arr-lxc)
+        siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
+    -
+      QbitTorrent:
+        icon: qbittorrent.png
+        href: https://qbittorrent.{{ global_domain }}/
+        description: Torrent client (arr-lxc)
+        siteMonitor: https://qbittorrent.{{ global_domain }}
+        widget:
+          type: qbittorrent
+          url: https://qbittorrent.{{ global_domain }}/
+          username: {{ homepage_qbittorrent_user }}
+          password: {{ homepage_qbittorrent_password }}
+          enableLeechProgress: true
+          enableLeechSize: true
 -
   Internal Apps:
     -

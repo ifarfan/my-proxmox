@@ -123,6 +123,38 @@ services:
       - "traefik.http.services.lidarr.loadbalancer.server.port={{ lidarr_port }}"
       - "traefik.docker.network=traefik_default"
 
+  lazylibrarian:
+    image: lscr.io/linuxserver/lazylibrarian:latest
+    container_name: lazylibrarian
+    hostname: lidarr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ lazylibrarian_port }}:{{ lazylibrarian_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/lazylibrarian/config:/config
+      - {{ arr_apps_directory }}/lazylibrarian/backup:/data/Backup
+      - {{ arr_apps_directory }}/downloads:/downloads
+      - /mnt/books:/books
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+      DOCKER_MODS: linuxserver/mods:universal-calibre|linuxserver/mods:lazylibrarian-ffmpeg
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lazylibrarian.entrypoints=http"
+      - "traefik.http.routers.lazylibrarian.rule=Host(`{{ lazylibrarian_uri }}`)"
+      - "traefik.http.middlewares.lazylibrarian-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.lazylibrarian.middlewares=lazylibrarian-https-redirect"
+      - "traefik.http.routers.lazylibrarian-secure.entrypoints=https"
+      - "traefik.http.routers.lazylibrarian-secure.rule=Host(`{{ lazylibrarian_uri }}`)"
+      - "traefik.http.routers.lazylibrarian-secure.tls=true"
+      - "traefik.http.routers.lazylibrarian-secure.service=lazylibrarian"
+      - "traefik.http.services.lazylibrarian.loadbalancer.server.port={{ lazylibrarian_port }}"
+      - "traefik.docker.network=traefik_default"
+
   qbittorrent:
     image: linuxserver/qbittorrent:latest
     container_name: qbittorrent

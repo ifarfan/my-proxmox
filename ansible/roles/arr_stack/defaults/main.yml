@@ -17,6 +17,9 @@ radarr_uri: "radarr.{{ global_domain }}"
 lidarr_port: 8686
 lidarr_uri: "lidarr.{{ global_domain }}"
 
+lazylibrarian_port: 5299
+lazylibrarian_uri: "lazylibrarian.{{ global_domain }}"
+
 qbittorrent_web_port: 8081
 qbittorrent_torrent_port: 6881
 qbittorrent_uri: "qbittorrent.{{ global_domain }}"
