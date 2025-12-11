@@ -33,6 +33,7 @@ locals {
     "sonarr",
     "radarr",
     "lidarr",
-    "qbittorrent"
+    "qbittorrent",
+    "flaresolverr"
   ]
 }
