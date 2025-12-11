@@ -4,7 +4,7 @@ nfs_options_rw: rw,relatime,vers=4.0,rsize=131072,wsize=131072,namlen=255,hard,p
 nfs_options_ro: ro,relatime,vers=4.0,rsize=131072,wsize=131072,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,local_lock=none,_netdev
 
 nfs_pkgs:
-- nfs-common
+  - nfs-common
 
 nfs_volumes:
   booklore: /volume1/booklore

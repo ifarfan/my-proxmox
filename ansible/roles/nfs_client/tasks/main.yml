@@ -4,7 +4,7 @@
     name: "{{ nfs_pkgs }}"
     state: present
 
-- name: Create NFS folders
+- name: Create NFS folders # noqa: risky-file-permissions
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
