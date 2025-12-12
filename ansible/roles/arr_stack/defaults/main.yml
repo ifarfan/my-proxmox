@@ -3,7 +3,6 @@ arr_directory: /opt/arr-stack/
 arr_apps_directory: "{{ arr_directory }}/arrs"
 arr_puid: 1000
 arr_pgid: 1000
-arr_tz: America/New_York
 
 prowlarr_port: 9696
 prowlarr_uri: "prowlarr.{{ global_domain }}"

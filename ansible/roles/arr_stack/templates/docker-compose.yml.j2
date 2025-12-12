@@ -17,7 +17,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prowlarr.entrypoints=http"
@@ -49,7 +49,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.entrypoints=http"
@@ -81,7 +81,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radarr.entrypoints=http"
@@ -113,7 +113,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lidarr.entrypoints=http"
@@ -145,7 +145,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
       DOCKER_MODS: linuxserver/mods:universal-calibre|linuxserver/mods:lazylibrarian-ffmpeg
     labels:
       - "traefik.enable=true"
@@ -177,7 +177,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.bazarr.entrypoints=http"
@@ -209,7 +209,7 @@ services:
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
       WEBUI_PORT: {{ qbittorrent_web_port }}
       TORRENTING_PORT: {{ qbittorrent_torrent_port }}
     healthcheck:
@@ -246,7 +246,7 @@ services:
       LOG_LEVEL: info
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
-      TZ: {{ arr_tz }}
+      TZ: {{ global_tz }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.flaresolverr.entrypoints=http"

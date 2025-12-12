@@ -36,6 +36,7 @@ locals {
     "qbittorrent",
     "flaresolverr",
     "lazylibrarian",
-    "bazarr"
+    "bazarr",
+    "booklore"
   ]
 }
