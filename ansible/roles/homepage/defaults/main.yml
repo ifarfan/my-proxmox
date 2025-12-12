@@ -25,6 +25,7 @@ homepage_prowlarr_api: "{{ lookup('ansible.builtin.ini', 'prowlarr_api', section
 homepage_lidarr_api: "{{ lookup('ansible.builtin.ini', 'lidarr_api', section='arr_stack', file='credentials.ini') }}"
 homepage_radarr_api: "{{ lookup('ansible.builtin.ini', 'radarr_api', section='arr_stack', file='credentials.ini') }}"
 homepage_sonarr_api: "{{ lookup('ansible.builtin.ini', 'sonarr_api', section='arr_stack', file='credentials.ini') }}"
+homepage_bazarr_api: "{{ lookup('ansible.builtin.ini', 'bazarr_api', section='arr_stack', file='credentials.ini') }}"
 
 glances_uri: "glances.{{ global_domain }}"
 glances_username: glances
