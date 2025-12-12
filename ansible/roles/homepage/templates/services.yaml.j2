@@ -127,17 +127,7 @@
         server: apps-local-docker
         container: wakapi
 -
-  "Arrs 'n Media":
-    -
-      Plex:
-        icon: plex.png
-        href: https://plex.{{ global_domain }}/web/index.html
-        description: Media Server (DS1 - NAS)
-        siteMonitor: https://plex.{{ global_domain }}/web/index.html
-        widget:
-          type: plex
-          url: https://plex.{{ global_domain }}
-          key: {{ homepage_plex_token }}
+  High Seas:
     -
       Prowlarr:
         icon: prowlarr.png
@@ -181,6 +171,16 @@
           url: https://lidarr.{{ global_domain }}
           key: {{ homepage_lidarr_api }}
     -
+      Bazarr:
+        icon: bazarr.png
+        href: https://bazarr.{{ global_domain }}/
+        description: Subtitles (arr-lxc)
+        siteMonitor: https://bazarr.{{ global_domain }}
+        widget:
+          type: bazarr
+          url: https://bazarr.{{ global_domain }}
+          key: {{ homepage_bazarr_api }}
+    -
       LazyLibrarian:
         icon: lazylibrarian.png
         href: https://lazylibrarian.{{ global_domain }}/
@@ -199,6 +199,18 @@
           password: {{ homepage_qbittorrent_password }}
           enableLeechProgress: true
           enableLeechSize: true
+-
+  Media Apps:
+    -
+      Plex:
+        icon: plex.png
+        href: https://plex.{{ global_domain }}/web/index.html
+        description: Media Server (DS1 - NAS)
+        siteMonitor: https://plex.{{ global_domain }}/web/index.html
+        widget:
+          type: plex
+          url: https://plex.{{ global_domain }}
+          key: {{ homepage_plex_token }}
 -
   Internal Apps:
     -

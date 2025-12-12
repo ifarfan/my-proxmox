@@ -1,6 +1,17 @@
 ---
+# Look 'n Feel
 title: Homelab | Dashboard
 headerStyle: clean
+color: zinc
+background:
+  image: https://images.unsplash.com/photo-1637032482680-0f7086963a67
+  blur: sm              # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 50          # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 50        # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  opacity: 85           # 0-100
+statusStyle: "dot"
+
+# Layout
 layout:
   Hardware:
     style: row
@@ -17,11 +28,6 @@ layout:
     columns: 4
     icon: mdi-eye-outline
     useEqualHeights: true
-  "Arrs 'n Media":
-    style: row
-    columns: 3
-    icon: mdi-pirate
-    useEqualHeights: true
   Internal Apps:
     style: row
     columns: 3
@@ -32,6 +38,17 @@ layout:
     columns: 4
     icon: mdi-filter-cog-outline
     useEqualHeights: true
+  Media Apps:
+    style: row
+    columns: 3
+    icon: mdi-multimedia
+    useEqualHeights: true
+  High Seas:
+    style: row
+    columns: 3
+    icon: mdi-pirate
+    useEqualHeights: true
+    initiallyCollapsed: true
   External Vendors:
     style: row
     columns: 4
@@ -41,19 +58,11 @@ layout:
     columns: 2
     icon: mdi-finance
     useEqualHeights: true
+    initiallyCollapsed: true
 
-color: zinc
-background:
-  image: https://images.unsplash.com/photo-1637032482680-0f7086963a67
-  blur: sm              # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
-  saturate: 50          # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
-  brightness: 50        # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
-  opacity: 85           # 0-100
-statusStyle: "dot"
-
+# Other
 providers:
   finnhub: {{ homepage_finnhub_token }}
-
 quicklaunch:
   searchDescriptions: true
   hideInternetSearch: true

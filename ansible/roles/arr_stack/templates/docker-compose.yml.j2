@@ -1,5 +1,6 @@
 ---
 services:
+  # Indexer Manager
   prowlarr:
     image: linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -30,6 +31,7 @@ services:
       - "traefik.http.services.prowlarr.loadbalancer.server.port={{ prowlarr_port }}"
       - "traefik.docker.network=traefik_default"
 
+  # TV Show Manager
   sonarr:
     image: linuxserver/sonarr:latest
     container_name: sonarr
@@ -61,6 +63,7 @@ services:
       - "traefik.http.services.sonarr.loadbalancer.server.port={{ sonarr_port }}"
       - "traefik.docker.network=traefik_default"
 
+  # Movie Manager
   radarr:
     image: linuxserver/radarr:latest
     container_name: radarr
@@ -92,6 +95,7 @@ services:
       - "traefik.http.services.radarr.loadbalancer.server.port={{ radarr_port }}"
       - "traefik.docker.network=traefik_default"
 
+  # Music Manager
   lidarr:
     image: linuxserver/lidarr:latest
     container_name: lidarr
@@ -123,6 +127,7 @@ services:
       - "traefik.http.services.lidarr.loadbalancer.server.port={{ lidarr_port }}"
       - "traefik.docker.network=traefik_default"
 
+  # Book Manager
   lazylibrarian:
     image: lscr.io/linuxserver/lazylibrarian:latest
     container_name: lazylibrarian
@@ -155,6 +160,38 @@ services:
       - "traefik.http.services.lazylibrarian.loadbalancer.server.port={{ lazylibrarian_port }}"
       - "traefik.docker.network=traefik_default"
 
+  # Subtitle Downloader
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    hostname: bazarr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ bazarr_port }}:{{ bazarr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/bazarr/config:/config
+      - /mnt/movies:/movies
+      - /mnt/tv:/tv
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ arr_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bazarr.entrypoints=http"
+      - "traefik.http.routers.bazarr.rule=Host(`{{ bazarr_uri }}`)"
+      - "traefik.http.middlewares.bazarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.bazarr.middlewares=bazarr-https-redirect"
+      - "traefik.http.routers.bazarr-secure.entrypoints=https"
+      - "traefik.http.routers.bazarr-secure.rule=Host(`{{ bazarr_uri }}`)"
+      - "traefik.http.routers.bazarr-secure.tls=true"
+      - "traefik.http.routers.bazarr-secure.service=bazarr"
+      - "traefik.http.services.bazarr.loadbalancer.server.port={{ bazarr_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  # Download Manager
   qbittorrent:
     image: linuxserver/qbittorrent:latest
     container_name: qbittorrent
@@ -190,6 +227,7 @@ services:
       - "traefik.http.services.qbittorrent.loadbalancer.server.port={{ qbittorrent_web_port }}"
       - "traefik.docker.network=traefik_default"
 
+  # CAPTCHA Solver for Cloudflare Protected Sites (consider Byparr)
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
