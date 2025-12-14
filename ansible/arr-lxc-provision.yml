@@ -48,13 +48,14 @@
     - name: Install Stash
       ansible.builtin.include_role:
         name: stash
-      vars:
-        hostname_in_uri: true
       tags: stash
 
     - name: Install Arr Stack
       ansible.builtin.include_role:
         name: arr_stack
-      vars:
-        hostname_in_uri: true
       tags: arr_stack
+
+    - name: Install Booklore
+      ansible.builtin.include_role:
+        name: booklore
+      tags: booklore

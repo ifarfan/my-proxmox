@@ -71,3 +71,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag arr_stack"
+
+  provision-booklore:
+    desc: "Provision 'Booklore' on '{{.ARR_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag booklore"

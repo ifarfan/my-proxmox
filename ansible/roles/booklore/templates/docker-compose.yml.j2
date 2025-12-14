@@ -1,0 +1,63 @@
+---
+services:
+  booklore:
+    image: booklore/booklore:{{ booklore_version }}
+    container_name: booklore
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ booklore_directory }}/data:/app/data
+      - {{ booklore_directory }}/bookdrop:/bookdrop
+      - /mnt/booklore:/books
+    ports:
+      - {{ booklore_port }}:{{ booklore_port }}
+    environment:
+      USER_ID: 0
+      GROUP_ID: 0
+      TZ: {{ global_tz }}
+      DATABASE_URL: jdbc:mariadb://mariadb:3306/{{ booklore_db_name }}
+      DATABASE_USERNAME: {{ booklore_db_username }}
+      DATABASE_PASSWORD: {{ booklore_db_password }}
+      BOOKLORE_PORT: {{ booklore_port }}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.booklore.entrypoints=http"
+      - "traefik.http.routers.booklore.rule=Host(`{{ booklore_uri }}`)"
+      - "traefik.http.middlewares.booklore-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.booklore.middlewares=booklore-https-redirect"
+      - "traefik.http.routers.booklore-secure.entrypoints=https"
+      - "traefik.http.routers.booklore-secure.rule=Host(`{{ booklore_uri }}`)"
+      - "traefik.http.routers.booklore-secure.tls=true"
+      - "traefik.http.routers.booklore-secure.service=booklore"
+      - "traefik.http.services.booklore.loadbalancer.server.port={{ booklore_port }}"
+      - "traefik.docker.network=traefik_default"
+
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:11.4.5
+    container_name: mariadb
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    environment:
+       PUID: 1000
+       PGID: 1000
+       TZ: {{ global_tz }}
+       MYSQL_ROOT_PASSWORD: {{ booklore_db_password }}
+       MYSQL_DATABASE: {{ booklore_db_name }}
+       MYSQL_USER: {{ booklore_db_username }}
+       MYSQL_PASSWORD: {{ booklore_db_password }}
+    volumes:
+      - {{ booklore_directory }}/mariadb-config:/config
+    healthcheck:
+      test: [ "CMD", "mariadb-admin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+networks:
+  traefik_default:
+    external: true
