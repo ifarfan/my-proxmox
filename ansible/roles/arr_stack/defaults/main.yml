@@ -22,6 +22,9 @@ lazylibrarian_uri: "lazylibrarian.{{ global_domain }}"
 bazarr_port: 6767
 bazarr_uri: "bazarr.{{ global_domain }}"
 
+whisparr_port: 6969
+whisparr_uri: "whisparr.{{ global_domain }}"
+
 qbittorrent_web_port: 8081
 qbittorrent_torrent_port: 6881
 qbittorrent_uri: "qbittorrent.{{ global_domain }}"
