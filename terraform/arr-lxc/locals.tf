@@ -17,7 +17,7 @@ locals {
     },
     {
       mp   = "/opt"
-      size = "50G"
+      size = "70G"
     }
   ]
 
