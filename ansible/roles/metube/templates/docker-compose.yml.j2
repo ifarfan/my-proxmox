@@ -1,0 +1,38 @@
+---
+services:
+  metube:
+    image: ghcr.io/alexta69/metube:{{ metube_version }}
+    container_name: metube
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ metube_directory }}/config:/config
+      - {{ metube_directory }}/cookies:/cookies
+      - {{ metube_directory }}/downloads:/downloads
+    ports:
+      - {{ metube_port }}:{{ metube_port }}
+    environment:
+      DOWNLOAD_DIR: /downloads
+      STATE_DIR: /config
+      TEMP_DIR: /metube-tmp
+      URL_PREFIX: /metube
+      YTDL_OPTIONS: "{'cookiefile':'/cookies/cookies.txt'}"
+      TZ: {{ global_tz }}
+      LOGLEVEL: DEBUG
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metube.entrypoints=http"
+      - "traefik.http.routers.metube.rule=Host(`{{ metube_uri }}`)"
+      - "traefik.http.middlewares.metube-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.metube.middlewares=metube-https-redirect"
+      - "traefik.http.routers.metube-secure.entrypoints=https"
+      - "traefik.http.routers.metube-secure.rule=Host(`{{ metube_uri }}`)"
+      - "traefik.http.routers.metube-secure.tls=true"
+      - "traefik.http.routers.metube-secure.service=metube"
+      - "traefik.http.services.metube.loadbalancer.server.port={{ metube_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

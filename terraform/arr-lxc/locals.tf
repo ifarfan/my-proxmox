@@ -37,6 +37,7 @@ locals {
     "flaresolverr",
     "lazylibrarian",
     "bazarr",
-    "booklore"
+    "booklore",
+    "metube"
   ]
 }
