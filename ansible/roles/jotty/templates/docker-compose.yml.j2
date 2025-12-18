@@ -1,0 +1,33 @@
+---
+services:
+  jotty:
+    image: ghcr.io/fccview/jotty:{{ jotty_version }}
+    container_name: jotty
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ jotty_directory }}/data:/app/data:rw
+      - {{ jotty_directory }}/config:/app/config:rw
+      - {{ jotty_directory }}/cache:/app/.next/cache:rw
+    ports:
+      - 1122:{{ jotty_port }}
+    user: "{{ jotty_user}}:{{ jotty_user }}"
+    environment:
+      NODE_ENV: production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jotty.entrypoints=http"
+      - "traefik.http.routers.jotty.rule=Host(`{{ jotty_uri }}`)"
+      - "traefik.http.middlewares.jotty-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.jotty.middlewares=jotty-https-redirect"
+      - "traefik.http.routers.jotty-secure.entrypoints=https"
+      - "traefik.http.routers.jotty-secure.rule=Host(`{{ jotty_uri }}`)"
+      - "traefik.http.routers.jotty-secure.tls=true"
+      - "traefik.http.routers.jotty-secure.service=jotty"
+      - "traefik.http.services.jotty.loadbalancer.server.port={{ jotty_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

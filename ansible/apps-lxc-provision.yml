@@ -84,3 +84,8 @@
       ansible.builtin.include_role:
         name: snippet_box
       tags: snippet_box
+
+    - name: Install Jotty
+      ansible.builtin.include_role:
+        name: jotty
+      tags: jotty
