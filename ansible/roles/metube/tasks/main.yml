@@ -1,0 +1,51 @@
+---
+- name: Install metube
+  block:
+    - name: Install NFS client and mount volumes
+      ansible.builtin.include_role:
+        name: nfs_client
+      vars:
+        nfs_client_mounts:
+          - { volume: stash, path: /mnt/stash, rights: rw }
+
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ metube_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Create remote "downloads" folder
+      ansible.builtin.file:
+        path: /mnt/stash/downloads
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ metube_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ metube_directory }}"
+        recreate: always
+        pull: missing
+        remove_orphans: true
+        remove_volumes: true
+        state: restarted
+
+    - name: Wait until certificate is registered
+      ansible.builtin.uri:
+        url: "https://{{ metube_uri }}/"
+        validate_certs: true
+        status_code:
+          - 200
+      register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 30       # Retries for 30 * 10 secs = 300 secs = 5 mins
+
+  tags: metube

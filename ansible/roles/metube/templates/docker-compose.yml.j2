@@ -1,0 +1,39 @@
+---
+services:
+  metube:
+    image: alexta69/metube:latest
+    container_name: metube
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ metube_directory }}/config:/config
+      - {{ metube_directory }}/cookies:/cookies
+      - /mnt/stash/downloads:/downloads
+    ports:
+      - "8083:{{ metube_port }}"
+    environment:
+      UID: {{ metube_uid}}
+      GID: {{ metube_gid}}
+      DOWNLOAD_DIR: /downloads
+      STATE_DIR: /config
+      TEMP_DIR: /metube-tmp
+      YTDL_OPTIONS: '{"cookiefile":"/cookies/cookies.txt","writesubtitles": "true","subtitlesformat":"srt","extractor_args": {"generic": {"impersonate": [""]}}}'
+      TZ: {{ global_tz }}
+      LOGLEVEL: INFO
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metube.entrypoints=http"
+      - "traefik.http.routers.metube.rule=Host(`{{ metube_uri }}`)"
+      - "traefik.http.middlewares.metube-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.metube.middlewares=metube-https-redirect"
+      - "traefik.http.routers.metube-secure.entrypoints=https"
+      - "traefik.http.routers.metube-secure.rule=Host(`{{ metube_uri }}`)"
+      - "traefik.http.routers.metube-secure.tls=true"
+      - "traefik.http.routers.metube-secure.service=metube"
+      - "traefik.http.services.metube.loadbalancer.server.port={{ metube_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

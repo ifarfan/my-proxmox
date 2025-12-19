@@ -77,3 +77,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag booklore"
+
+  provision-metube:
+    desc: "Provision 'MeTube' on '{{.ARR_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.ARR_LXC_ANSIBLE_PLAYBOOK}} --tag metube"
