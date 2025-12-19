@@ -38,6 +38,7 @@ locals {
     "speedtest-tracker",
     "wakapi",
     "snippet-box",
+    "jotty"
     # "grafana",
     # "loki",
     # "prometheus",

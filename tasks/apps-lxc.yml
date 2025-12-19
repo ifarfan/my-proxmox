@@ -119,3 +119,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag snippet_box"
+
+  provision-jotty:
+    desc: Provision "Jotty" on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag jotty"

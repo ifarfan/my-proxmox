@@ -1,5 +1,5 @@
 ---
-arr_directory: /opt/arr-stack/
+arr_directory: /opt/arr-stack
 arr_apps_directory: "{{ arr_directory }}/arrs"
 arr_puid: 1000
 arr_pgid: 1000
@@ -22,7 +22,7 @@ lazylibrarian_uri: "lazylibrarian.{{ global_domain }}"
 bazarr_port: 6767
 bazarr_uri: "bazarr.{{ global_domain }}"
 
-qbittorrent_web_port: 8081
+qbittorrent_web_port: 8082
 qbittorrent_torrent_port: 6881
 qbittorrent_uri: "qbittorrent.{{ global_domain }}"
 
