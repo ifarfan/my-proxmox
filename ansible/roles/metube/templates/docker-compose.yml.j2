@@ -1,7 +1,7 @@
 ---
 services:
   metube:
-    image: ghcr.io/alexta69/metube:{{ metube_version }}
+    image: alexta69/metube:latest
     container_name: metube
     restart: unless-stopped
     networks:
@@ -11,13 +11,12 @@ services:
       - {{ metube_directory }}/cookies:/cookies
       - {{ metube_directory }}/downloads:/downloads
     ports:
-      - {{ metube_port }}:{{ metube_port }}
+      - "8083:{{ metube_port }}"
     environment:
       DOWNLOAD_DIR: /downloads
       STATE_DIR: /config
       TEMP_DIR: /metube-tmp
-      URL_PREFIX: /metube
-      YTDL_OPTIONS: "{'cookiefile':'/cookies/cookies.txt'}"
+      YTDL_OPTIONS: '{"cookiefile":"/cookies/cookies.txt","writesubtitles": "true","subtitlesformat":"srt","extractor_args": {"generic": {"impersonate": [""]}}}'
       TZ: {{ global_tz }}
       LOGLEVEL: DEBUG
     labels:

@@ -2,4 +2,3 @@
 metube_directory: /opt/metube
 metube_uri: "metube.{{ global_domain }}"
 metube_port: 8081
-metube_version: 2025.10.01
