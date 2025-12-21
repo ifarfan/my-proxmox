@@ -1,6 +1,6 @@
 ---
-- name: Tailscale provisioning
-  hosts: tailscale-lxc.macminis.net
+- name: Net provisioning
+  hosts: net-lxc.macminis.net
   become: true
   gather_facts: true
   tasks:
