@@ -1,0 +1,38 @@
+---
+- name: Install it_tools
+  block:
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ it_tools_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ it_tools_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ it_tools_directory }}"
+        recreate: always
+        pull: missing
+        remove_orphans: true
+        remove_volumes: true
+        state: restarted
+
+    - name: Wait until certificate is registered
+      ansible.builtin.uri:
+        url: "https://{{ it_tools_uri }}/"
+        validate_certs: true
+        status_code:
+          - 200
+      register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 30       # Retries for 30 * 10 secs = 300 secs = 5 mins
+
+  tags: it_tools
