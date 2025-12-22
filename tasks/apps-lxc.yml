@@ -125,3 +125,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag jotty"
+
+  provision-booklore:
+    desc: "Provision 'Booklore' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag booklore"

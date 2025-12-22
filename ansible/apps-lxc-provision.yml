@@ -89,3 +89,8 @@
       ansible.builtin.include_role:
         name: jotty
       tags: jotty
+
+    - name: Install Booklore
+      ansible.builtin.include_role:
+        name: booklore
+      tags: booklore

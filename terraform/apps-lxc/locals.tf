@@ -38,12 +38,7 @@ locals {
     "speedtest-tracker",
     "wakapi",
     "snippet-box",
-    "jotty"
-    # "grafana",
-    # "loki",
-    # "prometheus",
-    # "home-assistant",
-    # "linkding",
-    # "swingmusic",
+    "jotty",
+    "booklore"
   ]
 }
