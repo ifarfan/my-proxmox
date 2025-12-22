@@ -41,5 +41,6 @@ locals {
     "jotty",
     "booklore",
     "ephemera",
+    "it-tools",
   ]
 }
