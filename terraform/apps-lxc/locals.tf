@@ -39,6 +39,7 @@ locals {
     "wakapi",
     "snippet-box",
     "jotty",
-    "booklore"
+    "booklore",
+    "ephemera",
   ]
 }
