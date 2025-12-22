@@ -43,13 +43,13 @@ services:
     networks:
       - traefik_default
     environment:
-       PUID: 1000
-       PGID: 1000
-       TZ: {{ global_tz }}
-       MYSQL_ROOT_PASSWORD: {{ booklore_db_password }}
-       MYSQL_DATABASE: {{ booklore_db_name }}
-       MYSQL_USER: {{ booklore_db_username }}
-       MYSQL_PASSWORD: {{ booklore_db_password }}
+      PUID: 1000
+      PGID: 1000
+      TZ: {{ global_tz }}
+      MYSQL_ROOT_PASSWORD: {{ booklore_db_password }}
+      MYSQL_DATABASE: {{ booklore_db_name }}
+      MYSQL_USER: {{ booklore_db_username }}
+      MYSQL_PASSWORD: {{ booklore_db_password }}
     volumes:
       - {{ booklore_directory }}/mariadb-config:/config
     healthcheck:
@@ -57,6 +57,78 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  ephemera:
+    image: ghcr.io/orwellianepilogue/ephemera:latest
+    container_name: ephemera
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ booklore_directory }}/ephemera_data:/app/data
+      - {{ booklore_directory }}/ephemera_downloads:/app/downloads
+      - {{ booklore_directory }}/bookdrop:/app/ingest
+    ports:
+      - {{ ephemera_port }}:{{ ephemera_port }}
+    environment:
+      # Required:
+      AA_BASE_URL: https://annas-archive.org/
+      # FlareSolverr is used for slow download fallback when API key is missing or quota exhausted
+      # Default: http://127.0.0.1:8191 (or http://flaresolverr:8191 in Docker)
+      FLARESOLVERR_URL: http://flaresolverr:{{ flaresolverr_port }}
+      # Optional
+      # Alternative Download Source (optional, but highly recommended)
+      # If set, LG fast download will be attempted before falling back to slow servers
+      # Leave empty to disable this feature
+      # li, bz, etc.
+      LG_BASE_URL: #https://gen.com
+      AA_API_KEY:
+      PUID: 1000
+      PGID: 100
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ephemera.entrypoints=http"
+      - "traefik.http.routers.ephemera.rule=Host(`{{ ephemera_uri }}`)"
+      - "traefik.http.middlewares.ephemera-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.ephemera.middlewares=ephemera-https-redirect"
+      - "traefik.http.routers.ephemera-secure.entrypoints=https"
+      - "traefik.http.routers.ephemera-secure.rule=Host(`{{ ephemera_uri }}`)"
+      - "traefik.http.routers.ephemera-secure.tls=true"
+      - "traefik.http.routers.ephemera-secure.service=ephemera"
+      - "traefik.http.services.ephemera.loadbalancer.server.port={{ ephemera_port }}"
+      - "traefik.docker.network=traefik_default"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://ephemera:{{ ephemera_port }}/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    environment:
+      LOG_LEVEL: info
+      LOG_HTML: false
+      CAPTCHA_SOLVER: none
+      TZ: {{ global_tz }}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://flaresolverr:{{ flaresolverr_port}}/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
 
 networks:
   traefik_default:
