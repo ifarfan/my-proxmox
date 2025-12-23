@@ -99,3 +99,8 @@
       ansible.builtin.include_role:
         name: it_tools
       tags: it_tools
+
+    - name: Install Neko
+      ansible.builtin.include_role:
+        name: neko
+      tags: neko
