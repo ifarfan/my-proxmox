@@ -128,77 +128,103 @@
         container: wakapi
 -
   High Seas:
-    -
-      Prowlarr:
-        icon: prowlarr.png
-        href: https://prowlarr.{{ global_domain }}/
-        description: Indexer (arr-lxc)
-        siteMonitor: https://prowlarr.{{ global_domain }}/login
-        widget:
-          type: prowlarr
-          url: https://prowlarr.{{ global_domain }}
-          key: {{ homepage_prowlarr_api }}
-    -
-      Radarr:
-        icon: radarr.png
-        href: https://radarr.{{ global_domain }}/
-        description: Movies (arr-lxc)
-        siteMonitor: https://radarr.{{ global_domain }}/login
-        widget:
-          type: radarr
-          url: https://radarr.{{ global_domain }}
-          key: {{ homepage_radarr_api }}
-          enableQueue: true
-    -
-      Sonarr:
-        icon: sonarr.png
-        href: https://sonarr.{{ global_domain }}/
-        description: TV (arr-lxc)
-        siteMonitor: https://sonarr.{{ global_domain }}/login
-        widget:
-          type: sonarr
-          url: https://sonarr.{{ global_domain }}
-          key: {{ homepage_sonarr_api }}
-          enableQueue: true
-    -
-      Lidarr:
-        icon: lidarr.png
-        href: https://lidarr.{{ global_domain }}/
-        description: Music (arr-lxc)
-        siteMonitor: https://lidarr.{{ global_domain }}/login
-        widget:
-          type: lidarr
-          url: https://lidarr.{{ global_domain }}
-          key: {{ homepage_lidarr_api }}
-    -
-      Bazarr:
-        icon: bazarr.png
-        href: https://bazarr.{{ global_domain }}/
-        description: Subtitles (arr-lxc)
-        siteMonitor: https://bazarr.{{ global_domain }}
-        widget:
-          type: bazarr
-          url: https://bazarr.{{ global_domain }}
-          key: {{ homepage_bazarr_api }}
-    -
-      LazyLibrarian:
-        icon: lazylibrarian.png
-        href: https://lazylibrarian.{{ global_domain }}/
-        description: Books (arr-lxc)
-        siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
-    -
-      QbitTorrent:
-        icon: qbittorrent.png
-        href: https://qbittorrent.{{ global_domain }}/
-        description: Torrent client (arr-lxc)
-        siteMonitor: https://qbittorrent.{{ global_domain }}
-        widget:
-          type: qbittorrent
-          url: https://qbittorrent.{{ global_domain }}/
-          username: {{ homepage_qbittorrent_user }}
-          password: {{ homepage_qbittorrent_password }}
-          enableLeechProgress: true
-          enableLeechSize: true
+    - Arr Downloads:
+      -
+        QbitTorrent:
+          icon: qbittorrent.png
+          href: https://qbittorrent.{{ global_domain }}/
+          description: Torrent client (arr-lxc)
+          siteMonitor: https://qbittorrent.{{ global_domain }}
+          widget:
+            type: qbittorrent
+            url: https://qbittorrent.{{ global_domain }}/
+            username: {{ homepage_qbittorrent_user }}
+            password: {{ homepage_qbittorrent_password }}
+            enableLeechProgress: true
+            enableLeechSize: true
+            highlight:
+              status:
+                string:
+                  - level: danger
+                    when: regex
+                    value: 20
+                  - level: warn
+                    when: regex
+                    value: "(meta|force)"
+                  - level: good
+                    when: regex
+                    value: "(eed|omplet)"
+    - Arr Apps:
+      -
+        Prowlarr:
+          icon: prowlarr.png
+          href: https://prowlarr.{{ global_domain }}/
+          description: Indexer (arr-lxc)
+          siteMonitor: https://prowlarr.{{ global_domain }}/login
+          widget:
+            type: prowlarr
+            url: https://prowlarr.{{ global_domain }}
+            key: {{ homepage_prowlarr_api }}
+      -
+        Radarr:
+          icon: radarr.png
+          href: https://radarr.{{ global_domain }}/
+          description: Movies (arr-lxc)
+          siteMonitor: https://radarr.{{ global_domain }}/login
+          widget:
+            type: radarr
+            url: https://radarr.{{ global_domain }}
+            key: {{ homepage_radarr_api }}
+            enableQueue: true
+      -
+        Sonarr:
+          icon: sonarr.png
+          href: https://sonarr.{{ global_domain }}/
+          description: TV (arr-lxc)
+          siteMonitor: https://sonarr.{{ global_domain }}/login
+          widget:
+            type: sonarr
+            url: https://sonarr.{{ global_domain }}
+            key: {{ homepage_sonarr_api }}
+            enableQueue: true
+      -
+        Lidarr:
+          icon: lidarr.png
+          href: https://lidarr.{{ global_domain }}/
+          description: Music (arr-lxc)
+          siteMonitor: https://lidarr.{{ global_domain }}/login
+          widget:
+            type: lidarr
+            url: https://lidarr.{{ global_domain }}
+            key: {{ homepage_lidarr_api }}
+      -
+        Bazarr:
+          icon: bazarr.png
+          href: https://bazarr.{{ global_domain }}/
+          description: Subtitles (arr-lxc)
+          siteMonitor: https://bazarr.{{ global_domain }}
+          widget:
+            type: bazarr
+            url: https://bazarr.{{ global_domain }}
+            key: {{ homepage_bazarr_api }}
+      -
+        LazyLibrarian:
+          icon: lazylibrarian.png
+          href: https://lazylibrarian.{{ global_domain }}/
+          description: Books (arr-lxc)
+          siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
+      -
+        Metube:
+          icon: metube.png
+          href: https://metube.{{ global_domain }}/
+          description: Video downloader (apps-lxc)
+          siteMonitor: https://metube.{{ global_domain }}/
+      -
+        Ephemera:
+          icon: sh-ephemera
+          href: https://Ephemera.{{ global_domain }}/
+          description: Book downloader (apps-lxc)
+          siteMonitor: https://ephemera.{{ global_domain }}/
 -
   Media Apps:
     -
@@ -212,14 +238,8 @@
           url: https://plex.{{ global_domain }}
           key: {{ homepage_plex_token }}
     -
-      Metube:
-        icon: metube.png
-        href: https://metube.{{ global_domain }}/
-        description: Video downloader (apps-lxc)
-        siteMonitor: https://metube.{{ global_domain }}/
-    -
       Booklore:
-        icon: mdi-book-open
+        icon: book-lore.png
         href: https://booklore.{{ global_domain }}/
         description: Book library (arr-lxc)
         siteMonitor: https://booklore.{{ global_domain }}/
@@ -230,22 +250,25 @@
         icon: termix.png
         href: https://termix.{{ global_domain }}/
         description: SSH terminal server (apps-lxc)
-        server: apps-local-docker
-        container: termix
+        siteMonitor: https://termix.{{ global_domain }}/
+    -
+      IT-Tools:
+        icon: it-tools.png
+        href: https://it-tools.{{ global_domain }}/
+        description: Miscellaneous sysadmin tools (apps-lxc)
+        siteMonitor: https://it-tools.{{ global_domain }}/
     -
       Snippet-Box:
         icon: snippetbox.png
         href: https://snippet-box.{{ global_domain }}/
         description: Manage code snippets (apps-lxc)
-        server: apps-local-docker
-        container: snippet-box
+        siteMonitor: https://snippet-box.{{ global_domain }}/
     -
       Jotty:
         icon: jotty.png
         href: https://jotty.{{ global_domain }}/
         description: Tasks + checklists (apps-lxc)
-        server: apps-local-docker
-        container: jotty
+        siteMonitor: https://jotty.{{ global_domain }}/
 -
   Internal Services:
     -
