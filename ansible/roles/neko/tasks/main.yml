@@ -1,0 +1,62 @@
+---
+- name: Install neko
+  block:
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ neko_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Create browser directories
+      ansible.builtin.file:
+        path: "{{ neko_directory }}/{{ item }}"
+        state: directory
+        mode: 0755
+        owner: "{{ neko_puid }}"
+        group: "{{ neko_pgid }}"
+      loop:
+        - chromium
+        - firefox
+        - google-chrome
+
+    - name: Copy browser policies
+      ansible.builtin.template:
+        src: "policies-{{ item }}.json.j2"
+        dest: "{{ neko_directory }}/policies-{{ item }}.json"
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        - chromium
+        - firefox
+        - google-chrome
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ neko_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ neko_directory }}"
+        recreate: always
+        pull: missing
+        remove_orphans: true
+        remove_volumes: true
+        state: restarted
+
+    - name: Wait until certificate is registered
+      ansible.builtin.uri:
+        url: "https://{{ neko_uri }}/"
+        validate_certs: true
+        status_code:
+          - 200
+      register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 30       # Retries for 30 * 10 secs = 300 secs = 5 mins
+
+  tags: neko

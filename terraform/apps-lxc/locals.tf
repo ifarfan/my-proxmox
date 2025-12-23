@@ -42,5 +42,6 @@ locals {
     "booklore",
     "ephemera",
     "it-tools",
+    "neko",
   ]
 }
