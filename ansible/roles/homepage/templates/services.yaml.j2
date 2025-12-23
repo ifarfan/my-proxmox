@@ -143,17 +143,14 @@
             enableLeechProgress: true
             enableLeechSize: true
             highlight:
-              status:
-                string:
+              seed:
+                numeric:
                   - level: danger
-                    when: regex
-                    value: 20
-                  - level: warn
-                    when: regex
-                    value: "(meta|force)"
+                    when: gt
+                    value: 0
                   - level: good
-                    when: regex
-                    value: "(eed|omplet)"
+                    when: eq
+                    value: 0
     - Arr Apps:
       -
         Prowlarr:
