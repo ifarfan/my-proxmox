@@ -83,8 +83,8 @@ services:
       # li, bz, etc.
       LG_BASE_URL: #https://gen.com
       AA_API_KEY:
-      PUID: 1000
-      PGID: 100
+      PUID: {{ ephemera_puid}}
+      PGID: {{ ephemera_pgid }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ephemera.entrypoints=http"

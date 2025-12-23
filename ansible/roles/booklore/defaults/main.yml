@@ -10,4 +10,6 @@ booklore_db_name: "{{ lookup('ansible.builtin.ini', 'booklore_db_name', section=
 
 ephemera_uri: "ephemera.{{ global_domain }}"
 ephemera_port: 8286
+ephemera_puid: 1000
+ephemera_pgid: 100
 flaresolverr_port: 8191

@@ -14,6 +14,18 @@
         state: directory
         mode: 0755
 
+    - name: Create app sub-directories
+      ansible.builtin.file:
+        path: "{{ booklore_directory }}/{{ item }}"
+        state: directory
+        mode: 0755
+        owner: "{{ ephemera_puid }}"
+        group: "{{ ephemera_pgid }}"
+      loop:
+        - bookdrop
+        - ephemera_data
+        - ephemera_downloads
+
     - name: Copy docker-compose file
       ansible.builtin.template:
         src: docker-compose.yml.j2
