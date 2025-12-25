@@ -1,42 +1,23 @@
 ---
-- name: Install booklore
+- name: Install it_tools
   block:
-    - name: Install NFS client and mount volumes
-      ansible.builtin.include_role:
-        name: nfs_client
-      vars:
-        nfs_client_mounts:
-          - { volume: booklore, path: /mnt/booklore, rights: rw }
-
     - name: Create app directory
       ansible.builtin.file:
-        path: "{{ booklore_directory }}"
+        path: "{{ it_tools_directory }}"
         state: directory
         mode: 0755
-
-    - name: Create app sub-directories
-      ansible.builtin.file:
-        path: "{{ booklore_directory }}/{{ item }}"
-        state: directory
-        mode: 0755
-        owner: "{{ ephemera_puid }}"
-        group: "{{ ephemera_pgid }}"
-      loop:
-        - bookdrop
-        - ephemera_data
-        - ephemera_downloads
 
     - name: Copy docker-compose file
       ansible.builtin.template:
         src: docker-compose.yml.j2
-        dest: "{{ booklore_directory }}/docker-compose.yml"
+        dest: "{{ it_tools_directory }}/docker-compose.yml"
         owner: root
         group: root
         mode: 0644
 
     - name: Create and start app
       community.docker.docker_compose_v2:
-        project_src: "{{ booklore_directory }}"
+        project_src: "{{ it_tools_directory }}"
         recreate: always
         pull: missing
         remove_orphans: true
@@ -45,7 +26,7 @@
 
     - name: Wait until certificate is registered
       ansible.builtin.uri:
-        url: "https://{{ booklore_uri }}/"
+        url: "https://{{ it_tools_uri }}/"
         validate_certs: true
         status_code:
           - 200
@@ -54,4 +35,4 @@
       delay: 10
       retries: 30       # Retries for 30 * 10 secs = 300 secs = 5 mins
 
-  tags: booklore
+  tags: it_tools

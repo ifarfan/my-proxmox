@@ -1,0 +1,4 @@
+---
+it_tools_directory: /opt/it-tools
+it_tools_uri: "it-tools.{{ global_domain }}"
+it_tools_port: 80

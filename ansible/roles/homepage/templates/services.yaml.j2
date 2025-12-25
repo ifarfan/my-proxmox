@@ -86,8 +86,8 @@
     -
       Dozzle Agent:
         icon: dozzle.png
-        description: Agent (tailscale-lxc)
-        server: tailscale-docker
+        description: Agent (net-lxc)
+        server: net-docker
         container: dozzle-agent
     -
       Dozzle Agent:
@@ -128,77 +128,101 @@
         container: wakapi
 -
   High Seas:
-    -
-      Prowlarr:
-        icon: prowlarr.png
-        href: https://prowlarr.{{ global_domain }}/
-        description: Indexer (arr-lxc)
-        siteMonitor: https://prowlarr.{{ global_domain }}/login
-        widget:
-          type: prowlarr
-          url: https://prowlarr.{{ global_domain }}
-          key: {{ homepage_prowlarr_api }}
-    -
-      Radarr:
-        icon: radarr.png
-        href: https://radarr.{{ global_domain }}/
-        description: Movies (arr-lxc)
-        siteMonitor: https://radarr.{{ global_domain }}/login
-        widget:
-          type: radarr
-          url: https://radarr.{{ global_domain }}
-          key: {{ homepage_radarr_api }}
-          enableQueue: true
-    -
-      Sonarr:
-        icon: sonarr.png
-        href: https://sonarr.{{ global_domain }}/
-        description: TV (arr-lxc)
-        siteMonitor: https://sonarr.{{ global_domain }}/login
-        widget:
-          type: sonarr
-          url: https://sonarr.{{ global_domain }}
-          key: {{ homepage_sonarr_api }}
-          enableQueue: true
-    -
-      Lidarr:
-        icon: lidarr.png
-        href: https://lidarr.{{ global_domain }}/
-        description: Music (arr-lxc)
-        siteMonitor: https://lidarr.{{ global_domain }}/login
-        widget:
-          type: lidarr
-          url: https://lidarr.{{ global_domain }}
-          key: {{ homepage_lidarr_api }}
-    -
-      Bazarr:
-        icon: bazarr.png
-        href: https://bazarr.{{ global_domain }}/
-        description: Subtitles (arr-lxc)
-        siteMonitor: https://bazarr.{{ global_domain }}
-        widget:
-          type: bazarr
-          url: https://bazarr.{{ global_domain }}
-          key: {{ homepage_bazarr_api }}
-    -
-      LazyLibrarian:
-        icon: lazylibrarian.png
-        href: https://lazylibrarian.{{ global_domain }}/
-        description: Books (arr-lxc)
-        siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
-    -
-      QbitTorrent:
-        icon: qbittorrent.png
-        href: https://qbittorrent.{{ global_domain }}/
-        description: Torrent client (arr-lxc)
-        siteMonitor: https://qbittorrent.{{ global_domain }}
-        widget:
-          type: qbittorrent
-          url: https://qbittorrent.{{ global_domain }}/
-          username: {{ homepage_qbittorrent_user }}
-          password: {{ homepage_qbittorrent_password }}
-          enableLeechProgress: true
-          enableLeechSize: true
+    - Arr Downloads:
+      -
+        QbitTorrent:
+          icon: qbittorrent.png
+          href: https://qbittorrent.{{ global_domain }}/
+          description: Torrent client (arr-lxc)
+          siteMonitor: https://qbittorrent.{{ global_domain }}
+          widget:
+            type: qbittorrent
+            url: https://qbittorrent.{{ global_domain }}/
+            username: {{ homepage_qbittorrent_user }}
+            password: {{ homepage_qbittorrent_password }}
+            enableLeechProgress: true
+            enableLeechSize: true
+            highlight:
+              seed:
+                numeric:
+                  - level: danger
+                    when: gt
+                    value: 0
+                  - level: good
+                    when: eq
+                    value: 0
+    - Arr Apps 1:
+      -
+        Prowlarr:
+          icon: prowlarr.png
+          href: https://prowlarr.{{ global_domain }}/
+          description: Indexer (arr-lxc)
+          siteMonitor: https://prowlarr.{{ global_domain }}/login
+          widget:
+            type: prowlarr
+            url: https://prowlarr.{{ global_domain }}
+            key: {{ homepage_prowlarr_api }}
+      -
+        Radarr:
+          icon: radarr.png
+          href: https://radarr.{{ global_domain }}/
+          description: Movies (arr-lxc)
+          siteMonitor: https://radarr.{{ global_domain }}/login
+          widget:
+            type: radarr
+            url: https://radarr.{{ global_domain }}
+            key: {{ homepage_radarr_api }}
+            enableQueue: true
+      -
+        Sonarr:
+          icon: sonarr.png
+          href: https://sonarr.{{ global_domain }}/
+          description: TV (arr-lxc)
+          siteMonitor: https://sonarr.{{ global_domain }}/login
+          widget:
+            type: sonarr
+            url: https://sonarr.{{ global_domain }}
+            key: {{ homepage_sonarr_api }}
+            enableQueue: true
+      -
+        Lidarr:
+          icon: lidarr.png
+          href: https://lidarr.{{ global_domain }}/
+          description: Music (arr-lxc)
+          siteMonitor: https://lidarr.{{ global_domain }}/login
+          widget:
+            type: lidarr
+            url: https://lidarr.{{ global_domain }}
+            key: {{ homepage_lidarr_api }}
+      -
+        Bazarr:
+          icon: bazarr.png
+          href: https://bazarr.{{ global_domain }}/
+          description: Subtitles (arr-lxc)
+          siteMonitor: https://bazarr.{{ global_domain }}
+          widget:
+            type: bazarr
+            url: https://bazarr.{{ global_domain }}
+            key: {{ homepage_bazarr_api }}
+      -
+        LazyLibrarian:
+          icon: lazylibrarian.png
+          href: https://lazylibrarian.{{ global_domain }}/
+          description: Books (arr-lxc)
+          siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
+    - Arr Apps 2:
+      -
+        Metube:
+          icon: metube.png
+          href: https://metube.{{ global_domain }}/
+          description: Video downloader (apps-lxc)
+          siteMonitor: https://metube.{{ global_domain }}/
+      -
+        Ephemera:
+          icon: sh-ephemera
+          href: https://Ephemera.{{ global_domain }}/
+          description: Book downloader (apps-lxc)
+          siteMonitor: https://ephemera.{{ global_domain }}/
 -
   Media Apps:
     -
@@ -211,6 +235,12 @@
           type: plex
           url: https://plex.{{ global_domain }}
           key: {{ homepage_plex_token }}
+    -
+      Booklore:
+        icon: book-lore.png
+        href: https://booklore.{{ global_domain }}/
+        description: Book library (arr-lxc)
+        siteMonitor: https://booklore.{{ global_domain }}/
 -
   Internal Apps:
     -
@@ -218,22 +248,38 @@
         icon: termix.png
         href: https://termix.{{ global_domain }}/
         description: SSH terminal server (apps-lxc)
-        server: apps-local-docker
-        container: termix
+        siteMonitor: https://termix.{{ global_domain }}/
     -
-      Snippet-Box:
-        icon: snippetbox.png
-        href: https://snippet-box.{{ global_domain }}/
-        description: Manage code snippets (apps-lxc)
-        server: apps-local-docker
-        container: snippet-box
+      IT-Tools:
+        icon: it-tools.png
+        href: https://it-tools.{{ global_domain }}/
+        description: Miscellaneous sysadmin tools (apps-lxc)
+        siteMonitor: https://it-tools.{{ global_domain }}/
+    # -
+    #   Snippet-Box:
+    #     icon: snippetbox.png
+    #     href: https://snippet-box.{{ global_domain }}/
+    #     description: Manage code snippets (apps-lxc)
+    #     siteMonitor: https://snippet-box.{{ global_domain }}/
+    -
+      Jotty:
+        icon: jotty.png
+        href: https://jotty.{{ global_domain }}/
+        description: Tasks + checklists (apps-lxc)
+        siteMonitor: https://jotty.{{ global_domain }}/
+    -
+      Neko:
+        icon: neko.png
+        href: https://neko.{{ global_domain }}/
+        description: Browser sessions (apps-lxc)
+        siteMonitor: https://neko.{{ global_domain }}/
 -
   Internal Services:
     -
       Tailscale:
         icon: tailscale.png
-        description: Tailscale Sub-router (tailscale-lxc)
-        server: tailscale-docker
+        description: Tailscale Sub-router (net-lxc)
+        server: net-docker
         container: tailscale
     -
       Cloudflare DDNS:
@@ -301,7 +347,7 @@
       Dockerhub:
         icon: docker.png
         href: https://hub.docker.com/
-        description: Hosted Container Registry
+        description: Container Registry
         siteMonitor: https://login.docker.com/u/login/identifier
 -
   Financial:

@@ -84,3 +84,23 @@
       ansible.builtin.include_role:
         name: snippet_box
       tags: snippet_box
+
+    - name: Install Jotty
+      ansible.builtin.include_role:
+        name: jotty
+      tags: jotty
+
+    - name: Install Booklore
+      ansible.builtin.include_role:
+        name: booklore
+      tags: booklore
+
+    - name: Install IT-Tools
+      ansible.builtin.include_role:
+        name: it_tools
+      tags: it_tools
+
+    - name: Install Neko
+      ansible.builtin.include_role:
+        name: neko
+      tags: neko

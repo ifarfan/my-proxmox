@@ -38,11 +38,10 @@ locals {
     "speedtest-tracker",
     "wakapi",
     "snippet-box",
-    # "grafana",
-    # "loki",
-    # "prometheus",
-    # "home-assistant",
-    # "linkding",
-    # "swingmusic",
+    "jotty",
+    "booklore",
+    "ephemera",
+    "it-tools",
+    "neko",
   ]
 }

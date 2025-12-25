@@ -13,7 +13,8 @@ services:
     environment:
       DOZZLE_LEVEL: trace
       DOZZLE_NO_ANALYTICS: false
-      DOZZLE_REMOTE_AGENT: {{ dozzle_remote_agents }}
+      DOZZLE_REMOTE_AGENT: {{ dozzle_remote_agents | join(',') }}
+    # See https://dozzle.dev/guide/healthcheck#enabling-healthcheck
     healthcheck:
       test: [ "CMD", "/dozzle", "healthcheck" ]
       interval: 3s

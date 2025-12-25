@@ -1,0 +1,68 @@
+---
+# Browsers docker images:       https://neko.m1k1o.net/docs/v3/installation/docker-images#apps
+# Browser-specific directories: https://neko.m1k1o.net/docs/v3/customization/browsers#policy-files
+# Browser-specific policies:    https://neko.m1k1o.net/docs/v3/customization/browsers#policy-files
+services:
+  neko:
+    # Enable only 1 browser at the time!!!
+    #
+    #################
+    # Chromium
+    #################
+    image: ghcr.io/m1k1o/neko/chromium:latest
+    volumes:
+      - {{ neko_directory }}/chromium:/home/neko/.config/chromium
+      - {{ neko_directory }}/policies-chromium.json:/etc/chromium/policies/managed/policies.json
+    shm_size: "2gb"
+    cap_add:
+      - SYS_ADMIN
+    # #################
+    # # Firefox
+    # #################
+    # image: ghcr.io/m1k1o/neko/firefox:latest
+    # volumes:
+    #   - {{ neko_directory }}/firefox:/home/neko/.mozilla/firefox
+    #   - {{ neko_directory }}/policies-firefox.json:/usr/lib/firefox/distribution/policies.json
+    # #################
+    # # Google Chrome
+    # #################
+    # image: ghcr.io/m1k1o/neko/google-chrome:latest
+    # volumes:
+    #   - {{ neko_directory }}/google-chrome:/home/neko/.config/google-chrome
+    #   - {{ neko_directory }}/policies-google-chrome.json:/etc/opt/chrome/policies/managed/policies.json
+    # shm_size: "2gb"
+    # cap_add:
+    #   - SYS_ADMIN
+    # #################
+    container_name: neko
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - 8084:{{ neko_gui_port }}
+      - {{ neko_webrtc_port }}:{{ neko_webrtc_port }}/udp
+    environment:
+      NEKO_DESKTOP_SCREEN: '1920x1080@30'
+      NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD: {{ neko_admin_password }}
+      NEKO_MEMBER_MULTIUSER_USER_PASSWORD: {{ neko_user_password }}
+      NEKO_SERVER_BIND: 0.0.0.0:{{ neko_gui_port }}
+      NEKO_SERVER_PROXY: true
+      NEKO_WEBRTC_EPR: {{ neko_webrtc_port }}
+      NEKO_WEBRTC_ICELITE: 1
+      NEKO_WEBRTC_NAT1TO1: {{ ansible_default_ipv4.address }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.neko.entrypoints=http"
+      - "traefik.http.routers.neko.rule=Host(`{{ neko_uri }}`)"
+      - "traefik.http.middlewares.neko-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.neko.middlewares=neko-https-redirect"
+      - "traefik.http.routers.neko-secure.entrypoints=https"
+      - "traefik.http.routers.neko-secure.rule=Host(`{{ neko_uri }}`)"
+      - "traefik.http.routers.neko-secure.tls=true"
+      - "traefik.http.routers.neko-secure.service=neko"
+      - "traefik.http.services.neko.loadbalancer.server.port={{ neko_gui_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

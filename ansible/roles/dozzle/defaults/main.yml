@@ -6,5 +6,8 @@ dozzle_directory: /opt/dozzle
 dozzle_uri: dozzle.{{ global_domain }}
 dozzle_server_port: 8080
 dozzle_image_version: v8
-# yamllint disable-line rule:line-length
-dozzle_remote_agents: tailscale-lxc.macminis.net:{{ dozzle_agent_port }},devbox-lxc.macminis.net:{{ dozzle_agent_port }},cloudy-box.macminis.net:{{ dozzle_agent_port }},arr-lxc.macminis.net:{{ dozzle_agent_port }}
+dozzle_remote_agents:
+  - arr-lxc.{{ global_domain }}:{{ dozzle_agent_port }}
+  - cloudy-box.{{ global_domain }}:{{ dozzle_agent_port }}
+  - devbox-lxc.{{ global_domain }}:{{ dozzle_agent_port }}
+  - net-lxc.{{ global_domain }}:{{ dozzle_agent_port }}

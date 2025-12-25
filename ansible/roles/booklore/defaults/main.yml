@@ -7,3 +7,9 @@ booklore_version: v1.14.1
 booklore_db_username: "{{ lookup('ansible.builtin.ini', 'booklore_db_username', section='booklore', file='credentials.ini') }}"
 booklore_db_password: "{{ lookup('ansible.builtin.ini', 'booklore_db_password', section='booklore', file='credentials.ini') }}"
 booklore_db_name: "{{ lookup('ansible.builtin.ini', 'booklore_db_name', section='booklore', file='credentials.ini') }}"
+
+ephemera_uri: "ephemera.{{ global_domain }}"
+ephemera_port: 8286
+ephemera_puid: 1000
+ephemera_pgid: 100
+flaresolverr_port: 8191

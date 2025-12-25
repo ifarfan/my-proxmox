@@ -1,0 +1,10 @@
+---
+neko_directory: /opt/neko
+neko_uri: "neko.{{ global_domain }}"
+neko_gui_port: 8080
+neko_webrtc_port: 56000-56100
+neko_puid: 1000
+neko_pgid: 1000
+
+neko_user_password: "{{ lookup('ansible.builtin.ini', 'user_password', section='neko', file='credentials.ini') }}"
+neko_admin_password: "{{ lookup('ansible.builtin.ini', 'admin_password', section='neko', file='credentials.ini') }}"

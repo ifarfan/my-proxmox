@@ -1,0 +1,26 @@
+---
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - 8083:{{ it_tools_port }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ittools.entrypoints=http"
+      - "traefik.http.routers.ittools.rule=Host(`{{ it_tools_uri }}`)"
+      - "traefik.http.middlewares.ittools-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.ittools.middlewares=ittools-https-redirect"
+      - "traefik.http.routers.ittools-secure.entrypoints=https"
+      - "traefik.http.routers.ittools-secure.rule=Host(`{{ it_tools_uri }}`)"
+      - "traefik.http.routers.ittools-secure.tls=true"
+      - "traefik.http.routers.ittools-secure.service=ittools"
+      - "traefik.http.services.ittools.loadbalancer.server.port={{ it_tools_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

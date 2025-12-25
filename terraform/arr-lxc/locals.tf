@@ -17,7 +17,7 @@ locals {
     },
     {
       mp   = "/opt"
-      size = "50G"
+      size = "85G"
     }
   ]
 
@@ -37,6 +37,6 @@ locals {
     "flaresolverr",
     "lazylibrarian",
     "bazarr",
-    "booklore"
+    "metube"
   ]
 }

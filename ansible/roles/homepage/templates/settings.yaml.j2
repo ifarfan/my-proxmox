@@ -2,12 +2,13 @@
 # Look 'n Feel
 title: Homelab | Dashboard
 headerStyle: clean
-color: zinc
+# color: zinc  # use page palette, instead
 background:
-  image: https://images.unsplash.com/photo-1637032482680-0f7086963a67
-  blur: sm              # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
-  saturate: 50          # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
-  brightness: 50        # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  # image: https://images.unsplash.com/photo-1637032482680-0f7086963a67
+  image: https://images.unsplash.com/photo-1582185143928-599a75bbe975
+  blur: sm              # sm, "", md, xl see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 50          # 0, 50, 100     see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 80        # 0, 50, 75      see https://tailwindcss.com/docs/backdrop-brightness
   opacity: 85           # 0-100
 statusStyle: "dot"
 
@@ -30,7 +31,7 @@ layout:
     useEqualHeights: true
   Internal Apps:
     style: row
-    columns: 3
+    columns: 4
     icon: mdi-web-check
     useEqualHeights: true
   Internal Services:
@@ -48,11 +49,23 @@ layout:
     columns: 3
     icon: mdi-pirate
     useEqualHeights: true
-    initiallyCollapsed: true
+    Arr Downloads:
+      style: row
+      columns: 1
+      useEqualHeights: true
+    Arr Apps 1:
+      style: row
+      columns: 2
+      useEqualHeights: true
+    Arr Apps 2:
+      style: row
+      columns: 2
+      useEqualHeights: true
   External Vendors:
     style: row
-    columns: 4
+    columns: 8
     icon: mdi-web
+    useEqualHeights: true
   Financial:
     style: row
     columns: 2

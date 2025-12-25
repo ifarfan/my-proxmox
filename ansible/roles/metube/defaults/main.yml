@@ -1,0 +1,8 @@
+---
+metube_directory: /opt/metube
+metube_uri: "metube.{{ global_domain }}"
+metube_port: 8081
+
+# permissions needed for "downloads" folder in NAS
+metube_uid: 1024
+metube_gid: 100

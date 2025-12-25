@@ -55,7 +55,7 @@
         name: arr_stack
       tags: arr_stack
 
-    - name: Install Booklore
+    - name: Install MeTube
       ansible.builtin.include_role:
-        name: booklore
-      tags: booklore
+        name: metube
+      tags: metube

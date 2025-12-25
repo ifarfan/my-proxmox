@@ -9,9 +9,10 @@ services:
       - {{ dozzle_agent_port }}:{{ dozzle_agent_port }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    # See https://dozzle.dev/guide/agent#setting-up-healthcheck
     healthcheck:
-      test: [ "CMD", "/dozzle", "healthcheck" ]
-      interval: 3s
-      timeout: 30s
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 5s
       retries: 5
-      start_period: 30s
+      start_period: 5s
+      start_interval: 5s
