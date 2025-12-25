@@ -2,5 +2,5 @@
 jotty_directory: /opt/jotty
 jotty_uri: "jotty.{{ global_domain }}"
 jotty_port: 3000
-jotty_version: 1.14.0
+jotty_version: 1.14.4
 jotty_user: 1000
