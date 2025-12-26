@@ -236,6 +236,7 @@ services:
     volumes:
       - {{ arr_apps_directory }}/qbittorrent/config:/config
       - {{ arr_apps_directory }}/downloads:/downloads
+      - {{ vuetorrent_path }}:/vuetorrent
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
