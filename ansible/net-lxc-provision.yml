@@ -38,3 +38,8 @@
         is_subnet_router: true
         is_dockerized: true
       tags: tailscale
+
+    - name: Install RustDesk
+      ansible.builtin.include_role:
+        name: rustdesk
+      tags: rustdesk

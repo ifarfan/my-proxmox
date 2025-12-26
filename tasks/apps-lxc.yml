@@ -96,12 +96,6 @@ tasks:
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag atuin"
 
-  provision-rustdesk:
-    desc: "Provision 'RustDesk' on '{{.APPS_LXC_HOST}}'"
-    dir: "{{.ANSIBLE_DIR}}"
-    cmds:
-      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag rustdesk"
-
   provision-speedtest-tracker:
     desc: Provision "Speedtest Tracker" on '{{.APPS_LXC_HOST}}'"
     dir: "{{.ANSIBLE_DIR}}"
