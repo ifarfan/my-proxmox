@@ -43,4 +43,13 @@
           - { volume: stash, path: /mnt/stash, rights: rw }
           - { volume: tv, path: /mnt/tv, rights: rw }
 
+    - name: Install Vuetorrent
+      ansible.builtin.git:
+        repo: "{{ vuetorrent_repo }}"
+        dest: "{{ vuetorrent_path }}"
+        version: "{{ vuetorrent_branch }}"
+        clone: true
+        single_branch: true
+        update: true
+
   tags: arr_stack
