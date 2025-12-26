@@ -191,6 +191,36 @@ services:
       - "traefik.http.services.bazarr.loadbalancer.server.port={{ bazarr_port }}"
       - "traefik.docker.network=traefik_default"
 
+  whisparr:
+    # image: ghcr.io/thespad/whisparr:latest
+    image: ghcr.io/hotio/whisparr
+    container_name: whisparr
+    hostname: whisparr
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - "{{ whisparr_port }}:{{ whisparr_port }}"
+    volumes:
+      - {{ arr_apps_directory }}/whisparr/config:/config
+      - /mnt/stash/downloads:/downloads
+    environment:
+      PUID: {{ arr_puid }}
+      PGID: {{ arr_pgid }}
+      TZ: {{ global_tz }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whisparr.entrypoints=http"
+      - "traefik.http.routers.whisparr.rule=Host(`{{ whisparr_uri }}`)"
+      - "traefik.http.middlewares.whisparr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.whisparr.middlewares=whisparr-https-redirect"
+      - "traefik.http.routers.whisparr-secure.entrypoints=https"
+      - "traefik.http.routers.whisparr-secure.rule=Host(`{{ whisparr_uri }}`)"
+      - "traefik.http.routers.whisparr-secure.tls=true"
+      - "traefik.http.routers.whisparr-secure.service=whisparr"
+      - "traefik.http.services.whisparr.loadbalancer.server.port={{ whisparr_port }}"
+      - "traefik.docker.network=traefik_default"
+
   # Download Manager
   qbittorrent:
     image: linuxserver/qbittorrent:latest
