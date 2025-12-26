@@ -59,4 +59,3 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.NET_LXC_ANSIBLE_PLAYBOOK}} --tag rustdesk"
-
