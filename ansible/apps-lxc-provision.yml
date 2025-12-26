@@ -65,11 +65,6 @@
         name: atuin
       tags: atuin
 
-    - name: Install RustDesk
-      ansible.builtin.include_role:
-        name: rustdesk
-      tags: rustdesk
-
     - name: Install Speedtest-Tracker
       ansible.builtin.include_role:
         name: speedtest_tracker

@@ -34,7 +34,7 @@ locals {
     "atuin",
     "dozzle",
     "plex",
-    "rustdesk",
+    "neko",
     "speedtest-tracker",
     "wakapi",
     "snippet-box",
@@ -42,6 +42,5 @@ locals {
     "booklore",
     "ephemera",
     "it-tools",
-    "neko",
   ]
 }

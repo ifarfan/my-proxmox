@@ -28,5 +28,6 @@ locals {
   dns_aliases = [
     "traefik-net-lxc",
     "portainer-net-lxc",
+    "rustdesk"
   ]
 }
