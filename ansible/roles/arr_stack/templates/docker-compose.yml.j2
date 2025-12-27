@@ -13,7 +13,7 @@ services:
     volumes:
       - {{ arr_directory }}/prowlarr/config:/config
       - {{ arr_directory }}/prowlarr/backup:/data/Backup
-      - {{ arr_directory }}/downloads:/downloads
+      - {{ arr_downloads }}:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -45,7 +45,7 @@ services:
       - {{ arr_directory }}/sonarr/config:/config
       - {{ arr_directory }}/sonarr/backup:/data/Backup
       - {{ arr_directory }}/sonarr/tvshows:/data/tvshows
-      - {{ arr_directory }}/downloads:/downloads
+      - {{ arr_downloads }}:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -77,7 +77,7 @@ services:
       - {{ arr_directory }}/radarr/config:/config
       - {{ arr_directory }}/radarr/movies:/data/movies
       - {{ arr_directory }}/radarr/backup:/data/Backup
-      - {{ arr_directory }}/downloads:/downloads
+      - {{ arr_downloads }}:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -109,7 +109,7 @@ services:
       - {{ arr_directory }}/lidarr/config:/config
       - {{ arr_directory }}/lidarr/music:/data/musicfolder
       - {{ arr_directory }}/lidarr/backup:/data/Backup
-      - {{ arr_directory }}/downloads:/downloads
+      - {{ arr_downloads }}:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -140,7 +140,7 @@ services:
     volumes:
       - {{ arr_directory }}/lazylibrarian/config:/config
       - {{ arr_directory }}/lazylibrarian/backup:/data/Backup
-      - {{ arr_directory }}/downloads:/downloads
+      - {{ arr_downloads }}:/downloads
       - /mnt/books:/books
     environment:
       PUID: {{ arr_puid }}
@@ -235,7 +235,7 @@ services:
       - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port}}/udp
     volumes:
       - {{ arr_directory }}/qbittorrent/config:/config
-      - {{ arr_directory }}/downloads:/downloads
+      - {{ arr_downloads }}:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}

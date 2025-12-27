@@ -26,13 +26,13 @@
         group: root
         mode: 0644
 
-    # - name: Create and start app
-    #   community.docker.docker_compose_v2:
-    #     project_src: "{{ arr_directory }}"
-    #     recreate: always
-    #     pull: missing
-    #     remove_orphans: true
-    #     remove_volumes: true
-    #     state: restarted
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ arr_directory }}"
+        recreate: always
+        pull: missing
+        remove_orphans: true
+        remove_volumes: true
+        state: restarted
 
   tags: arr_stack
