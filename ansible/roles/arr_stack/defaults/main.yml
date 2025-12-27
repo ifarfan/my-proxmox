@@ -1,8 +1,8 @@
 ---
 arr_directory: /opt/arr-stack
-arr_apps_directory: "{{ arr_directory }}/arrs"
 arr_puid: 1000
 arr_pgid: 1000
+arr_downloads: /mnt/downloads/qbittorrent       # Ensure permissions are pre-set on NFS server
 
 prowlarr_port: 9696
 prowlarr_uri: "prowlarr.{{ global_domain }}"
@@ -28,10 +28,6 @@ whisparr_uri: "whisparr.{{ global_domain }}"
 qbittorrent_web_port: 8082
 qbittorrent_torrent_port: 6881
 qbittorrent_uri: "qbittorrent.{{ global_domain }}"
-
-vuetorrent_repo: https://github.com/VueTorrent/VueTorrent.git
-vuetorrent_branch: latest-release
-vuetorrent_path: "{{ arr_apps_directory }}/qbittorrent/vuetorrent"
 
 flaresolverr_port: 8191
 flaresolverr_uri: "flaresolverr.{{ global_domain }}"

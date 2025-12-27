@@ -11,9 +11,9 @@ services:
     ports:
       - "{{ prowlarr_port }}:{{ prowlarr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/prowlarr/config:/config
-      - {{ arr_apps_directory }}/prowlarr/backup:/data/Backup
-      - {{ arr_apps_directory }}/downloads:/downloads
+      - {{ arr_directory }}/prowlarr/config:/config
+      - {{ arr_directory }}/prowlarr/backup:/data/Backup
+      - {{ arr_directory }}/downloads:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -42,10 +42,10 @@ services:
     ports:
       - "{{ sonarr_port }}:{{ sonarr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/sonarr/config:/config
-      - {{ arr_apps_directory }}/sonarr/backup:/data/Backup
-      - {{ arr_apps_directory }}/sonarr/tvshows:/data/tvshows
-      - {{ arr_apps_directory }}/downloads:/downloads
+      - {{ arr_directory }}/sonarr/config:/config
+      - {{ arr_directory }}/sonarr/backup:/data/Backup
+      - {{ arr_directory }}/sonarr/tvshows:/data/tvshows
+      - {{ arr_directory }}/downloads:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -74,10 +74,10 @@ services:
     ports:
       - "{{ radarr_port }}:{{ radarr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/radarr/config:/config
-      - {{ arr_apps_directory }}/radarr/movies:/data/movies
-      - {{ arr_apps_directory }}/radarr/backup:/data/Backup
-      - {{ arr_apps_directory }}/downloads:/downloads
+      - {{ arr_directory }}/radarr/config:/config
+      - {{ arr_directory }}/radarr/movies:/data/movies
+      - {{ arr_directory }}/radarr/backup:/data/Backup
+      - {{ arr_directory }}/downloads:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -106,10 +106,10 @@ services:
     ports:
       - "{{ lidarr_port }}:{{ lidarr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/lidarr/config:/config
-      - {{ arr_apps_directory }}/lidarr/music:/data/musicfolder
-      - {{ arr_apps_directory }}/lidarr/backup:/data/Backup
-      - {{ arr_apps_directory }}/downloads:/downloads
+      - {{ arr_directory }}/lidarr/config:/config
+      - {{ arr_directory }}/lidarr/music:/data/musicfolder
+      - {{ arr_directory }}/lidarr/backup:/data/Backup
+      - {{ arr_directory }}/downloads:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -138,9 +138,9 @@ services:
     ports:
       - "{{ lazylibrarian_port }}:{{ lazylibrarian_port }}"
     volumes:
-      - {{ arr_apps_directory }}/lazylibrarian/config:/config
-      - {{ arr_apps_directory }}/lazylibrarian/backup:/data/Backup
-      - {{ arr_apps_directory }}/downloads:/downloads
+      - {{ arr_directory }}/lazylibrarian/config:/config
+      - {{ arr_directory }}/lazylibrarian/backup:/data/Backup
+      - {{ arr_directory }}/downloads:/downloads
       - /mnt/books:/books
     environment:
       PUID: {{ arr_puid }}
@@ -171,7 +171,7 @@ services:
     ports:
       - "{{ bazarr_port }}:{{ bazarr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/bazarr/config:/config
+      - {{ arr_directory }}/bazarr/config:/config
       - /mnt/movies:/movies
       - /mnt/tv:/tv
     environment:
@@ -202,7 +202,7 @@ services:
     ports:
       - "{{ whisparr_port }}:{{ whisparr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/whisparr/config:/config
+      - {{ arr_directory }}/whisparr/config:/config
       - /mnt/stash/downloads:/downloads
     environment:
       PUID: {{ arr_puid }}
@@ -234,9 +234,8 @@ services:
       - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port}}
       - {{ qbittorrent_torrent_port }}:{{ qbittorrent_torrent_port}}/udp
     volumes:
-      - {{ arr_apps_directory }}/qbittorrent/config:/config
-      - {{ arr_apps_directory }}/downloads:/downloads
-      - {{ vuetorrent_path }}:/vuetorrent
+      - {{ arr_directory }}/qbittorrent/config:/config
+      - {{ arr_directory }}/downloads:/downloads
     environment:
       PUID: {{ arr_puid }}
       PGID: {{ arr_pgid }}
@@ -269,7 +268,7 @@ services:
     ports:
       - "{{ flaresolverr_port }}:{{ flaresolverr_port }}"
     volumes:
-      - {{ arr_apps_directory }}/flaresolverr:/config
+      - {{ arr_directory }}/flaresolverr:/config
     environment:
       CAPTCHA_SOLVER: none
       LOG_FILE: none

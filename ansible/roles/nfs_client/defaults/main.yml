@@ -11,6 +11,7 @@ nfs_volumes:
   books: /volume1/books
   devbox: /volume1/devbox
   docker: /volume1/docker
+  downloads: /volume1/downloads
   movies: /volume1/movies
   music: /volume1/music
   stash: /volume1/stash
