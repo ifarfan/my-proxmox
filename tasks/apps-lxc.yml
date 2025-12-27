@@ -66,12 +66,6 @@ tasks:
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag termix"
 
-  provision-cloudflare-ddns:
-    desc: "Provision 'Cloudflare DDNS' on '{{.APPS_LXC_HOST}}'"
-    dir: "{{.ANSIBLE_DIR}}"
-    cmds:
-      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag cloudflare_ddns"
-
   provision-homepage:
     desc: "Provision 'Homepage' on '{{.APPS_LXC_HOST}}'"
     dir: "{{.ANSIBLE_DIR}}"

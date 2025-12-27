@@ -43,3 +43,8 @@
       ansible.builtin.include_role:
         name: rustdesk
       tags: rustdesk
+
+    - name: Install Cloudflare DDNS
+      ansible.builtin.include_role:
+        name: cloudflare_ddns
+      tags: cloudflare_ddns

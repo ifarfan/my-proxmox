@@ -59,3 +59,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.NET_LXC_ANSIBLE_PLAYBOOK}} --tag rustdesk"
+
+  provision-cloudflare-ddns:
+    desc: "Provision 'Cloudflare DDNS' on '{{.NET_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.NET_LXC_ANSIBLE_PLAYBOOK}} --tag cloudflare_ddns"

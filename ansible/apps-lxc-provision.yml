@@ -40,11 +40,6 @@
         name: termix
       tags: termix
 
-    - name: Install Cloudflare DDNS
-      ansible.builtin.include_role:
-        name: cloudflare_ddns
-      tags: cloudflare_ddns
-
     - name: Install Homepage
       ansible.builtin.include_role:
         name: homepage
