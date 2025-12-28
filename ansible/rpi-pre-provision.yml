@@ -1,0 +1,52 @@
+---
+- name: RPis pre-provisioning (local)
+  hosts: rpi_local
+  become: true
+  gather_facts: true
+  vars:
+    pkgs:
+      - net-tools
+      - network-manager
+  tasks:
+    - name: Get default authorized_keys file content
+      ansible.builtin.slurp:
+        src: /home/izzy/.ssh/authorized_keys
+      register: authorized_keys_content
+
+    - name: Set root authorized_keys from default user
+      ansible.posix.authorized_key:
+        user: root
+        key: "{{ authorized_keys_content['content'] | b64decode }}"
+        state: present
+        exclusive: true
+
+    - name: Install needed packages
+      ansible.builtin.apt:
+        pkg: "{{ pkgs }}"
+        state: present
+        update_cache: true
+
+    - name: Run local dig command to find new IP
+      ansible.builtin.command: "dig +short {{ inventory_hostname_short }}.{{ global_domain }}"
+      delegate_to: localhost
+      become: false
+      register: dig_output
+
+    - name: Set new IP via nmcli
+      community.general.nmcli:
+        conn_name: "eth0"
+        type: ethernet
+        ifname: eth0
+        ip4: "{{ dig_output.stdout }}/24"
+        gw4: "{{ ansible_default_ipv4.gateway }}"
+        dns4: "{{ dns_external_servers }}"
+        state: present
+
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname_short }}.{{ global_domain }}"
+
+    - name: Reboot RPi + may lose connection
+      ansible.builtin.reboot:
+        post_reboot_delay: 60
+        reboot_timeout: 180

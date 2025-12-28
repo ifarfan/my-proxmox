@@ -32,51 +32,44 @@ Dynamic inventory for `proxmox` boxes located at `inventories/macminis`
 
 ```shell
 # To provision all proxmox boxes
-ansible-playbook -i inventories/macminis macminis-provision.yml
+task proxmox:provision-nodes
 
 # Reboot all proxmox boxes sequentially
-ansible-playbook -i inventories/macminis macminis-reboot.yml
+task proxmox:reboot-nodes
 ```
 
-
-### 2. `k3s`
+### 2. `LXCs`
 #### Inventory
-Dynamic inventory for `k3s` lxc boxes under Proxmox located at `inventories/k3s`
-Global values required during provisioning stored under `inventories/k3s/main.yml`
+Dynamic inventory for `ALL` LXCs located at `inventories/proxmox`
+**NOTE**: all servers are self-contained LXCs running multiple `docker compose` stacks
 
 #### Actions
 
 ```shell
-# To provision k3s stack from scratch
-ansible-playbook -i inventories/k3s k3s-provision.yml
+# To provision `apps-lxc` stack from scratch
+task apps-lxc:provision
 
-# Start all nodes in a staggered fashion
-ansible-playbook -i inventories/k3s k3s-start.yml
-
-# Reboot all nodes sequentially
-ansible-playbook -i inventories/k3s k3s-reboot.yml
-
-# Stop all nodes in a staggered fashion
-ansible-playbook -i inventories/k3s k3s-stop.yml
+# Update specific docker compose stack ONLY
+task apps-lxc:provision-booklore
+task apps-lxc:provision-dozzle
+task apps-lxc:provision-homepage
+task apps-lxc:provision-jotty
+task apps-lxc:provision-portainer
+task apps-lxc:provision-termix
 ```
 
-
-### 3. `portainer`
+### 3. `RPis`
 #### Inventory
-Dynamic inventory for `portainer` LXC located at `inventories/proxmox`
-**NOTE**: portainer is a single, self-contained LXC running multiple `docker compose` stacks
+Dynamic inventory for `rpis` located at
+- `inventories/rpi-local` when RPis are freshly booted and untouched
+- `inventories/rpi` once provisioned
 
 #### Actions
 
 ```shell
-# To provision portainer stack from scratch
-ansible-playbook -i inventories/proxmox portainer-provision.yml
+# On 1st boot, pre-provision RPIs (needed only once)
+task rpi:pre-provision-rpis
 
-# Update specific docker compose ONLY
-ansible-playbook -i inventories/proxmox portainer-provision.yml --tags traefik
-ansible-playbook -i inventories/proxmox portainer-provision.yml --tags heimdall
-ansible-playbook -i inventories/proxmox portainer-provision.yml --tags uptime_kuma
-ansible-playbook -i inventories/proxmox portainer-provision.yml --tags portainer
-ansible-playbook -i inventories/proxmox portainer-provision.yml --tags grafana
-ansible-playbook -i inventories/proxmox portainer-provision.yml --tags prometheus
+# From then on, use the regular "provision" command
+task rpi:provision-rpis
 ```

@@ -1,0 +1,51 @@
+---
+version: '3'
+
+vars:
+  RPI_MONIKER: rpi
+  RPI_TF_DIR: "{{.TERRAFORM_DIR}}/{{.RPI_MONIKER}}"
+  RPI_ANSIBLE_PLAYBOOK: "{{.RPI_MONIKER}}-provision.yml"
+  # ? Pre-provisioned RPis
+  RPI_LOCAL_ANSIBLE_PLAYBOOK: "{{.RPI_MONIKER}}-pre-provision.yml"
+
+tasks:
+  # ? Terraform
+  update-dns:
+    desc: "Update DNS records for RPi hosts"
+    dir: "{{.RPI_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -compact-warnings
+
+  # ? Ansible (pre-provisioned RPis)
+  list-rpis-local:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List RPis local
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_LOCAL_ANSIBLE_PLAYBOOK}} --list-hosts
+
+  pre-provision-rpis:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision RPis
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_LOCAL_ANSIBLE_PLAYBOOK}}
+
+  # ? Ansible
+  list-rpis:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List RPis
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}} --list-hosts
+
+  provision-rpis:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision RPis
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}}
+
+  update-rpis:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Update RPis
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}}
