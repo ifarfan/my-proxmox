@@ -1,0 +1,15 @@
+---
+- name: Install logrotate
+  ansible.builtin.apt:
+    pkg: logrotate
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Copy logrotate config
+  ansible.builtin.copy:
+    src: logrotate.conf
+    dest: /etc/logrotate.conf
+    owner: root
+    group: root
+    mode: 0644

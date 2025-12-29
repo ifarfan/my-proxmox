@@ -1,0 +1,17 @@
+---
+- name: List of pam.d configs
+  ansible.builtin.command:
+    ls -1 "{{ role_path }}/files/pam/"
+  delegate_to: localhost
+  changed_when: false
+  become: false
+  register: pamd_files
+
+- name: Copy pam.d configs
+  ansible.builtin.copy:
+    src: "pam/{{ item }}"
+    dest: /etc/pam.d/
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ pamd_files.stdout_lines }}"

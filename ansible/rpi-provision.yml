@@ -4,14 +4,18 @@
   become: true
   gather_facts: true
   tasks:
-    - name: Proxmox node default configuration
+    # ? Base OS install + fixings
+    - name: Install Ubuntu base
       ansible.builtin.include_role:
-        name: proxmox
+        name: base_24
+      vars:
+        is_hardware: true
 
     - name: Install modern Unix utilities
       ansible.builtin.include_role:
         name: modern_unix
 
-    - name: Install Prometheus Node Exporter
+    # ? Docker daemon + docker compose apps
+    - name: Install Docker
       ansible.builtin.include_role:
-        name: node_exporter
+        name: docker

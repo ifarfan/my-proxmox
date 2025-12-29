@@ -1,0 +1,29 @@
+---
+- name: Copy default .bashrc files
+  ansible.builtin.copy:
+    src: _bashrc
+    dest: "{{ item.path }}"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: 0644
+  loop:
+    -
+      path: '/etc/skel/.bashrc'
+      user: 'root'
+    -
+      path: '/root/.bashrc'
+      user: 'root'
+
+- name: Check for ubuntu user
+  ansible.builtin.stat:
+    path: /home/ubuntu
+  register: ubuntu_home
+
+- name: Copy ubuntu .bashrc file
+  ansible.builtin.copy:
+    src: _bashrc
+    dest: /home/ubuntu/.bashrc
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+  when: not is_lxc and ubuntu_home.stat.exists

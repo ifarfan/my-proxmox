@@ -1,0 +1,16 @@
+//
+//  NOTE: Enable apt-auto-updates
+//  - ONLY for security packages
+//  - Check 50unattended-upgrades
+//
+//  NOTE:
+//  - Update-Package-Lists: 1=enable auto update, 0=disable.
+//  - Download-Upgradeable-Packages: 1=enables auto download package, 0=disable
+//  - AutocleanInterval: Enable auto clean packages for "X" days. Configuration shows 3 days auto clean packages.
+//  - Unattended-Upgrade: 1=enables auto upgrade, 0=disable
+//  See: https://www.howtoforge.com/tutorial/how-to-setup-automatic-security-updates-on-ubuntu-1604/
+//
+APT::Periodic::Update-Package-Lists "1";
+// NOTE: New settings below
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "3";

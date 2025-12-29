@@ -1,0 +1,6 @@
+#
+# NOTE: New settings below
+#
+
+# Only log cron errors
+EXTRA_OPTS="-L 0"

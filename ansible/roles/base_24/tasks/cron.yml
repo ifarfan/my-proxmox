@@ -1,0 +1,44 @@
+---
+- name: Install cron pkg
+  ansible.builtin.apt:
+    pkg: cron
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Check for missing root crontab
+  ansible.builtin.stat:
+    path: /var/spool/cron/crontabs/root
+  register: crontab_file
+
+- name: Copy empty crontab template
+  ansible.builtin.copy:
+    src: cron/crontab
+    dest: /var/spool/cron/crontabs/root
+    owner: root
+    group: crontab
+    mode: 0600
+  when: not crontab_file.stat.exists
+
+- name: Only record cron errors
+  ansible.builtin.copy:
+    src: cron/cron
+    dest: /etc/default/cron
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart cron
+
+- name: Remove unnecessary scheduled cron jobs
+  ansible.builtin.file:
+    path: /etc/{{ item }}
+    state: absent
+  loop: "{{ cron_job_to_remove }}"
+
+- name: Ensure systemd restarts cron
+  ansible.builtin.lineinfile:
+    dest: /lib/systemd/system/cron.service
+    regexp: '^Restart'
+    insertafter: '\[Service\]'
+    line: 'Restart=always'
+  notify: restart cron

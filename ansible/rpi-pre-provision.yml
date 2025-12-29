@@ -31,8 +31,9 @@
       delegate_to: localhost
       become: false
       register: dig_output
+      changed_when: false
 
-    - name: Set new IP via nmcli
+    - name: Set new, fixed IP via nmcli
       community.general.nmcli:
         conn_name: "eth0"
         type: ethernet
@@ -42,11 +43,29 @@
         dns4: "{{ dns_external_servers }}"
         state: present
 
+    - name: Disable DHCP IP addresses in netplan
+      ansible.builtin.replace:
+        path: /etc/netplan/50-cloud-init.yaml
+        regexp: "{{ item.find }}"
+        replace: "{{ item.replace }}"
+      loop:
+        - { find: '(\s+)dhcp4\:(\s+)true(\s+.*)?$', replace: '\1dhcp4:\2false\3' }
+        - { find: '(\s+)dhcp6\:(\s+)true(\s+.*)?$', replace: '\1dhcp6:\2false\3' }
+
+    - name: Set new DNS servers
+      ansible.builtin.replace:
+        path: /etc/systemd/resolved.conf
+        regexp: "{{ item.find }}"
+        replace: "{{ item.replace }}"
+      loop:
+        - { find: '^#DNS=', replace: "DNS={{ dns_external_servers[0]}}" }
+        - { find: '^#FallbackDNS=', replace: "FallbackDNS={{ dns_external_servers[1] }}" }
+
     - name: Set hostname
       ansible.builtin.hostname:
         name: "{{ inventory_hostname_short }}.{{ global_domain }}"
 
-    - name: Reboot RPi + may lose connection
-      ansible.builtin.reboot:
-        post_reboot_delay: 60
-        reboot_timeout: 180
+    # - name: Reboot RPi + may lose connection
+    #   ansible.builtin.reboot:
+    #     post_reboot_delay: 60
+    #     reboot_timeout: 180

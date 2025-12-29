@@ -1,0 +1,24 @@
+---
+# yamllint disable rule:line-length
+- name: Install chrony
+  ansible.builtin.apt:
+    pkg: chrony
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Use AWS free time sync server
+  ansible.builtin.lineinfile:
+    dest: /etc/chrony/chrony.conf
+    regexp: '^pool ntp.ubuntu.com'
+    insertbefore: 'pool ntp.ubuntu.com'
+    line: 'pool time.aws.com iburst'
+  notify: restart chrony
+
+- name: Ensure systemd restarts chrony
+  ansible.builtin.lineinfile:
+    dest: /lib/systemd/system/chrony.service
+    regexp: '^Restart'
+    insertafter: '\[Service\]'
+    line: 'Restart=always'
+  notify: restart chrony

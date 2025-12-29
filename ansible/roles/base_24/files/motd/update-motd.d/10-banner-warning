@@ -1,0 +1,98 @@
+#!/bin/sh
+#
+# 1 0 - B A N N E R - W A R N I N G
+#
+# ASCII Generator: http://patorjk.com/software/taag/
+#
+
+# Get Distro Info
+[ -r /etc/lsb-release ] && . /etc/lsb-release
+
+if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+    # Fall back to using the very slow lsb_release utility
+    DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+fi
+
+##  Show Logo
+echo
+echo "\033[0;32m"
+cat << 'EOF'
+                                  *     .--.
+                                       / /  `
+                      +               | |
+                             '         \ \__,
+                         *          +   '--'  *
+                             +   /\
+                +              .'  '.   *
+                       *      /======\      +
+                             ;:.  _   ;
+                             |:. (_)  |
+                             |:.  _   |
+                   +         |:. (_)  |          *
+                             ;:.      ;
+                           .' \:.    / `.
+                          / .-'':._.'`-. \
+                          |/    /||\    \|
+                        _..--"""````"""--.._
+                  _.-'``                    ``'-._
+                -'                                '-
+EOF
+echo "\033[0;34m"
+cat << 'EOF'
+                                  _       _                  _
+                                 (_)     (_)                | |
+   _ __ ___   __ _  ___ _ __ ___  _ _ __  _ ___   _ __   ___| |_
+  | '_ ` _ \ / _` |/ __| '_ ` _ \| | '_ \| / __| | '_ \ / _ \ __|
+  | | | | | | (_| | (__| | | | | | | | | | \__ \_| | | |  __/ |_
+  |_| |_| |_|\__,_|\___|_| |_| |_|_|_| |_|_|___(_)_| |_|\___|\__|
+EOF
+echo "\033[0m"
+
+# Show Distro Info
+echo "\033[0;32m"
+cat << 'EOF'
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    S Y S T E M    I N F O R M A T I O N
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+EOF
+echo "\033[0m"
+
+echo "  Date/Time: \t$(date)"
+echo "  Hostname: \t\033[0;32m$(hostname)\033[0m"
+echo "  OS Version: \t$DISTRIB_DESCRIPTION [$(uname -o) $(uname -r) $(uname -m)]"
+
+# Uptime
+UPTIME_DAYS=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 / 86400)
+UPTIME_HOURS=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 % 86400 / 3600)
+UPTIME_MINUTES=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 % 86400 % 3600 / 60)
+echo "  Uptime: \t$UPTIME_DAYS days, $UPTIME_HOURS hours, $UPTIME_MINUTES minutes"
+
+DISK_USED=$(df --output=pcent / | tail -n +2 | tr -d '[[:space:]]')
+INODES_USED=$(df --output=ipcent / | tail -n +2 | tr -d '[[:space:]]')
+echo "  Disk used: \t$DISK_USED, Inodes used: $INODES_USED"
+
+# Show Machine Info
+cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+[ "$cores" -eq "0" ] && cores=1
+threshold="${cores:-1}.0"
+if [ $(echo "`cut -f1 -d ' ' /proc/loadavg` < $threshold" | bc) -eq 1 ]; then
+    echo
+    /usr/bin/landscape-sysinfo
+else
+    echo
+    echo "  System information disabled due to load higher than $threshold"
+fi
+
+# Show Warning
+echo "\033[0;31m"
+cat << 'EOF'
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+    S E C U R I T Y    N O T I C E
+  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+EOF
+echo "\033[0m"
+
+# Show login warning
+cat /etc/issue.net
+
+exit 0
