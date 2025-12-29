@@ -1,0 +1,59 @@
+---
+#
+# Remove unused packages
+#
+- name: Stop and disable unnecessary daemons
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+    masked: true
+  loop: "{{ services_2_disable }}"
+  ignore_errors: true                     # noqa ignore-errors
+  when: not is_lxc
+
+- name: Uninstall Packages
+  ansible.builtin.apt:
+    pkg: "{{ apt_pkgs_to_remove }}"
+    state: absent
+    purge: true
+
+- name: Run "apt-get clean"
+  ansible.builtin.apt:
+    clean: true
+
+#
+# Install packages
+#
+- name: Set apt settings tweaks
+  ansible.builtin.copy:
+    src: "apt/{{ item }}"
+    dest: /etc/apt/apt.conf.d
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - 10periodic
+    - 50unattended-upgrades
+    - 99disable-translations
+    - 99no-recommends
+
+- name: Update apt caches
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Update all packages to the latest version
+  ansible.builtin.apt:
+    upgrade: dist
+
+- name: Install default packages
+  ansible.builtin.apt:
+    pkg: "{{ apt_default_pkgs_to_install }}"
+    state: present
+
+- name: Install server packages
+  ansible.builtin.apt:
+    pkg: "{{ apt_server_pkgs_to_install }}"
+    state: present
+  when: is_hardware

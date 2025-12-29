@@ -34,4 +34,4 @@
   ansible.builtin.replace:
     path: ~/.config/atuin/config.toml
     regexp: '^#\s*sync_address\s*=.*'
-    replace: 'sync_address = "https://atuin.macminis.net"'
+    replace: 'sync_address = "https://atuin.{{ global_domain }}"'

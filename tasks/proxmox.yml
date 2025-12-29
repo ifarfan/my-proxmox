@@ -1,39 +1,49 @@
 ---
 version: '3'
 
+vars:
+  PROXMOX_MONIKER: macminis
+
 tasks:
   download-iso-files:
     dir: "{{.ANSIBLE_DIR}}"
     desc: Download latest ISOs
     cmds:
-      - ansible-playbook -i inventories/macminis macminis-download-iso-files.yml
-
-  list-lxc:
-    dir: "{{.ANSIBLE_DIR}}"
-    desc: List LXCs
-    cmds:
-      - ansible-playbook -i inventories/proxmox lxc-provision.yml --list-hosts
-
-  provision-lxc:
-    dir: "{{.ANSIBLE_DIR}}"
-    desc: Provision LXCs
-    cmds:
-      - ansible-playbook -i inventories/proxmox lxc-provision.yml
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} {{.PROXMOX_MONIKER}}-download-iso-files.yml
 
   list-nodes:
     dir: "{{.ANSIBLE_DIR}}"
     desc: List Proxmox nodes
     cmds:
-      - ansible-playbook -i inventories/macminis macminis-provision.yml --list-hosts
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} {{.PROXMOX_MONIKER}}-provision.yml --list-hosts
 
   provision-nodes:
     dir: "{{.ANSIBLE_DIR}}"
     desc: Provision Proxmox nodes
     cmds:
-      - ansible-playbook -i inventories/macminis macminis-provision.yml
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} {{.PROXMOX_MONIKER}}-provision.yml
 
   update-nodes:
     dir: "{{.ANSIBLE_DIR}}"
     desc: Update Proxmox nodes
     cmds:
-      - ansible-playbook -i inventories/macminis macminis-update.yml
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} {{.PROXMOX_MONIKER}}-update.yml
+
+  reboot-nodes:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Reboot k3s cluster VMs
+    cmds:
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} {{.PROXMOX_MONIKER}}-reboot.yml
+
+  # ? LXCs
+  list-lxc:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: List LXCs
+    cmds:
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} lxc-provision.yml --list-hosts
+
+  provision-lxc:
+    dir: "{{.ANSIBLE_DIR}}"
+    desc: Provision LXCs
+    cmds:
+      - ansible-playbook -i inventories/{{.PROXMOX_MONIKER}} lxc-provision.yml

@@ -1,0 +1,31 @@
+---
+# Use "rpi-local" group once when RPis are first booted
+# Use "rpi" group once after RPis have been provisioned
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+    # Provisioned hosts
+    rpi0.macminis.net:
+    # rpi1.macminis.net:
+    # Pre-provisioned hosts
+    rpi0.local:
+    # rpi1.local:
+  children:
+    # Provisioned hosts
+    rpi:
+      hosts:
+        rpi0.macminis.net:
+        # rpi1.macminis.net:
+    # Pre-provisioned hosts
+    rpi_local:
+      hosts:
+        rpi0.local:
+        # rpi1.local:
+      vars:
+        ansible_user: izzy
+        ansible_ssh_user: izzy
+  vars:
+    ansible_connection: ssh
+    ansible_user: root
+    ansible_ssh_user: root

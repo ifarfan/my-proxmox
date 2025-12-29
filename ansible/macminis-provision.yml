@@ -6,7 +6,7 @@
   tasks:
     - name: Proxmox node default configuration
       ansible.builtin.include_role:
-        name: proxmox
+        name: base_proxmox
 
     - name: Install modern Unix utilities
       ansible.builtin.include_role:

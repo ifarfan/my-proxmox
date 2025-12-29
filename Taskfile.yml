@@ -15,6 +15,7 @@ includes:
   oracle: ./tasks/oracle.yml
   packer: ./tasks/packer.yml
   proxmox: ./tasks/proxmox.yml
+  rpi: ./tasks/rpi.yml
 
 vars:
   ANSIBLE_DIR: ./ansible

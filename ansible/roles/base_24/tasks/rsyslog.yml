@@ -1,0 +1,15 @@
+---
+- name: Install rsyslog
+  ansible.builtin.apt:
+    pkg: rsyslog
+    state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_time }}"
+
+- name: Copy rsyslog logrotate config
+  ansible.builtin.copy:
+    src: rsyslog/logrotate.conf
+    dest: /etc/logrotate.d/rsyslog
+    owner: root
+    group: root
+    mode: 0644

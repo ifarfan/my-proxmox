@@ -1,0 +1,111 @@
+---
+is_lxc: false
+is_hardware: false
+
+apt_pkgs_to_remove:
+  - apparmor
+  - apport
+  - apport-symptoms
+  - bcache-tools
+  - binutils
+  - bolt
+  - busybox-initramfs
+  - byobu
+  - cloud-guest-utils
+  - cryptsetup
+  - eatmydata
+  - eject
+  - g++
+  - g++-9
+  - gdisk
+  - mdadm
+  - modemmanager
+  - motd-news-config
+  - multipath-tools
+  - os-prober
+  - overlayroot
+  - packagekit-tools
+  - pastebinit
+  - popularity-contest
+  - powermgmt-base
+  - python3-debconf
+  - python3-debian
+  - run-one
+  - sbsigntool
+  - secureboot-db
+  - tcl
+  - telnet
+  - thermald
+  - ubuntu-advantage-tools
+  - upower
+  - usb-modeswitch
+  - usb-modeswitch-data
+  - usbmuxd
+  - wireless-regdb
+  - xfsprogs
+  # - xkb-data  # !!! breaks the uninstall step if added
+  - zstd
+
+apt_default_pkgs_to_install:
+  - apt-file
+  - apt-utils
+  - colordiff
+  - curl
+  - dnsutils
+  - git-core
+  - grc
+  - htop
+  - iftop
+  - iotop
+  - iptraf
+  - lnav
+  - locate
+  - lsb-release
+  - lsof
+  - multitail
+  - nano
+  - ncdu
+  - net-tools
+  - nfs-common
+  - nmap
+  - nscd
+  - peco
+  - python3-apt
+  - python3-pip
+  - python3-setuptools
+  - rsync
+  - screen
+  - software-properties-common
+  - strace
+  - sysstat
+  - tar
+  - tmux
+  - tree
+  - unzip
+  - vim
+  - wget
+  - zip
+
+apt_server_pkgs_to_install:
+  - aptitude
+  - lm-sensors
+  - smartmontools
+
+services_2_disable:
+  - packagekit                # Used during package updates when using GUI
+
+cron_job_to_remove:
+  # ? NOTE:
+  # ? Removing jobs that are either resource hogs (cough, sysstat, cough)
+  # ? and/or no longer needed/deprecated
+  - cron.d/sysstat
+  - cron.daily/apport
+  - cron.daily/apt-compat
+  - cron.daily/bsdmainutils
+  - cron.daily/locate
+  - cron.daily/sysstat
+  - cron.daily/update-notifier-common
+  - cron.weekly/update-notifier-common
+
+locale: en_US.UTF-8
+time_zone: UTC

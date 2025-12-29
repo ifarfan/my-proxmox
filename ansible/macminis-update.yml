@@ -6,7 +6,7 @@
   tasks:
     - name: Update Proxmox nodes
       ansible.builtin.include_role:
-        name: proxmox
+        name: base_proxmox
 
     - name: Reboot 1 proxmox node at the time + wait up to 3 mins
       throttle: 1

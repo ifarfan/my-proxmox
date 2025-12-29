@@ -1,0 +1,12 @@
+---
+- name: Custom sysctl configs
+  ansible.builtin.copy:
+    src: "sysctl/{{ item }}"
+    dest: /etc/sysctl.d/
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - 90-hardening.conf
+    - 90-tcptuning.conf
+  notify: run sysctl
