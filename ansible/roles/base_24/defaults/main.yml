@@ -41,9 +41,9 @@ apt_pkgs_to_remove:
   - usb-modeswitch
   - usb-modeswitch-data
   - usbmuxd
-  - wireless-regdb
+  # - wireless-regdb  # !!! breaks iptables, needed for docker
   - xfsprogs
-  # - xkb-data  # !!! breaks the uninstall step if added
+  # - xkb-data        # !!! breaks the uninstall step if added
   - zstd
 
 apt_default_pkgs_to_install:
