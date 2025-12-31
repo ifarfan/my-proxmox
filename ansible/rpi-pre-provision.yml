@@ -3,15 +3,12 @@
   hosts: rpi_local
   become: true
   gather_facts: true
-  vars:
-    pkgs:
-      - net-tools
-      - network-manager
   tasks:
     - name: Get default authorized_keys file content
       ansible.builtin.slurp:
         src: /home/izzy/.ssh/authorized_keys
       register: authorized_keys_content
+      changed_when: false
 
     - name: Set root authorized_keys from default user
       ansible.posix.authorized_key:
@@ -20,11 +17,17 @@
         state: present
         exclusive: true
 
-    - name: Install needed packages
-      ansible.builtin.apt:
-        pkg: "{{ pkgs }}"
-        state: present
-        update_cache: true
+    - name: List of remote unmanaged netplan files
+      ansible.builtin.command:
+        ls -1 /etc/netplan/
+      register: unmanaged_files
+      changed_when: false
+
+    - name: Remove remote unmanaged netplan files
+      ansible.builtin.file:
+        path: "/etc/netplan/{{ item }}"
+        state: absent
+      loop: "{{ unmanaged_files.stdout_lines }}"
 
     - name: Run local dig command to find new IP
       ansible.builtin.command: "dig +short {{ inventory_hostname_short }}.{{ global_domain }}"
@@ -33,39 +36,71 @@
       register: dig_output
       changed_when: false
 
-    - name: Set new, fixed IP via nmcli
-      community.general.nmcli:
-        conn_name: "eth0"
-        type: ethernet
-        ifname: eth0
-        ip4: "{{ dig_output.stdout }}/24"
-        gw4: "{{ ansible_default_ipv4.gateway }}"
-        dns4: "{{ dns_external_servers }}"
-        state: present
+    - name: Get mac address for eth0
+      ansible.builtin.slurp:
+        src: /sys/class/net/eth0/address
+      register: mac_address_content
+      changed_when: false
 
-    - name: Disable DHCP IP addresses in netplan
-      ansible.builtin.replace:
-        path: /etc/netplan/50-cloud-init.yaml
-        regexp: "{{ item.find }}"
-        replace: "{{ item.replace }}"
-      loop:
-        - { find: '(\s+)dhcp4\:(\s+)true(\s+.*)?$', replace: '\1dhcp4:\2false\3' }
-        - { find: '(\s+)dhcp6\:(\s+)true(\s+.*)?$', replace: '\1dhcp6:\2false\3' }
-
-    - name: Set new DNS servers
-      ansible.builtin.replace:
-        path: /etc/systemd/resolved.conf
-        regexp: "{{ item.find }}"
-        replace: "{{ item.replace }}"
-      loop:
-        - { find: '^#DNS=', replace: "DNS={{ dns_external_servers[0]}}" }
-        - { find: '^#FallbackDNS=', replace: "FallbackDNS={{ dns_external_servers[1] }}" }
+    - name: Set new netplan config file
+      ansible.builtin.copy:
+        dest: /etc/netplan/90-static-ip.yaml
+        mode: 0600
+        content: |
+          network:
+            version: 2
+            ethernets:
+              eth0:
+                renderer: networkd
+                match:
+                  # macaddress: '{{ mac_address_content["content"] | b64decode | trim() }}'
+                  name: "eth0"
+                # set-name: eth0
+                addresses:
+                - "{{ dig_output.stdout }}/24"
+                nameservers:
+                  addresses:
+                  - {{ dns_external_servers[0] }}
+                  - {{ dns_external_servers[1] }}
+                # dhcp4: false
+                dhcp6: false
+                wakeonlan: true
+                routes:
+                  - to: default
+                    via: {{ ansible_default_ipv4.gateway }}
+                link-local: [ ipv4 ]
 
     - name: Set hostname
       ansible.builtin.hostname:
         name: "{{ inventory_hostname_short }}.{{ global_domain }}"
 
-    # - name: Reboot RPi + may lose connection
-    #   ansible.builtin.reboot:
-    #     post_reboot_delay: 60
-    #     reboot_timeout: 180
+    - name: Reboot RPi + may lose connection
+      ansible.builtin.reboot:
+        post_reboot_delay: 60
+        reboot_timeout: 180
+
+# network:
+#   version: 2
+#   ethernets:
+#     NM-a1608d19-d315-4a3e-a483-e6f15e7752e8:
+#       renderer: NetworkManager
+#       match:
+#         name: "eth0"
+#       addresses:
+#       - "192.168.136.3/24"
+#       nameservers:
+#         addresses:
+#         - 1.1.1.1
+#         - 1.0.0.1
+#       dhcp6: true
+#       wakeonlan: true
+#       networkmanager:
+#         uuid: "a1608d19-d315-4a3e-a483-e6f15e7752e8"
+#         name: "eth0"
+#         passthrough:
+#           ethernet._: ""
+#           ipv4.address1: "192.168.136.3/24,192.168.136.1"
+#           ipv4.method: "manual"
+#           ipv6.addr-gen-mode: "default"
+#           ipv6.ip6-privacy: "-1"
+#           proxy._: ""
