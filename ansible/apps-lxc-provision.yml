@@ -94,3 +94,8 @@
       ansible.builtin.include_role:
         name: neko
       tags: neko
+
+    - name: Install Glance
+      ansible.builtin.include_role:
+        name: glance
+      tags: glance

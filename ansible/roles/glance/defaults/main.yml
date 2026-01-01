@@ -1,0 +1,4 @@
+---
+glance_directory: /opt/glance
+glance_uri: "glance.{{ global_domain }}"
+glance_port: 8080
