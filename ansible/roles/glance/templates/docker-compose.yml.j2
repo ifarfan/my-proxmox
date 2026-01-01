@@ -1,0 +1,30 @@
+---
+services:
+  glance:
+    image: glanceapp/glance
+    container_name: glance
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ glance_directory }}/config:/app/config
+      - {{ glance_directory }}/assets:/app/assets
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8085:{{ glance_port }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.glance.entrypoints=http"
+      - "traefik.http.routers.glance.rule=Host(`{{ glance_uri }}`)"
+      - "traefik.http.middlewares.glance-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.glance.middlewares=glance-https-redirect"
+      - "traefik.http.routers.glance-secure.entrypoints=https"
+      - "traefik.http.routers.glance-secure.rule=Host(`{{ glance_uri }}`)"
+      - "traefik.http.routers.glance-secure.tls=true"
+      - "traefik.http.routers.glance-secure.service=glance"
+      - "traefik.http.services.glance.loadbalancer.server.port={{ glance_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true
