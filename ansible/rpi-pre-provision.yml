@@ -53,22 +53,18 @@
               eth0:
                 renderer: networkd
                 match:
-                  # macaddress: '{{ mac_address_content["content"] | b64decode | trim() }}'
-                  name: "eth0"
-                # set-name: eth0
+                  macaddress: '{{ mac_address_content["content"] | b64decode | trim() }}'
                 addresses:
                 - "{{ dig_output.stdout }}/24"
                 nameservers:
                   addresses:
                   - {{ dns_external_servers[0] }}
                   - {{ dns_external_servers[1] }}
-                # dhcp4: false
-                dhcp6: false
-                wakeonlan: true
                 routes:
                   - to: default
                     via: {{ ansible_default_ipv4.gateway }}
-                link-local: [ ipv4 ]
+                dhcp6: false
+                wakeonlan: true
 
     - name: Set hostname
       ansible.builtin.hostname:
@@ -78,29 +74,3 @@
       ansible.builtin.reboot:
         post_reboot_delay: 60
         reboot_timeout: 180
-
-# network:
-#   version: 2
-#   ethernets:
-#     NM-a1608d19-d315-4a3e-a483-e6f15e7752e8:
-#       renderer: NetworkManager
-#       match:
-#         name: "eth0"
-#       addresses:
-#       - "192.168.136.3/24"
-#       nameservers:
-#         addresses:
-#         - 1.1.1.1
-#         - 1.0.0.1
-#       dhcp6: true
-#       wakeonlan: true
-#       networkmanager:
-#         uuid: "a1608d19-d315-4a3e-a483-e6f15e7752e8"
-#         name: "eth0"
-#         passthrough:
-#           ethernet._: ""
-#           ipv4.address1: "192.168.136.3/24,192.168.136.1"
-#           ipv4.method: "manual"
-#           ipv6.addr-gen-mode: "default"
-#           ipv6.ip6-privacy: "-1"
-#           proxy._: ""
