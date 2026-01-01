@@ -35,3 +35,4 @@
     path: ~/.config/atuin/config.toml
     regexp: '^#\s*sync_address\s*=.*'
     replace: 'sync_address = "https://atuin.{{ global_domain }}"'
+  ignore_errors: true
