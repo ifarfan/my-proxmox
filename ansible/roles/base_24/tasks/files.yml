@@ -1,4 +1,14 @@
 ---
+- name: Copy profile.d files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/profile.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - 10-prompt.sh
+
 - name: Copy default .bashrc files
   ansible.builtin.copy:
     src: _bashrc
@@ -27,3 +37,14 @@
     group: ubuntu
     mode: 0644
   when: not is_lxc and ubuntu_home.stat.exists
+
+- name: Add hostname to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1 {{ inventory_hostname_short }} {{ inventory_hostname_short }}.{{ global_domain }}"
+    state: present
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname_short }}.{{ global_domain }}"
