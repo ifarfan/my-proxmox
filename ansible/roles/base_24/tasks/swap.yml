@@ -33,10 +33,12 @@
     - name: Format the file as swap
       ansible.builtin.command:
         cmd: "mkswap {{ swap_file_path }}"
+      # noqa: no-changed-when
 
     - name: Turn on swap
       ansible.builtin.command:
         cmd: swapon -a
+      # noqa: no-changed-when
 
   when: not swap_file.stat.exists
 
