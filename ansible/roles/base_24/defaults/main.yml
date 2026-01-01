@@ -1,6 +1,7 @@
 ---
 is_lxc: false
 is_hardware: false
+has_swap: false
 
 apt_pkgs_to_remove:
   - apparmor

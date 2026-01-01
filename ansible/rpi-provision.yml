@@ -10,6 +10,7 @@
         name: base_24
       vars:
         is_hardware: true
+        has_swap: true
 
     - name: Install modern Unix utilities
       ansible.builtin.include_role:
