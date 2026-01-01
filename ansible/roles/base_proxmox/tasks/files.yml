@@ -17,7 +17,6 @@
     group: root
     mode: 0755
 
-
 - name: Set global prompt
   ansible.builtin.copy:
     dest: /etc/resolv.conf

@@ -47,3 +47,16 @@
       - apparmor
     state: absent
     purge: true
+
+- name: Schedule docker pruning cron job
+  ansible.builtin.copy:
+    dest: /etc/cron.daily/docker-system-prune
+    content: |
+      #!/bin/sh
+      # Run docker system prune with force (-f) to avoid confirmation prompts
+      # and --volumes to also prune anonymous volumes.
+      # The --filter "until=24h" only prunes resources older than 24 hours.
+      docker system prune -af --volumes --filter "until=24h"
+    owner: root
+    group: root
+    mode: 0755
