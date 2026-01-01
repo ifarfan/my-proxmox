@@ -1,0 +1,16 @@
+---
+- name: Check if reboot is needed
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+    get_checksum: false
+  register: reboot_required_file
+
+- name: Reboot server, if needed
+  ansible.builtin.reboot:
+    msg: "Rebooting due to system updates"
+    reboot_timeout: 600
+  when: reboot_required_file.stat.exists
+
+- name: Remove packages no longer needed
+  ansible.builtin.apt:
+    autoremove: true

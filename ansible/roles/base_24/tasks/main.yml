@@ -41,3 +41,6 @@
 
 - name: Configure motd
   ansible.builtin.import_tasks: motd.yml
+
+- name: Reboot, if needed after installation
+  ansible.builtin.import_tasks: reboot.yml
