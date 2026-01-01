@@ -32,6 +32,10 @@
       ansible.builtin.import_tasks: chrony.yml
   when: not is_lxc
 
+- name: Configure swap
+  ansible.builtin.import_tasks: swap.yml
+  when: has_swap
+
 - name: Configure cron
   ansible.builtin.import_tasks: cron.yml
 
