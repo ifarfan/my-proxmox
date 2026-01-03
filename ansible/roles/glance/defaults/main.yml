@@ -2,3 +2,6 @@
 glance_directory: /opt/glance
 glance_uri: "glance.{{ global_domain }}"
 glance_port: 8080
+glance_version: v0.8.4
+
+glance_github_token: "{{ lookup('ansible.builtin.ini', 'github_token', section='glance', file='credentials.ini') }}"

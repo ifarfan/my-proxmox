@@ -1,0 +1,41 @@
+---
+# See "Community Widgets" at https://github.com/glanceapp/community-widgets
+server:
+  assets-path: /app/assets
+  proxied: true
+
+# See https://github.com/glanceapp/glance/blob/main/docs/themes.md
+theme:
+  # # Teal City
+  # background-color: 225 14 15
+  # primary-color: 157 47 65
+  # contrast-multiplier: 1.1
+
+  # # Catppuccin Mocha
+  # background-color: 240 21 15
+  # contrast-multiplier: 1.2
+  # primary-color: 217 92 83
+  # positive-color: 115 54 76
+  # negative-color: 347 70 65
+
+  # # Camouflage
+  # background-color: 186 21 20
+  # contrast-multiplier: 1.2
+  # primary-color: 97 13 80
+
+  # Catppuccin Latte
+  light: true
+  background-color: 220 23 95
+  contrast-multiplier: 1.0
+  primary-color: 220 91 54
+  positive-color: 109 58 40
+  negative-color: 347 87 44
+
+  # Note: assets are cached by the browser, changes to the CSS file
+  # will not be reflected until the browser cache is cleared (Ctrl+F5)
+  custom-css-file: /assets/user.css
+
+pages:
+  - $include: home.yml
+  - $include: feeds.yml
+  - $include: vids.yml

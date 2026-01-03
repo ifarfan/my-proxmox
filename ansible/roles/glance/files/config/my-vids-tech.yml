@@ -1,0 +1,17 @@
+-
+  type: group
+  widgets:
+    -
+      type: videos
+      title: Tech
+      style: grid-cards
+      channels:
+        - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
+        - UCx0ObGO7YJZpPPf6tbHpqPQ # Servers at Home
+        - UC9Rrud-8CaHokDtK9FszvRg # Github Awesome
+    -
+      type: videos
+      title: AI
+      style: grid-cards
+      channels:
+        - UC0C-17n9iuUQPylguM1d-lQ # Nate B Jones

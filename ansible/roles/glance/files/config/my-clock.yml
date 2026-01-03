@@ -1,0 +1,14 @@
+-
+  type: clock
+  hour-format: 12h
+  timezones:
+    - timezone: America/New_York
+      label: New York
+    - timezone: America/Lima
+      label: Lima
+    - timezone: America/Sao_Paulo
+      label: Rio de Janeiro
+    - timezone: Europe/Berlin
+      label: Berlin
+    - timezone: Europe/Riga
+      label: Riga

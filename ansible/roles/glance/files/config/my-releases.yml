@@ -1,0 +1,24 @@
+-
+  type: releases
+  token: ${GITHUB_TOKEN}
+  show-source-icon: true
+  cache: 1d
+  limit: 20
+  collapse-after: 7
+  repositories:
+    - glanceapp/glance
+    - atuinsh/atuin
+    - booklore-app/booklore
+    - amir20/dozzle
+    - CorentinTh/it-tools
+    - gethomepage/homepage
+    - fccview/jotty
+    - alexta69/metube
+    - m1k1o/neko
+    - portainer/portainer
+    - rustdesk/rustdesk
+    - alexjustesen/speedtest-tracker
+    - stashapp/stash
+    - Termix-SSH/Termix
+    - traefik/traefik
+    - muety/wakapi

@@ -1,0 +1,30 @@
+- name: Home
+  head-widgets:
+    - $include: my-markets.yml
+  columns:
+    # Left column
+    - size: small
+      widgets:
+        -
+          type: server-stats
+          servers:
+            - type: local
+              name: Services
+        -
+          type: calendar
+          first-day-of-week: sunday
+        - $include: my-clock.yml
+    # Middle column
+    - size: full
+      widgets:
+        - $include: my-reddit.yml
+    # Right column
+    - size: small
+      widgets:
+        - $include: cw-time-bar.yml
+        -
+          type: weather
+          location: Philadelphia, USA
+          units: imperial
+          hour-format: 12h
+        - $include: my-releases.yml

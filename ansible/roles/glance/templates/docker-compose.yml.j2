@@ -1,7 +1,7 @@
 ---
 services:
   glance:
-    image: glanceapp/glance
+    image: glanceapp/glance:{{ glance_version }}
     container_name: glance
     restart: unless-stopped
     networks:
@@ -12,6 +12,10 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 8085:{{ glance_port }}
+    environment:
+      GITHUB_TOKEN: {{ glance_github_token }}
+      TZ: America/New_York
+      WEATHER_LOCATION: "New York, United States"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.glance.entrypoints=http"

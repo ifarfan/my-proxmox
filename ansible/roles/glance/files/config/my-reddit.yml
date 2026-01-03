@@ -1,0 +1,19 @@
+-
+  type: group
+  define: &shared-properties
+    type: reddit
+    collapse-after: 13
+    limit: 20
+    show-thumbnails: true
+    show-flairs: true
+  widgets:
+    - subreddit: homelab
+      <<: *shared-properties
+    - subreddit: selfhosted
+      <<: *shared-properties
+    - subreddit: minilab
+      <<: *shared-properties
+    - subreddit: philly
+      <<: *shared-properties
+    - subreddit: koreader
+      <<: *shared-properties
