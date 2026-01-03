@@ -1,0 +1,9 @@
+- name: Vids
+  columns:
+    - size: full
+      widgets:
+        - type: split-column
+          max-columns: 2
+          widgets:
+            - $include: my-vids-tech.yml
+            - $include: my-vids-lifestyle.yml

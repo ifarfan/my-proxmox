@@ -11,18 +11,47 @@
         - "{{ glance_directory }}/assets"
         - "{{ glance_directory }}/config"
 
-    - name: Copy app files
+    - name: Copy docker-compose file
       ansible.builtin.template:
-        src: "{{ item.file }}.j2"
-        dest: "{{ glance_directory }}/{{ item.folder }}{{ item.file }}"
+        src: docker-compose.yml.j2
+        dest: "{{ glance_directory }}/docker-compose.yml"
         owner: root
         group: root
         mode: 0644
-      loop:
-        - { file: 'docker-compose.yml', folder: '' }
-        - { file: 'glance.yml', folder: 'config/' }
-        - { file: 'home.yml', folder: 'config/' }
-        - { file: 'user.css', folder: 'assets/' }
+
+    - name: List of local "config" files
+      ansible.builtin.command:
+        ls -1 "{{ role_path }}/files/config/"
+      delegate_to: localhost
+      become: false
+      changed_when: false
+      register: config_files
+
+    - name: Copy app "config" files
+      ansible.builtin.copy:
+        src: "config/{{ item }}"
+        dest: "{{ glance_directory }}/config/{{ item }}"
+        owner: root
+        group: root
+        mode: 0644
+      loop: "{{ config_files.stdout_lines }}"
+
+    - name: List of local "assets" files
+      ansible.builtin.command:
+        ls -1 "{{ role_path }}/files/assets/"
+      delegate_to: localhost
+      become: false
+      changed_when: false
+      register: assets_files
+
+    - name: Copy app "assets" files
+      ansible.builtin.copy:
+        src: "assets/{{ item }}"
+        dest: "{{ glance_directory }}/assets/{{ item }}"
+        owner: root
+        group: root
+        mode: 0644
+      loop: "{{ assets_files.stdout_lines }}"
 
     - name: Create and start app
       community.docker.docker_compose_v2:

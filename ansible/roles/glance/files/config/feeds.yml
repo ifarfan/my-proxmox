@@ -1,0 +1,9 @@
+- name: Feeds
+  columns:
+    - size: full
+      widgets:
+        - type: split-column
+          max-columns: 2
+          widgets:
+            - $include: my-reddit.yml
+            - $include: my-rss.yml

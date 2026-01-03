@@ -1,0 +1,10 @@
+-
+  type: group
+  widgets:
+    -
+      type: videos
+      title: Food + Travel
+      style: grid-cards
+      channels:
+        - UCD8fpCkckYmYj_qm6hhE4jw # Viaja y Prueba
+        - UCZB2JfwFvccwQdpTwgE5idA # Giacomo Bocchio
