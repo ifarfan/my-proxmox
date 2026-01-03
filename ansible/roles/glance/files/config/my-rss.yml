@@ -1,23 +1,24 @@
 -
   type: group
+  define-rss: &rss-properties
+    type: rss
+    style: vertical-list
+    limit: 20
+    collapse-after: 10
+    cache: 12h
+  define-hn: &hn-properties
+    limit: 20
+    collapse-after: 10
   widgets:
     -
-      type: rss
       title: selfh.st
-      style: detailed-list
-      limit: 20
-      collapse-after: 5
-      cache: 12h
+      <<: *rss-properties
       feeds:
         - url: https://selfh.st/rss/
           title: selfh.st
     -
-      type: rss
       title: Atom
-      style: detailed-list
-      limit: 20
-      collapse-after: 5
-      cache: 12h
+      <<: *rss-properties
       feeds:
         - url: https://ciechanow.ski/atom.xml
           title: Atom
@@ -28,12 +29,12 @@
         #   title: Ahmad Shadeed
     -
       type: hacker-news
+      <<: *hn-properties
       limit: 20
       collapse-after: 10
     -
       type: lobsters
-      limit: 20
-      collapse-after: 10
+      <<: *hn-properties
       tags:
         - job
         - linux
