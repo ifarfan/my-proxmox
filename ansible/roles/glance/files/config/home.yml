@@ -28,4 +28,3 @@
           units: imperial
           hour-format: 12h
         - $include: my-releases.yml
-
