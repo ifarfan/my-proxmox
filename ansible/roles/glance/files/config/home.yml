@@ -6,13 +6,9 @@
     - size: small
       widgets:
         -
-          type: server-stats
-          servers:
-            - type: local
-              name: Services
-        -
           type: calendar
           first-day-of-week: sunday
+        - $include: cw-time-bar.yml
         - $include: my-clock.yml
     # Middle column
     - size: full
@@ -21,7 +17,11 @@
     # Right column
     - size: small
       widgets:
-        - $include: cw-time-bar.yml
+        -
+          type: server-stats
+          servers:
+            - type: local
+              name: Services
         -
           type: weather
           location: Philadelphia, USA
