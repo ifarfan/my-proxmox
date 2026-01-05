@@ -1,0 +1,6 @@
+---
+dumbpad_directory: /opt/dumbpad
+dumbpad_uri: "dumbpad.{{ global_domain }}"
+dumbpad_port: 3000
+dumbpad_version: v1.0.4
+dumbpad_user: 1000
