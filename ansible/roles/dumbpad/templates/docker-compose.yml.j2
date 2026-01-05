@@ -1,0 +1,32 @@
+---
+services:
+  dumbpad:
+    image: dumbwareio/dumbpad
+    container_name: dumbpad
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik_default
+    ports:
+      - 3001:{{ dumbpad_port }}
+    volumes:
+      - {{ dumbpad_directory }}/data:/app/data
+    environment:
+      SITE_TITLE: "DumbPad or all my sh*tty notes"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dumbpad.entrypoints=http"
+      - "traefik.http.routers.dumbpad.rule=Host(`{{ dumbpad_uri }}`)"
+      - "traefik.http.middlewares.dumbpad-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.dumbpad.middlewares=dumbpad-https-redirect"
+      - "traefik.http.routers.dumbpad-secure.entrypoints=https"
+      - "traefik.http.routers.dumbpad-secure.rule=Host(`{{ dumbpad_uri }}`)"
+      - "traefik.http.routers.dumbpad-secure.tls=true"
+      - "traefik.http.routers.dumbpad-secure.service=dumbpad"
+      - "traefik.http.services.dumbpad.loadbalancer.server.port={{ dumbpad_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

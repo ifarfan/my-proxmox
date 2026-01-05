@@ -43,5 +43,6 @@ locals {
     "ephemera",
     "it-tools",
     "glance",
+    "dumbpad",
   ]
 }

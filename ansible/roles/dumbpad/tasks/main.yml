@@ -1,0 +1,46 @@
+---
+- name: Install dumbpad
+  block:
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ dumbpad_directory }}"
+        state: directory
+        mode: 0755
+
+    - name: Create app "data" directory
+      ansible.builtin.file:
+        path: "{{ dumbpad_directory }}/data"
+        owner: "{{ dumbpad_user }}"
+        group: "{{ dumbpad_user }}"
+        state: directory
+        mode: 0755
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ dumbpad_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ dumbpad_directory }}"
+        recreate: always
+        pull: missing
+        remove_orphans: true
+        remove_volumes: true
+        state: restarted
+
+    - name: Wait until certificate is registered
+      ansible.builtin.uri:
+        url: "https://{{ dumbpad_uri }}/"
+        validate_certs: true
+        status_code:
+          - 200
+      register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 30       # Retries for 30 * 10 secs = 300 secs = 5 mins
+
+  tags: dumbpad

@@ -99,3 +99,8 @@
       ansible.builtin.include_role:
         name: glance
       tags: glance
+
+    - name: Install DumbPad
+      ansible.builtin.include_role:
+        name: dumbpad
+      tags: dumbpad
