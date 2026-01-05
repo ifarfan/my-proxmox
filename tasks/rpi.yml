@@ -16,7 +16,7 @@ tasks:
     cmds:
       - terraform init
       - terraform fmt && terraform validate
-      - terraform apply -compact-warnings
+      - terraform apply -compact-warnings -target=cloudflare_record.cname_records -target=cloudflare_record.dns_record
 
   # ? Ansible (pre-provisioned RPis)
   list-rpis-local:
