@@ -1,10 +1,8 @@
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/widgets/info/resources/
--
-  Hardware:
-    -
-      M1:
+- Hardware:
+    - M1:
         icon: proxmox.png
         href: https://m1.{{ global_domain }}:8006/
         description: 'Proxmox Server: M1'
@@ -15,8 +13,7 @@
           username: {{ homepage_proxmox_user }}
           password: {{ homepage_proxmox_secret }}
           node: macmini1
-    -
-      M2:
+    - M2:
         icon: proxmox.png
         href: https://m2.{{ global_domain }}:8006/
         description: 'Proxmox Server: M2'
@@ -27,8 +24,7 @@
           username: {{ homepage_proxmox_user }}
           password: {{ homepage_proxmox_secret }}
           node: macmini2
-    -
-      M3:
+    - M3:
         icon: proxmox.png
         href: https://m3.{{ global_domain }}:8006/
         description: 'Proxmox Server: M3'
@@ -39,8 +35,7 @@
           username: {{ homepage_proxmox_user }}
           password: {{ homepage_proxmox_secret }}
           node: macmini3
-    -
-      DS1:
+    - DS1:
         icon: synology.png
         href: http://ds1.{{ global_domain }}:5000/
         description: NAS Server
@@ -50,76 +45,231 @@
           url: http://ds1.{{ global_domain }}:5000
           username: {{ homepage_synology_username }}
           password: {{ homepage_synology_password }}
--
-  System Apps:
-    -
-      Traefik:
-        icon: traefik.png
-        href: https://traefik-apps-lxc.{{ global_domain }}/
-        description: Proxy Server (apps-lxc)
-        server: apps-local-docker
-        container: traefik
-        widget:
-          type: traefik
-          url: https://traefik-apps-lxc.{{ global_domain }}
-    -
-      Portainer:
-        icon: portainer.png
-        href: https://portainer-apps-lxc.{{ global_domain }}/
-        description: Container Manager (apps-lxc)
-        server: apps-local-docker
-        container: portainer
-        widget:
-          type: portainer
-          url: https://portainer-apps-lxc.{{ global_domain }}
-          env: 3
-          key: {{ homepage_portainer_token }}
--
-  Monitoring:
-    -
-      Pulse:
-        icon: pulse.png
-        href: https://pulse.{{ global_domain }}/
-        description: "Monitor Proxmox/Docker/Hosts (Server: rpi1)"
-        server: rpi1-docker
-        container: pulse
-    -
-      Dozzle Server:
-        icon: dozzle.png
-        href: https://dozzle.{{ global_domain }}/
-        description: "Monitor Docker Logs (Server: app-lxc)"
-        server: apps-local-docker
-        container: dozzle
-    -
-      Glances:
-        icon: glances.png
-        href: https://{{ glances_username }}:{{ glances_password }}@glances.{{ global_domain }}/
-        description: Monitoring Server (apps-lxc)
-        server: apps-local-docker
-        container: glances
-    -
-      Wakapi:
-        icon: wakapi.png
-        href: https://wakapi.{{ global_domain }}/summary
-        description: Monitor developement work Over Time (apps-lxc)
-        server: apps-local-docker
-        container: wakapi
-    -
-      Speedtest Tracker:
-        icon: speedtest-tracker.png
-        href: https://speedtest-tracker.{{ global_domain }}/
-        description: Monitor Internet Speed Over Time (apps-lxc)
-        server: apps-local-docker
-        container: speedtest-tracker
-        widget:
-          type: speedtest
-          url: https://speedtest-tracker.{{ global_domain }}
-          bitratePrecision: 3
--
-  High Seas:
+- System:
+  - Network:
+      - Traefik:
+          icon: traefik.png
+          href: https://traefik-apps-lxc.{{ global_domain }}/
+          description: Proxy Server (apps-lxc)
+          server: apps-local-docker
+          container: traefik
+          widget:
+            type: traefik
+            url: https://traefik-apps-lxc.{{ global_domain }}
+      - Portainer:
+          icon: portainer.png
+          href: https://portainer-apps-lxc.{{ global_domain }}/
+          description: Container Manager (apps-lxc)
+          server: apps-local-docker
+          container: portainer
+          widget:
+            type: portainer
+            url: https://portainer-apps-lxc.{{ global_domain }}
+            env: 3
+            key: {{ homepage_portainer_token }}
+      - Speedtest Tracker:
+          icon: speedtest-tracker.png
+          href: https://speedtest-tracker.{{ global_domain }}/
+          description: Monitor Internet Speed Over Time (apps-lxc)
+          server: apps-local-docker
+          container: speedtest-tracker
+          widget:
+            type: speedtest
+            url: https://speedtest-tracker.{{ global_domain }}
+            bitratePrecision: 3
+  - Monitoring:
+      - Pulse:
+          icon: pulse.png
+          href: https://pulse.{{ global_domain }}/
+          description: "Monitor Proxmox/Docker/Hosts (Server: rpi1)"
+          server: rpi1-docker
+          container: pulse
+      - Dozzle Server:
+          icon: dozzle.png
+          href: https://dozzle.{{ global_domain }}/
+          description: "Monitor Docker Logs (Server: app-lxc)"
+          server: apps-local-docker
+          container: dozzle
+      - Wakapi:
+          icon: wakapi.png
+          href: https://wakapi.{{ global_domain }}/summary
+          description: Monitor developement work Over Time (apps-lxc)
+          server: apps-local-docker
+          container: wakapi
+- Internal:
+  - Internal Apps:
+      - Jotty:
+          icon: jotty.png
+          href: https://jotty.{{ global_domain }}/
+          description: Tasks + checklists (apps-lxc)
+          siteMonitor: https://jotty.{{ global_domain }}/
+      - Neko:
+          icon: neko.png
+          href: https://neko.{{ global_domain }}/
+          description: Private browser sessions (apps-lxc)
+          siteMonitor: https://neko.{{ global_domain }}/
+      - Glance:
+          icon: glance.png
+          href: https://glance.{{ global_domain }}/
+          description: RSS feeds + content (apps-lxc)
+          siteMonitor: https://glance.{{ global_domain }}/
+      - DumbPad:
+          icon: dumbpad.png
+          href: https://dumbpad.{{ global_domain }}/
+          description: Scratch pad (apps-lxc)
+          siteMonitor: https://dumbpad.{{ global_domain }}/
+      - Termix:
+          icon: termix.png
+          href: https://termix.{{ global_domain }}/
+          description: SSH terminal server (apps-lxc)
+          siteMonitor: https://termix.{{ global_domain }}/
+      - IT-Tools:
+          icon: it-tools.png
+          href: https://it-tools.{{ global_domain }}/
+          description: Miscellaneous sysadmin tools (apps-lxc)
+          siteMonitor: https://it-tools.{{ global_domain }}/
+      - Plex:
+          icon: plex.png
+          href: https://plex.{{ global_domain }}/web/index.html
+          description: Media Server (DS1 - NAS)
+          siteMonitor: https://plex.{{ global_domain }}/web/index.html
+          widget:
+            type: plex
+            url: https://plex.{{ global_domain }}
+            key: {{ homepage_plex_token }}
+      - Booklore:
+          icon: book-lore.png
+          href: https://booklore.{{ global_domain }}/
+          description: Book library (arr-lxc)
+          siteMonitor: https://booklore.{{ global_domain }}/
+  - Internal Services:
+      - Tailscale:
+          icon: tailscale.png
+          description: Tailscale Sub-router (net-lxc)
+          server: net-docker
+          container: tailscale
+      - Cloudflare DDNS:
+          icon: cloudflare.png
+          description: Local DDNS (apps-lxc)
+          server: net-docker
+          container: cloudflare-ddns
+      - Rustdesk:
+          icon: rustdesk.png
+          description: Remote Server (apps-lxc)
+          server: net-docker
+          container: hbbs
+      - Atuin:
+          icon: atuin.png
+          description: Terminal History (apps-lxc)
+          server: apps-local-docker
+          container: atuin
+- External Vendors:
+    - Oracle:
+        icon: oracle-cloud.png
+        href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
+        description: Oracle Cloud
+        siteMonitor: https://cloud.oracle.com/
+    - Cloudflare:
+        icon: cloudflare.png
+        href: https://dash.cloudflare.com/
+        description: DNS Hosting
+        siteMonitor: https://dash.cloudflare.com/login
+    - Doppler:
+        icon: doppler.png
+        href: https://dashboard.doppler.com/
+        description: Secrets
+        siteMonitor: https://dashboard.doppler.com/login
+    - Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: ZeroTrust VPN
+        siteMonitor: https://login.tailscale.com/
+    - FIOS:
+        icon: fios.png
+        href: http://192.168.1.1/#/setup
+        description: Home Router FIOS
+        siteMonitor: http://192.168.1.1/#/setup
+    - Github:
+        icon: github.png
+        href: https://github.com/ifarfan
+        description: Github Repos
+        siteMonitor: https://github.com/login
+    - CircleCI:
+        icon: artifactory.png
+        href: https://app.circleci.com/projects/project-dashboard/github/ifarfan/
+        description: Hosted CI/CD
+        siteMonitor: https://github.com/login
+    - Dockerhub:
+        icon: docker.png
+        href: https://hub.docker.com/
+        description: Container Registry
+        siteMonitor: https://login.docker.com/u/login/identifier
+- High Seas:
+    - Arr Stack:
+      - Prowlarr:
+          icon: prowlarr.png
+          href: https://prowlarr.{{ global_domain }}/
+          description: Indexer (arr-lxc)
+          siteMonitor: https://prowlarr.{{ global_domain }}/login
+          widget:
+            type: prowlarr
+            url: https://prowlarr.{{ global_domain }}
+            key: {{ homepage_prowlarr_api }}
+      - Radarr:
+          icon: radarr.png
+          href: https://radarr.{{ global_domain }}/
+          description: Movies (arr-lxc)
+          siteMonitor: https://radarr.{{ global_domain }}/login
+          widget:
+            type: radarr
+            url: https://radarr.{{ global_domain }}
+            key: {{ homepage_radarr_api }}
+            enableQueue: true
+      - Sonarr:
+          icon: sonarr.png
+          href: https://sonarr.{{ global_domain }}/
+          description: TV (arr-lxc)
+          siteMonitor: https://sonarr.{{ global_domain }}/login
+          widget:
+            type: sonarr
+            url: https://sonarr.{{ global_domain }}
+            key: {{ homepage_sonarr_api }}
+            enableQueue: true
+      - Lidarr:
+          icon: lidarr.png
+          href: https://lidarr.{{ global_domain }}/
+          description: Music (arr-lxc)
+          siteMonitor: https://lidarr.{{ global_domain }}/login
+          widget:
+            type: lidarr
+            url: https://lidarr.{{ global_domain }}
+            key: {{ homepage_lidarr_api }}
+      - Bazarr:
+          icon: bazarr.png
+          href: https://bazarr.{{ global_domain }}/
+          description: Subtitles (arr-lxc)
+          siteMonitor: https://bazarr.{{ global_domain }}
+          widget:
+            type: bazarr
+            url: https://bazarr.{{ global_domain }}
+            key: {{ homepage_bazarr_api }}
+      - LazyLibrarian:
+          icon: lazylibrarian.png
+          href: https://lazylibrarian.{{ global_domain }}/
+          description: Books (arr-lxc)
+          siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
+      - Metube:
+          icon: metube.png
+          href: https://metube.{{ global_domain }}/
+          description: Video downloader (apps-lxc)
+          siteMonitor: https://metube.{{ global_domain }}/
+      - Ephemera:
+          icon: sh-ephemera
+          href: https://Ephemera.{{ global_domain }}/
+          description: Book downloader (apps-lxc)
+          siteMonitor: https://ephemera.{{ global_domain }}/
     - Arr Downloads:
-      -
-        QbitTorrent:
+      - QbitTorrent:
           icon: qbittorrent.png
           href: https://qbittorrent.{{ global_domain }}/
           description: Torrent client (arr-lxc)
@@ -140,249 +290,3 @@
                   - level: good
                     when: eq
                     value: 0
-    - Arr Apps 1:
-      -
-        Prowlarr:
-          icon: prowlarr.png
-          href: https://prowlarr.{{ global_domain }}/
-          description: Indexer (arr-lxc)
-          siteMonitor: https://prowlarr.{{ global_domain }}/login
-          widget:
-            type: prowlarr
-            url: https://prowlarr.{{ global_domain }}
-            key: {{ homepage_prowlarr_api }}
-      -
-        Radarr:
-          icon: radarr.png
-          href: https://radarr.{{ global_domain }}/
-          description: Movies (arr-lxc)
-          siteMonitor: https://radarr.{{ global_domain }}/login
-          widget:
-            type: radarr
-            url: https://radarr.{{ global_domain }}
-            key: {{ homepage_radarr_api }}
-            enableQueue: true
-      -
-        Sonarr:
-          icon: sonarr.png
-          href: https://sonarr.{{ global_domain }}/
-          description: TV (arr-lxc)
-          siteMonitor: https://sonarr.{{ global_domain }}/login
-          widget:
-            type: sonarr
-            url: https://sonarr.{{ global_domain }}
-            key: {{ homepage_sonarr_api }}
-            enableQueue: true
-      -
-        Lidarr:
-          icon: lidarr.png
-          href: https://lidarr.{{ global_domain }}/
-          description: Music (arr-lxc)
-          siteMonitor: https://lidarr.{{ global_domain }}/login
-          widget:
-            type: lidarr
-            url: https://lidarr.{{ global_domain }}
-            key: {{ homepage_lidarr_api }}
-      -
-        Bazarr:
-          icon: bazarr.png
-          href: https://bazarr.{{ global_domain }}/
-          description: Subtitles (arr-lxc)
-          siteMonitor: https://bazarr.{{ global_domain }}
-          widget:
-            type: bazarr
-            url: https://bazarr.{{ global_domain }}
-            key: {{ homepage_bazarr_api }}
-      -
-        LazyLibrarian:
-          icon: lazylibrarian.png
-          href: https://lazylibrarian.{{ global_domain }}/
-          description: Books (arr-lxc)
-          siteMonitor: https://lazylibrarian.{{ global_domain }}/authors
-    - Arr Apps 2:
-      -
-        Metube:
-          icon: metube.png
-          href: https://metube.{{ global_domain }}/
-          description: Video downloader (apps-lxc)
-          siteMonitor: https://metube.{{ global_domain }}/
-      -
-        Ephemera:
-          icon: sh-ephemera
-          href: https://Ephemera.{{ global_domain }}/
-          description: Book downloader (apps-lxc)
-          siteMonitor: https://ephemera.{{ global_domain }}/
--
-  Media Apps:
-    -
-      Plex:
-        icon: plex.png
-        href: https://plex.{{ global_domain }}/web/index.html
-        description: Media Server (DS1 - NAS)
-        siteMonitor: https://plex.{{ global_domain }}/web/index.html
-        widget:
-          type: plex
-          url: https://plex.{{ global_domain }}
-          key: {{ homepage_plex_token }}
-    -
-      Booklore:
-        icon: book-lore.png
-        href: https://booklore.{{ global_domain }}/
-        description: Book library (arr-lxc)
-        siteMonitor: https://booklore.{{ global_domain }}/
--
-  Internal Apps:
-    -
-      Jotty:
-        icon: jotty.png
-        href: https://jotty.{{ global_domain }}/
-        description: Tasks + checklists (apps-lxc)
-        siteMonitor: https://jotty.{{ global_domain }}/
-    -
-      Neko:
-        icon: neko.png
-        href: https://neko.{{ global_domain }}/
-        description: Private browser sessions (apps-lxc)
-        siteMonitor: https://neko.{{ global_domain }}/
-    -
-      Glance:
-        icon: glance.png
-        href: https://glance.{{ global_domain }}/
-        description: RSS feeds + content (apps-lxc)
-        siteMonitor: https://glance.{{ global_domain }}/
-    -
-      DumbPad:
-        icon: dumbpad.png
-        href: https://dumbpad.{{ global_domain }}/
-        description: Scratch pad (apps-lxc)
-        siteMonitor: https://dumbpad.{{ global_domain }}/
-    -
-      Termix:
-        icon: termix.png
-        href: https://termix.{{ global_domain }}/
-        description: SSH terminal server (apps-lxc)
-        siteMonitor: https://termix.{{ global_domain }}/
-    -
-      IT-Tools:
-        icon: it-tools.png
-        href: https://it-tools.{{ global_domain }}/
-        description: Miscellaneous sysadmin tools (apps-lxc)
-        siteMonitor: https://it-tools.{{ global_domain }}/
--
-  Internal Services:
-    -
-      Tailscale:
-        icon: tailscale.png
-        description: Tailscale Sub-router (net-lxc)
-        server: net-docker
-        container: tailscale
-    -
-      Cloudflare DDNS:
-        icon: cloudflare.png
-        description: Local DDNS (apps-lxc)
-        server: net-docker
-        container: cloudflare-ddns
-    -
-      Rustdesk:
-        icon: rustdesk.png
-        description: Remote Server (apps-lxc)
-        server: net-docker
-        container: hbbs
-    -
-      Atuin:
-        icon: atuin.png
-        description: Terminal History (apps-lxc)
-        server: apps-local-docker
-        container: atuin
--
-  External Vendors:
-    -
-      Oracle:
-        icon: oracle-cloud.png
-        href: https://cloud.oracle.com/compute/instances?region=us-ashburn-1
-        description: Oracle Cloud
-        siteMonitor: https://cloud.oracle.com/
-    -
-      Cloudflare:
-        icon: cloudflare.png
-        href: https://dash.cloudflare.com/
-        description: DNS Hosting
-        siteMonitor: https://dash.cloudflare.com/login
-    -
-      Doppler:
-        icon: doppler.png
-        href: https://dashboard.doppler.com/
-        description: Secrets
-        siteMonitor: https://dashboard.doppler.com/login
-    -
-      Tailscale:
-        icon: tailscale.png
-        href: https://login.tailscale.com/admin/machines
-        description: ZeroTrust VPN
-        siteMonitor: https://login.tailscale.com/
-    -
-      FIOS:
-        icon: fios.png
-        href: http://192.168.1.1/#/setup
-        description: Home Router FIOS
-        siteMonitor: http://192.168.1.1/#/setup
-    -
-      Github:
-        icon: github.png
-        href: https://github.com/ifarfan
-        description: Github Repos
-        siteMonitor: https://github.com/login
-    -
-      CircleCI:
-        icon: artifactory.png
-        href: https://app.circleci.com/projects/project-dashboard/github/ifarfan/
-        description: Hosted CI/CD
-        siteMonitor: https://github.com/login
-    -
-      Dockerhub:
-        icon: docker.png
-        href: https://hub.docker.com/
-        description: Container Registry
-        siteMonitor: https://login.docker.com/u/login/identifier
--
-  Financial:
-    -
-      "Stocks (Mag 7)":
-        icon: mdi-cash-multiple
-        description: Magnificent 7 via Finnhub
-        widget:
-          type: stocks
-          provider: finnhub
-          showUSMarketStatus: true
-          watchlist:
-            - AAPL
-            - AMZN
-            - GOOGL
-            - META
-            - MSFT
-            - NVDA
-            - TSLA
-    -
-      Stocks:
-        icon: mdi-cash-multiple
-        description: Market data via Finnhub
-        widget:
-          type: stocks
-          provider: finnhub
-          showUSMarketStatus: false
-          watchlist:
-            - AIQ
-            - AMAT
-            - AMD
-            #- ANET
-            - ARM
-            - ASML
-            - AVGO
-            - CCJ
-            # - ISRG
-            #- LRCX
-            #- PANW
-            - QCOM
-            #- SMCI
-            #- SMH
-            #- SOUN
