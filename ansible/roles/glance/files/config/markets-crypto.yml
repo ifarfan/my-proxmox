@@ -1,6 +1,8 @@
 -
   type: markets
   title: crypto
+  sort-by: change
+  symbol-link-template: https://finance.yahoo.com/quote/{SYMBOL}/
   markets:
     -
       symbol: BTC-USD

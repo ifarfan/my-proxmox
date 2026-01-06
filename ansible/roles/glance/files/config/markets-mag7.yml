@@ -1,9 +1,9 @@
 -
   type: markets
+  title: magnificent 7
+  sort-by: change
+  symbol-link-template: https://finance.yahoo.com/quote/{SYMBOL}/
   markets:
-    -
-      symbol: SPY
-      name: S&P 500
     -
       symbol: AMZN
       name: Amazon

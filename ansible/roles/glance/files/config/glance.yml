@@ -39,3 +39,4 @@ pages:
   - $include: home.yml
   - $include: feeds.yml
   - $include: vids.yml
+  - $include: markets.yml

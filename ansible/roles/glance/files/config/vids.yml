@@ -5,5 +5,5 @@
         - type: split-column
           max-columns: 2
           widgets:
-            - $include: my-vids-tech.yml
-            - $include: my-vids-lifestyle.yml
+            - $include: vids-tech.yml
+            - $include: vids-lifestyle.yml

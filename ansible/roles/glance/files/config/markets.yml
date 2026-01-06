@@ -1,0 +1,16 @@
+- name: Markets
+  columns:
+    # Left column
+    - size: small
+      widgets:
+        - $include: markets-mag7.yml
+    # Right column
+    - size: full
+      widgets:
+        - $include: markets-vanguard.yml
+        - $include: markets-other-tech.yml
+    # Right column
+    - size: small
+      widgets:
+        - $include: markets-crypto.yml
+        - $include: markets-general.yml

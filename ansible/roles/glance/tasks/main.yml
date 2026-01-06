@@ -25,7 +25,20 @@
       delegate_to: localhost
       become: false
       changed_when: false
-      register: config_files
+      register: managed_files
+
+    - name: List of remote "config" files
+      ansible.builtin.command:
+        ls -1 "/{{ glance_directory }}/config/"
+      register: unmanaged_files
+      changed_when: false
+
+    - name: Remove remote "unmanaged" config files but leave "managed" files
+      ansible.builtin.file:
+        path: "/{{ glance_directory }}/config/{{ item }}"
+        state: absent
+      loop: "{{ unmanaged_files.stdout_lines }}"
+      when: item not in managed_files.stdout_lines
 
     - name: Copy app "config" files
       ansible.builtin.copy:
@@ -34,7 +47,7 @@
         owner: root
         group: root
         mode: 0644
-      loop: "{{ config_files.stdout_lines }}"
+      loop: "{{ managed_files.stdout_lines }}"
 
     - name: List of local "assets" files
       ansible.builtin.command:

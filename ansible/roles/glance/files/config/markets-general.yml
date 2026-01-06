@@ -1,0 +1,14 @@
+-
+  type: markets
+  sort-by: change
+  symbol-link-template: https://finance.yahoo.com/quote/{SYMBOL}/
+  markets:
+    -
+      symbol: SPY
+      name: S&P 500
+    -
+      symbol: PLTR
+      name: Palantir
+    -
+      symbol: SCHD
+      name: Schwab Dividend Equity ETF
