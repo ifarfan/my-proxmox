@@ -54,7 +54,7 @@ services:
     volumes:
       - {{ atuin_directory }}/db_dumps:/db_dumps
     environment:
-      POSTGRES_HOST: postgresql
+      POSTGRES_HOST: atuin-db
       POSTGRES_USER: {{ atuin_db_username }}
       POSTGRES_PASSWORD: {{ atuin_db_password }}
       POSTGRES_DB: {{ atuin_db_name }}
