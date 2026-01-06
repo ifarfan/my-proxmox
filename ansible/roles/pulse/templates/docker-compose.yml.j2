@@ -1,0 +1,34 @@
+---
+services:
+  pulse:
+    image: rcourtman/pulse:{{ pulse_version }}
+    container_name: pulse
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    volumes:
+      - {{ pulse_directory }}/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - {{ pulse_port }}:{{ pulse_port }}
+    environment:
+      PULSE_AUTH_USER: {{ pulse_username }}
+      PULSE_AUTH_PASS: {{ pulse_password }}
+      PULSE_DISABLE_DOCKER_UPDATE_ACTIONS: true
+      LOG_LEVEL: warn
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pulse.entrypoints=http"
+      - "traefik.http.routers.pulse.rule=Host(`{{ pulse_uri }}`)"
+      - "traefik.http.middlewares.pulse-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.pulse.middlewares=pulse-https-redirect"
+      - "traefik.http.routers.pulse-secure.entrypoints=https"
+      - "traefik.http.routers.pulse-secure.rule=Host(`{{ pulse_uri }}`)"
+      - "traefik.http.routers.pulse-secure.tls=true"
+      - "traefik.http.routers.pulse-secure.service=pulse"
+      - "traefik.http.services.pulse.loadbalancer.server.port={{ pulse_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

@@ -77,41 +77,19 @@
 -
   Monitoring:
     -
+      Pulse:
+        icon: pulse.png
+        href: https://pulse.{{ global_domain }}/
+        description: "Monitor Proxmox/Docker/Hosts (Server: rpi1)"
+        server: rpi1-docker
+        container: pulse
+    -
       Dozzle Server:
         icon: dozzle.png
         href: https://dozzle.{{ global_domain }}/
         description: "Monitor Docker Logs (Server: app-lxc)"
         server: apps-local-docker
         container: dozzle
-    -
-      Dozzle Agent:
-        icon: dozzle.png
-        description: Agent (net-lxc)
-        server: net-docker
-        container: dozzle-agent
-    -
-      Dozzle Agent:
-        icon: dozzle.png
-        description: Agent (devbox-lxc)
-        server: devbox-docker
-        container: dozzle-agent
-    -
-      Dozzle Agent:
-        icon: dozzle.png
-        description: Agent (arr-lxc)
-        server: arr-docker
-        container: dozzle-agent
-    -
-      Speedtest Tracker:
-        icon: speedtest-tracker.png
-        href: https://speedtest-tracker.{{ global_domain }}/
-        description: Monitor Internet Speed Over Time (apps-lxc)
-        server: apps-local-docker
-        container: speedtest-tracker
-        widget:
-          type: speedtest
-          url: https://speedtest-tracker.{{ global_domain }}
-          bitratePrecision: 3
     -
       Glances:
         icon: glances.png
@@ -126,6 +104,17 @@
         description: Monitor developement work Over Time (apps-lxc)
         server: apps-local-docker
         container: wakapi
+    -
+      Speedtest Tracker:
+        icon: speedtest-tracker.png
+        href: https://speedtest-tracker.{{ global_domain }}/
+        description: Monitor Internet Speed Over Time (apps-lxc)
+        server: apps-local-docker
+        container: speedtest-tracker
+        widget:
+          type: speedtest
+          url: https://speedtest-tracker.{{ global_domain }}
+          bitratePrecision: 3
 -
   High Seas:
     - Arr Downloads:
@@ -244,6 +233,30 @@
 -
   Internal Apps:
     -
+      Jotty:
+        icon: jotty.png
+        href: https://jotty.{{ global_domain }}/
+        description: Tasks + checklists (apps-lxc)
+        siteMonitor: https://jotty.{{ global_domain }}/
+    -
+      Neko:
+        icon: neko.png
+        href: https://neko.{{ global_domain }}/
+        description: Private browser sessions (apps-lxc)
+        siteMonitor: https://neko.{{ global_domain }}/
+    -
+      Glance:
+        icon: glance.png
+        href: https://glance.{{ global_domain }}/
+        description: RSS feeds + content (apps-lxc)
+        siteMonitor: https://glance.{{ global_domain }}/
+    -
+      DumbPad:
+        icon: dumbpad.png
+        href: https://dumbpad.{{ global_domain }}/
+        description: Scratch pad (apps-lxc)
+        siteMonitor: https://dumbpad.{{ global_domain }}/
+    -
       Termix:
         icon: termix.png
         href: https://termix.{{ global_domain }}/
@@ -255,24 +268,6 @@
         href: https://it-tools.{{ global_domain }}/
         description: Miscellaneous sysadmin tools (apps-lxc)
         siteMonitor: https://it-tools.{{ global_domain }}/
-    # -
-    #   Snippet-Box:
-    #     icon: snippetbox.png
-    #     href: https://snippet-box.{{ global_domain }}/
-    #     description: Manage code snippets (apps-lxc)
-    #     siteMonitor: https://snippet-box.{{ global_domain }}/
-    -
-      Jotty:
-        icon: jotty.png
-        href: https://jotty.{{ global_domain }}/
-        description: Tasks + checklists (apps-lxc)
-        siteMonitor: https://jotty.{{ global_domain }}/
-    -
-      Neko:
-        icon: neko.png
-        href: https://neko.{{ global_domain }}/
-        description: Browser sessions (apps-lxc)
-        siteMonitor: https://neko.{{ global_domain }}/
 -
   Internal Services:
     -

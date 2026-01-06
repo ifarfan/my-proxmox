@@ -16,7 +16,7 @@ tasks:
     cmds:
       - terraform init
       - terraform fmt && terraform validate
-      - terraform apply -compact-warnings
+      - terraform apply -compact-warnings -target=cloudflare_record.cname_records -target=cloudflare_record.dns_record
 
   # ? Ansible (pre-provisioned RPis)
   list-rpis-local:
@@ -49,3 +49,15 @@ tasks:
     desc: Update RPis
     cmds:
       - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}}
+
+  provision-traefik:
+    desc: "Provision 'Traefik' on RPis"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}} --tag traefik
+
+  provision-pulse:
+    desc: "Provision 'Pulse' on RPi"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}} --tag pulse

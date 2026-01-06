@@ -1,0 +1,8 @@
+---
+pulse_directory: /opt/pulse
+pulse_uri: "pulse.{{ global_domain }}"
+pulse_port: 7655
+pulse_version: 5.0
+
+pulse_username: "{{ lookup('ansible.builtin.ini', 'pulse_username', section='pulse', file='credentials.ini') }}"
+pulse_password: "{{ lookup('ansible.builtin.ini', 'pulse_password', section='pulse', file='credentials.ini') }}"
