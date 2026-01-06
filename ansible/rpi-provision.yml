@@ -22,6 +22,16 @@
       ansible.builtin.include_role:
         name: docker
 
+    - name: Install docker_proxy
+      ansible.builtin.include_role:
+        name: docker_proxy
+
+    - name: Install dozzle
+      ansible.builtin.include_role:
+        name: dozzle
+      vars:
+        is_agent: true
+
     # ? Docker apps
     - name: Install Traefik
       ansible.builtin.include_role:

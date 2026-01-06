@@ -11,3 +11,5 @@ dozzle_remote_agents:
   - cloudy-box.{{ global_domain }}:{{ dozzle_agent_port }}
   - devbox-lxc.{{ global_domain }}:{{ dozzle_agent_port }}
   - net-lxc.{{ global_domain }}:{{ dozzle_agent_port }}
+  - rpi0.{{ global_domain }}:{{ dozzle_agent_port }}
+  - rpi1.{{ global_domain }}:{{ dozzle_agent_port }}

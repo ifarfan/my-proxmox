@@ -15,6 +15,7 @@ services:
       PULSE_AUTH_USER: {{ pulse_username }}
       PULSE_AUTH_PASS: {{ pulse_password }}
       PULSE_DISABLE_DOCKER_UPDATE_ACTIONS: true
+      LOG_LEVEL: warn
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pulse.entrypoints=http"
