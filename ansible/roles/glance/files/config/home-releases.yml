@@ -4,7 +4,7 @@
   show-source-icon: true
   cache: 1d
   limit: 20
-  collapse-after: 7
+  collapse-after: 5
   repositories:
     - glanceapp/glance
     - atuinsh/atuin

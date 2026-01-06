@@ -1,0 +1,51 @@
+-
+  type: markets
+  title: other tech
+  sort-by: change
+  symbol-link-template: https://finance.yahoo.com/quote/{SYMBOL}/
+  markets:
+    -
+      symbol: AIQ
+      name: Global X Artificial Intelligence & Technology ETF
+    -
+      symbol: AMAT
+      name: Applied Materials
+    -
+      symbol: AMD
+      name: Advanced Micro Devices
+    -
+      symbol: ANET
+      name: Arista Networks
+    -
+      symbol: ARM
+      name: Arm Holdings
+    -
+      symbol: ASML
+      name: ASML Holding
+    -
+      symbol: AVGO
+      name: Broadcom
+    -
+      symbol: CCJ
+      name: Cameco Corporation
+    -
+      symbol: ISRG
+      name: Intuitive Surgical
+    -
+      symbol: LRCX
+      name: Lam Research Corporation
+    -
+      symbol: PANW
+      name: Palo Alto Networks
+    -
+      symbol: QCOM
+      name: QUALCOMM
+    -
+      symbol: SMCI
+      name: Super Micro Computer
+    -
+      symbol: SMH
+      name: VanEck Semiconductor
+    -
+      symbol: SOUN
+      name: SoundHound AI

@@ -1,0 +1,45 @@
+-
+  type: markets
+  title: vanguard
+  sort-by: change
+  symbol-link-template: https://finance.yahoo.com/quote/{SYMBOL}/
+  markets:
+    -
+      symbol: VTSAX
+      name: Total Stock Market Index Admiral
+    -
+      symbol: VIGAX
+      name: Growth Index Admiral
+    -
+      symbol: VDADX
+      name: Dividen Appreciation Index Admiral
+    -
+      symbol: VHYAX
+      name: High Dividend Yield Index Admiral
+    -
+      symbol: VDIGX
+      name: Dividen Growth Investor
+    -
+      symbol: MGK
+      name: Mega Cap Growth ETF
+    -
+      symbol: VGT
+      name: Information Technology ETF
+    -
+      symbol: VPU
+      name: Utilities ETF
+    -
+      symbol: VFIAX
+      name: 500 Index Admiral
+    -
+      symbol: VSMAX
+      name: Small Cap Index Admiral
+    -
+      symbol: VFORX
+      name: Target Retirement 2040 Investor
+    -
+      symbol: VTMGX
+      name: Developed Markets Index Admiral
+    -
+      symbol: VBIRX
+      name: Short Term Bond Index Admiral

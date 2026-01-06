@@ -5,5 +5,5 @@
         - type: split-column
           max-columns: 2
           widgets:
-            - $include: my-reddit.yml
-            - $include: my-rss.yml
+            - $include: feeds-reddit.yml
+            - $include: feeds-rss.yml
