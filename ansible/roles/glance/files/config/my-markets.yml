@@ -1,23 +1,27 @@
 -
   type: markets
   markets:
-    - symbol: SPY
+    -
+      symbol: SPY
       name: S&P 500
-    - symbol: AMZN
+    -
+      symbol: AMZN
       name: Amazon
-    - symbol: AAPL
+    -
+      symbol: AAPL
       name: Apple
-    - symbol: GOOG
+    -
+      symbol: GOOGL
       name: Google
-    - symbol: MSFT
+    -
+      symbol: META
+      name: Meta
+    -
+      symbol: MSFT
       name: Microsoft
-    - symbol: NVDA
+    -
+      symbol: NVDA
       name: NVIDIA
-    - symbol: TSLA
+    -
+      symbol: TSLA
       name: Tesla
-    - symbol: BTC-USD
-      name: Bitcoin
-    - symbol: ETH-USD
-      name: Ethereum
-    - symbol: SOL-USD
-      name: Solana

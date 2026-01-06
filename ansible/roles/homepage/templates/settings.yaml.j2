@@ -2,14 +2,14 @@
 # Look 'n Feel
 title: Homelab | Dashboard
 headerStyle: clean
-# color: zinc  # use page palette, instead
+color: slate  # comment out to use page palette, instead
 background:
   # image: https://images.unsplash.com/photo-1637032482680-0f7086963a67
-  image: https://images.unsplash.com/photo-1582185143928-599a75bbe975
-  blur: sm              # sm, "", md, xl see https://tailwindcss.com/docs/backdrop-blur
-  saturate: 50          # 0, 50, 100     see https://tailwindcss.com/docs/backdrop-saturate
+  # image: https://images.unsplash.com/photo-1582185143928-599a75bbe975
+  # blur: sm              # sm, "", md, xl see https://tailwindcss.com/docs/backdrop-blur
   brightness: 80        # 0, 50, 75      see https://tailwindcss.com/docs/backdrop-brightness
-  opacity: 85           # 0-100
+  # opacity: 85           # 0-100
+  # saturate: 50          # 0, 50, 100     see https://tailwindcss.com/docs/backdrop-saturate
 statusStyle: "dot"
 
 # Layout
@@ -19,59 +19,57 @@ layout:
     columns: 4
     icon: mdi-server-network
     useEqualHeights: true
-  System Apps:
+  System:
     style: row
-    columns: 3
+    columns: 2
     icon: mdi-cog-outline
     useEqualHeights: true
-  Monitoring:
-    style: row
-    columns: 4
-    icon: mdi-eye-outline
-    useEqualHeights: true
-  Internal Apps:
-    style: row
-    columns: 4
-    icon: mdi-web-check
-    useEqualHeights: true
-  Internal Services:
-    style: row
-    columns: 4
-    icon: mdi-filter-cog-outline
-    useEqualHeights: true
-  Media Apps:
-    style: row
-    columns: 3
-    icon: mdi-multimedia
-    useEqualHeights: true
-  High Seas:
-    style: row
-    columns: 3
-    icon: mdi-pirate
-    useEqualHeights: true
-    Arr Downloads:
-      style: row
-      columns: 1
-      useEqualHeights: true
-    Arr Apps 1:
+    Network:
       style: row
       columns: 2
+      icon: mdi-network-pos
       useEqualHeights: true
-    Arr Apps 2:
+    Monitoring:
       style: row
       columns: 2
+      icon: mdi-eye-outline
+      useEqualHeights: true
+  Internal:
+    style: row
+    columns: 2
+    icon: mdi-web-sync
+    useEqualHeights: true
+    Internal Apps:
+      style: row
+      columns: 2
+      icon: mdi-web-check
+      useEqualHeights: true
+    Internal Services:
+      style: row
+      columns: 2
+      icon: mdi-filter-cog-outline
       useEqualHeights: true
   External Vendors:
     style: row
     columns: 4
     icon: mdi-web
     useEqualHeights: true
-  Financial:
+  High Seas:
     style: row
     columns: 2
-    icon: mdi-finance
+    icon: mdi-pirate
     useEqualHeights: true
     initiallyCollapsed: true
+    Arr Stack:
+      style: row
+      columns: 2
+      icon: mdi-download-network
+      useEqualHeights: true
+    Arr Downloads:
+      style: row
+      columns: 1
+      icon: mdi-cloud-download
+      useEqualHeights: true
 
 # Other
 providers:

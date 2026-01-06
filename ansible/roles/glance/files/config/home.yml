@@ -1,6 +1,7 @@
 - name: Home
   head-widgets:
     - $include: my-markets.yml
+    - $include: my-crypto.yml
   columns:
     # Left column
     - size: small
