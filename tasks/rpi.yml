@@ -49,3 +49,15 @@ tasks:
     desc: Update RPis
     cmds:
       - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}}
+
+  provision-traefik:
+    desc: "Provision 'Traefik' on RPis"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}} --tag traefik
+
+  provision-pulse:
+    desc: "Provision 'Pulse' on RPi"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook -i inventories/{{.RPI_MONIKER}} {{.RPI_ANSIBLE_PLAYBOOK}} --tag pulse

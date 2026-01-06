@@ -1,4 +1,5 @@
 ---
+# ? Shared RPi provisioning playbook
 - name: RPis provisioning
   hosts: rpi
   become: true
@@ -20,3 +21,30 @@
     - name: Install Docker
       ansible.builtin.include_role:
         name: docker
+
+    # ? Docker apps
+    - name: Install Traefik
+      ansible.builtin.include_role:
+        name: traefik
+      vars:
+        hostname_in_uri: true
+      tags: traefik
+
+# ? Individual RPi provisioning: rpi0
+- name: RPi0 individual provisioning
+  hosts: rpi0.macminis.net
+  become: true
+  gather_facts: true
+  tasks:
+
+# ? Individual RPi provisioning: rpi1
+- name: RPi1 individual provisioning
+  hosts: rpi1.macminis.net
+  become: true
+  gather_facts: true
+  tasks:
+    # ? Docker apps
+    - name: Install Pulse
+      ansible.builtin.include_role:
+        name: pulse
+      tags: pulse
