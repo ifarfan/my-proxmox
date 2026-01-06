@@ -14,4 +14,3 @@
       widgets:
         - $include: markets-crypto.yml
         - $include: markets-general.yml
-
