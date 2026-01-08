@@ -145,5 +145,6 @@ git_config: |
 shell_integrations:
   - '# Custom shell integrations from "modern-linux" role'
   - 'eval "$(fzf --bash)"'                                        # Set up fzf key bindings and fuzzy completion
+  - ''
   - '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh'    # bash-exec, pre-requisite for atuin
   - 'eval "$(atuin init bash)"'                                   # Shell history
