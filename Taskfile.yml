@@ -12,6 +12,7 @@ includes:
   debug-lxc: ./tasks/debug-lxc.yml
   devbox-lxc: ./tasks/devbox-lxc.yml
   net-lxc: ./tasks/net-lxc.yml
+  mon-lxc: ./tasks/mon-lxc.yml
   oracle: ./tasks/oracle.yml
   packer: ./tasks/packer.yml
   proxmox: ./tasks/proxmox.yml

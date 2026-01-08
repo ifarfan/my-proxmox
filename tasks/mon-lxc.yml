@@ -1,0 +1,55 @@
+---
+version: '3'
+
+vars:
+  MON_LXC_HOST: mon-lxc
+  MON_LXC_HOST_FQDN: "{{.MON_LXC_HOST}}.{{.DOMAIN}}"
+  MON_LXC_TF_DIR: "{{.TERRAFORM_DIR}}/{{.MON_LXC_HOST}}"
+  MON_LXC_ANSIBLE_PLAYBOOK: "{{.MON_LXC_HOST}}-provision.yml"
+
+tasks:
+  check:
+    desc: "Check '{{.MON_LXC_HOST}}' host vars"
+    dir: "{{.MON_LXC_TF_DIR}}"
+    cmds:
+      - "echo MON_LXC_HOST={{.MON_LXC_HOST}}"
+      - "echo MON_LXC_HOST_FQDN={{.MON_LXC_HOST_FQDN}}"
+      - "echo MON_LXC_TF_DIR={{.MON_LXC_TF_DIR}}"
+      - "echo MON_LXC_ANSIBLE_PLAYBOOK={{.MON_LXC_ANSIBLE_PLAYBOOK}}"
+
+  # ? Terraform
+  create:
+    desc: "Create '{{.MON_LXC_HOST}}' host"
+    dir: "{{.MON_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply
+
+  destroy:
+    desc: "Destroy '{{.MON_LXC_HOST}}' host"
+    dir: "{{.MON_LXC_TF_DIR}}"
+    cmds:
+      - terraform destroy -compact-warnings
+
+  update-dns:
+    desc: "Update DNS records for '{{.MON_LXC_HOST}}' host"
+    dir: "{{.MON_LXC_TF_DIR}}"
+    cmds:
+      - terraform init
+      - terraform fmt && terraform validate
+      - terraform apply -compact-warnings -target=module.my_lxc.cloudflare_record.cname_records
+
+  # ? Ansible
+  provision:
+    desc: "Provision '{{.MON_LXC_HOST}}' via Ansible"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox -l {{.MON_LXC_HOST_FQDN}} upgrade22_to_24.yml"
+      - "ansible-playbook -i inventories/proxmox {{.MON_LXC_ANSIBLE_PLAYBOOK}}"
+
+  provision-traefik:
+    desc: "Provision 'Traefik' on '{{.MON_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.MON_LXC_ANSIBLE_PLAYBOOK}} --tag traefik"
