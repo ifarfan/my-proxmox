@@ -1,0 +1,55 @@
+---
+- name: Install backrest
+  block:
+    - name: Install NFS client and mount volumes
+      ansible.builtin.include_role:
+        name: nfs_client
+      vars:
+        nfs_client_mounts:
+          - { volume: backups, path: /mnt/backups, rights: rw }
+
+    - name: Create app directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - "{{ backrest_directory }}/"
+        - "{{ backrest_directory }}/data"
+        - "{{ backrest_directory }}/config"
+        - "{{ backrest_directory }}/cache"
+        - "/mnt/backups/{{ inventory_hostname_short }}"
+
+    - name: Copy config.json file, but only on 1st time
+      ansible.builtin.template:
+        src: config.json.j2
+        dest: "{{ backrest_directory }}/config/config.json"
+        owner: root
+        group: root
+        mode: 0600
+        force: false
+
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ backrest_directory }}/docker-compose.yml"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Create and start app
+      community.docker.docker_compose_v2:
+        project_src: "{{ backrest_directory }}"
+
+    - name: Wait until certificate is registered
+      ansible.builtin.uri:
+        url: "https://{{ backrest_uri }}/"
+        validate_certs: true
+        status_code:
+          - 200
+      register: uri_output
+      until: uri_output.status == 200
+      delay: 10
+      retries: 30       # Retries for 30 * 10 secs = 300 secs = 5 mins
+
+  tags: backrest

@@ -1,0 +1,39 @@
+---
+services:
+  backrest:
+    image: garethgeorge/backrest:{{ backrest_version }}
+    container_name: backrest
+    restart: unless-stopped
+    hostname: {{ inventory_hostname_short }}
+    networks:
+      - traefik_default
+    ports:
+      - {{ backrest_port }}:{{ backrest_port }}
+    environment:
+      BACKREST_DATA: /data                      # path for backrest data. restic binary and the database are placed here.
+      BACKREST_CONFIG: /config/config.json      # path for the backrest config file.
+      BACKREST_PORT: {{ backrest_port }}
+      XDG_CACHE_HOME: /cache                    # path for the restic cache which greatly improves performance.
+      TZ: {{ global_tz }}
+    volumes:
+      - {{ backrest_directory }}/data:/data
+      - {{ backrest_directory }}/config:/config
+      - {{ backrest_directory }}/cache:/cache
+      - /opt:/opt:ro
+      - /mnt/backups:/backups
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backrest.entrypoints=http"
+      - "traefik.http.routers.backrest.rule=Host(`{{ backrest_uri }}`)"
+      - "traefik.http.middlewares.backrest-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.backrest.middlewares=backrest-https-redirect"
+      - "traefik.http.routers.backrest-secure.entrypoints=https"
+      - "traefik.http.routers.backrest-secure.rule=Host(`{{ backrest_uri }}`)"
+      - "traefik.http.routers.backrest-secure.tls=true"
+      - "traefik.http.routers.backrest-secure.service=backrest"
+      - "traefik.http.services.backrest.loadbalancer.server.port={{ backrest_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true
