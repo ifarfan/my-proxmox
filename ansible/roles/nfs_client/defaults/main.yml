@@ -7,6 +7,7 @@ nfs_pkgs:
   - nfs-common
 
 nfs_volumes:
+  backups: /volume1/backups
   booklore: /volume1/booklore
   books: /volume1/books
   devbox: /volume1/devbox
