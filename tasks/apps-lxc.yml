@@ -143,3 +143,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag dumbpad"
+
+  provision-mealie:
+    desc: "Provision 'Mealie' on '{{.APPS_LXC_HOST}}'"
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook -i inventories/proxmox {{.APPS_LXC_ANSIBLE_PLAYBOOK}} --tag mealie"

@@ -44,5 +44,6 @@ locals {
     "it-tools",
     "glance",
     "dumbpad",
+    "mealie",
   ]
 }
