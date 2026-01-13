@@ -18,6 +18,7 @@
         - "{{ backrest_directory }}/data"
         - "{{ backrest_directory }}/config"
         - "{{ backrest_directory }}/cache"
+        - "{{ backrest_directory }}/tmp"
         - "/mnt/backups/{{ inventory_hostname_short }}"
 
     - name: Copy config.json file, but only on 1st time

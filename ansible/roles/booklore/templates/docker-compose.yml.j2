@@ -72,7 +72,7 @@ services:
       - {{ ephemera_port }}:{{ ephemera_port }}
     environment:
       # Required:
-      AA_BASE_URL: https://annas-archive.org/
+      AA_BASE_URL: https://annas-archive.li/
       # FlareSolverr is used for slow download fallback when API key is missing or quota exhausted
       # Default: http://127.0.0.1:8191 (or http://flaresolverr:8191 in Docker)
       FLARESOLVERR_URL: http://flaresolverr:{{ flaresolverr_port }}
