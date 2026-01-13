@@ -104,3 +104,8 @@
       ansible.builtin.include_role:
         name: dumbpad
       tags: dumbpad
+
+    - name: Install Mealie
+      ansible.builtin.include_role:
+        name: mealie
+      tags: mealie

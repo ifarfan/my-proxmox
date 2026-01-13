@@ -1,0 +1,7 @@
+---
+mealie_directory: /opt/mealie
+mealie_uri: "mealie.{{ global_domain }}"
+mealie_port: 9000
+mealie_version: v3.9.2
+mealie_puid: 1000
+mealie_guid: 1000
