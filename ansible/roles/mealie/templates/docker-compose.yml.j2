@@ -16,8 +16,8 @@ services:
           memory: 1000M
     environment:
       ALLOW_SIGNUP: false
-      PUID: {{ mealie_PUID }}
-      PGID: {{ mealie_GUID }}
+      PUID: {{ mealie_puid }}
+      PGID: {{ mealie_guid }}
       TZ: {{ global_tz }}
       BASE_URL: https://{{ mealie_uri }}
     labels:
