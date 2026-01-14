@@ -1,0 +1,58 @@
+---
+- name: Install restic
+  block:
+    - name: Install NFS client and mount volumes
+      ansible.builtin.include_role:
+        name: nfs_client
+      vars:
+        nfs_client_mounts:
+          - { volume: backups, path: /mnt/backups, rights: rw }
+
+    - name: Configure "WakeMeOps" repo
+      ansible.builtin.shell: |
+        curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | bash
+      args:
+        executable: /bin/bash
+        creates: /etc/apt/sources.list.d/wakemeops.list
+
+    - name: Install "restic" packages
+      ansible.builtin.apt:
+        pkg: "{{ item }}"
+        state: present
+      loop:
+        - restic
+        - resticprofile
+
+    - name: Create "repo" directory
+      ansible.builtin.file:
+        path: "{{ restic_repository }}"
+        state: directory
+        mode: 0755
+
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "{{ restic_directory }}"
+        state: directory
+        mode: 0700
+
+    - name: Copy app files
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "{{ restic_directory }}/{{ item }}"
+        owner: root
+        group: root
+        mode: 0600
+      loop:
+        - password.txt
+        - profiles.yaml
+
+    - name: Configure resticprofile
+      ansible.builtin.shell: |
+        resticprofile init
+        resticprofile schedule --all
+      args:
+        chdir: "{{ restic_directory }}"
+        executable: /bin/bash
+        creates: "{{ restic_repository }}/config"
+
+  tags: restic

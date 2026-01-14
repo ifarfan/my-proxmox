@@ -1,0 +1,72 @@
+---
+version: "1"
+
+global:
+  initialize: true
+  send-timeout: 20s
+  ionice: true
+  ionice-class: 2
+  ionice-level: 6
+  min-memory: 100    # at least XXX in MB free before running
+  restic-lock-retry-after: 1m
+  restic-stale-lock-age: 2h
+
+default:
+  base-dir: ""
+  repository: "local:{{ restic_repository }}"
+  password-file: "password.txt"
+  status-file: "{{ restic_directory}}/status.json"
+  force-inactive-lock: true
+  snapshots:
+    host: true
+
+  env:
+    tmp: "/tmp"
+
+  backup:
+    verbose: true
+    source:
+      - "{{ restic_source }}"
+    exclude:
+      - "containerd"
+      - "containerd/*"
+      - "lost+found"
+      - "lost+found/*"
+    exclude-caches: true
+    no-error-on-warning: true       # ignore restic warnings when files cannot be read
+    one-file-system: true
+    schedule-after-network-online: true
+    schedule-lock-wait: "10m"
+    schedule-log: "{{ restic_directory}}/backup.log"
+    schedule-permission: "system"
+    schedule-priority: "background"
+    schedule: "*:00/4:00"           # every 4-hours
+
+  retention:
+    host: true
+    before-backup: false
+    after-backup: true
+    keep-hourly: 6
+    keep-daily: 7
+    keep-weekly: 4
+    keep-monthly: 0
+    keep-yearly: 0
+    keep-within: "4h"
+
+  prune:
+    schedule: "sun 3:30"
+    schedule-permission: "system"
+    schedule-lock-wait: "10m"
+
+  check:
+    read-data: true
+    schedule: "*-*-01 03:00"   # check repository 1st day of month at 3am
+    schedule-lock-wait: "10m"
+
+  send-after-fail:
+    method: POST
+    url: "https://api.telegram.org/bot{{ telegram_bot_token }}/sendMessage?chat_id={{ telegram_chat_id }}"
+    body: "{{ inventory_hostname_short }} backup: ${ERROR}\n\n${ERROR_STDERR}"
+    headers:
+      - name: Content-Type
+        value: "text/plain; charset=UTF-8"

@@ -1,0 +1,9 @@
+---
+restic_directory: /opt/restic
+restic_source: /opt
+restic_repository: "/mnt/backups/{{ inventory_hostname_short }}"
+
+restic_password: "{{ lookup('ansible.builtin.ini', 'password', section='restic', file='credentials.ini') }}"
+
+telegram_bot_token: "{{ lookup('ansible.builtin.ini', 'bot_token', section='telegram', file='credentials.ini') }}"
+telegram_chat_id: "{{ lookup('ansible.builtin.ini', 'chat_id', section='telegram', file='credentials.ini') }}"
