@@ -1,0 +1,36 @@
+---
+services:
+  networking-toolbox:
+    image: lissy93/networking-toolbox:latest
+    container_name: networking-toolbox
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    ports:
+      - 3002:{{ networking_toolbox_port }}
+    environment:
+      NODE_ENV: production
+      PORT: {{ networking_toolbox_port }}
+      HOST: 0.0.0.0
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:{{ networking_toolbox_port }}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.networkingtoolbox.entrypoints=http"
+      - "traefik.http.routers.networkingtoolbox.rule=Host(`{{ networking_toolbox_uri }}`)"
+      - "traefik.http.middlewares.networkingtoolbox-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.networkingtoolbox.middlewares=networkingtoolbox-https-redirect"
+      - "traefik.http.routers.networkingtoolbox-secure.entrypoints=https"
+      - "traefik.http.routers.networkingtoolbox-secure.rule=Host(`{{ networking_toolbox_uri }}`)"
+      - "traefik.http.routers.networkingtoolbox-secure.tls=true"
+      - "traefik.http.routers.networkingtoolbox-secure.service=networkingtoolbox"
+      - "traefik.http.services.networkingtoolbox.loadbalancer.server.port={{ networking_toolbox_port }}"
+      - "traefik.docker.network=traefik_default"
+
+networks:
+  traefik_default:
+    external: true

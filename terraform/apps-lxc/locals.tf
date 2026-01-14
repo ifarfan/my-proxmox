@@ -45,5 +45,6 @@ locals {
     "glance",
     "dumbpad",
     "mealie",
+    "networking-toolbox",
   ]
 }

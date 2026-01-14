@@ -1,0 +1,4 @@
+---
+networking_toolbox_directory: /opt/networking-toolbox
+networking_toolbox_uri: "networking-toolbox.{{ global_domain }}"
+networking_toolbox_port: 3000
