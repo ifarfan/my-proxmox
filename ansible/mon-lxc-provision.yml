@@ -15,11 +15,6 @@
       ansible.builtin.include_role:
         name: modern_unix
 
-    - name: Install BackRest
-      ansible.builtin.include_role:
-        name: backrest
-      tags: backrest
-
     # ? Docker daemon + docker compose apps
     - name: Install docker
       ansible.builtin.include_role:

@@ -27,6 +27,5 @@ locals {
   # Additional DNS aliases/CNAMEs
   dns_aliases = [
     "traefik-mon-lxc",
-    "backrest-mon-lxc",
   ]
 }

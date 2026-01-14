@@ -14,11 +14,13 @@ services:
       BACKREST_CONFIG: /config/config.json      # path for the backrest config file.
       BACKREST_PORT: {{ backrest_port }}
       XDG_CACHE_HOME: /cache                    # path for the restic cache which greatly improves performance.
+      TMPDIR: /tmp
       TZ: {{ global_tz }}
     volumes:
       - {{ backrest_directory }}/data:/data
       - {{ backrest_directory }}/config:/config
       - {{ backrest_directory }}/cache:/cache
+      - {{ backrest_directory }}/tmp:/tmp
       - /opt:/opt:ro
       - /mnt/backups:/backups
     labels:
