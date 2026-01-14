@@ -109,3 +109,8 @@
       ansible.builtin.include_role:
         name: mealie
       tags: mealie
+
+    - name: Install Networking-Toolbox
+      ansible.builtin.include_role:
+        name: networking_toolbox
+      tags: networking_toolbox
