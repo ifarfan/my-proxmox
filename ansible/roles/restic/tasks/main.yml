@@ -14,6 +14,7 @@
       args:
         executable: /bin/bash
         creates: /etc/apt/sources.list.d/wakemeops.list
+      # noqa: command-instead-of-module
 
     - name: Install "restic" packages
       ansible.builtin.apt:
